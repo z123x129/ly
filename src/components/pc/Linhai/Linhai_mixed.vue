@@ -1,4 +1,4 @@
-//柱形图and折线图(合并图)
+<!--柱形图and折线图(合并图)-->
 <template>
     <div style="width: 100%;height: 100%;">
         <div ref="chart" class="echarts"></div>
