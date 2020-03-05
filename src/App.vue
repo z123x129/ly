@@ -14,7 +14,7 @@
 <style lang="less">
 #app {
   background: #F8F8F8;
-  height: 100vh;
+  height: 100%;
   font-size: 13px;
 }
 .el-loading-spinner {

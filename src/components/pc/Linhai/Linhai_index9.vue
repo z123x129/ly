@@ -1,10 +1,10 @@
 <template>
     <div>
         <el-tabs style="padding: 0 10px" v-model="activeName" @tab-click="handleClick">
-            <el-tab-pane label="被抓拍到的重点人员" name="first">
+            <el-tab-pane label="学校数据展示" name="first">
                 <el-form :inline="true" :model="formInline" class="demo-form-inline">
                     <el-form-item label="选择区域:">
-                        <el-select size="small" v-model="formInline.user" placeholder="请选择学校">
+                        <el-select size="small" v-model="formInline.user" placeholder="请选择区域">
                             <el-option label="选择区域" value="shanghai"></el-option>
                             <el-option label="选择学校" value="beijing"></el-option>
                         </el-select>
@@ -15,7 +15,7 @@
                             <el-option label="选择学校" value="beijing"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="抓拍时间段:">
+                    <el-form-item label="健康证到期时间:">
                         <el-date-picker
                                 size="small"
                                 v-model="value1"
@@ -27,11 +27,13 @@
                     </el-form-item>
                     <el-form-item style="margin-top: -2px">
                         <el-button size="small" type="primary" @click="onSubmit">搜索</el-button>
+                        <el-button size="small" type="primary" @click="onSubmit">导出excel</el-button>
                     </el-form-item>
                 </el-form>
                 <el-table
                         :data="tableData"
                         border
+                        :row-class-name="tableRowClassName"
                         style="width: 100%">
                     <el-table-column
                             align="center"
@@ -42,16 +44,26 @@
                     <el-table-column
                             align="center"
                             prop="name"
-                            label="识别人姓名">
+                            label="姓名">
                     </el-table-column>
                     <el-table-column
                             align="center"
                             prop="address"
-                            label="抓拍点">
+                            label="所属地区">
                     </el-table-column>
                     <el-table-column
                             align="center"
-                            label="人脸图">
+                            prop="address"
+                            label="所属学校">
+                    </el-table-column>
+                    <el-table-column
+                            align="center"
+                            prop="address"
+                            label="联系方式">
+                    </el-table-column>
+                    <el-table-column
+                            align="center"
+                            label="人脸照片">
                         <template slot-scope="scope">
                             <el-image
                                     style="width: 100px; height: 100px"
@@ -62,7 +74,7 @@
                     </el-table-column>
                     <el-table-column
                             align="center"
-                            label="抓拍图片">
+                            label="健康证照片">
                         <template slot-scope="scope">
                             <el-image
                                     style="width: 100px; height: 100px"
@@ -70,11 +82,16 @@
                                     :preview-src-list="srcList">
                             </el-image>
                         </template>
+                    </el-table-column>
+                    <el-table-column
+                            align="center"
+                            prop="address"
+                            label="人员类别">
                     </el-table-column>
                     <el-table-column
                             align="center"
                             prop="time"
-                            label="抓拍时间">
+                            label="健康证到期时间">
                     </el-table-column>
                 </el-table>
                 <div style="padding: 15px;display: flex;justify-content: flex-end;">
@@ -90,28 +107,25 @@
                     </el-pagination>
                 </div>
             </el-tab-pane>
-            <el-tab-pane label="重点人员列表" name="second">
+            <el-tab-pane label="违规数据" name="second">
                 <el-form :inline="true" :model="formInline" class="demo-form-inline">
-                    <el-form-item label="姓名:">
-                        <el-input size="small" v-model="formInline.name"></el-input>
+                    <el-form-item label="选择区域:">
+                        <el-select size="small" v-model="formInline.user" placeholder="请选择区域">
+                            <el-option label="选择区域" value="shanghai"></el-option>
+                            <el-option label="选择学校" value="beijing"></el-option>
+                        </el-select>
                     </el-form-item>
-                    <el-form-item label="身份证:">
-                        <el-input size="small" v-model="formInline.name"></el-input>
+                    <el-form-item label="选择学校:">
+                        <el-select size="small" v-model="formInline.region" placeholder="请选择学校">
+                            <el-option label="选择区域" value="shanghai"></el-option>
+                            <el-option label="选择学校" value="beijing"></el-option>
+                        </el-select>
                     </el-form-item>
-                    <el-form-item label="添加时间:">
-                        <el-date-picker
-                                size="small"
-                                v-model="value1"
-                                type="datetimerange"
-                                range-separator="至"
-                                start-placeholder="开始日期"
-                                end-placeholder="结束日期">
-                        </el-date-picker>
-                    </el-form-item>
-                    <el-form-item style="margin-top: -2px">
-                        <el-button size="small" type="primary" @click="onSubmit">搜索</el-button>
-                        <el-button size="small" type="primary" @click="dialogFormVisible = true">添加重点人员</el-button>
-                        <el-button size="small" type="primary" @click="onSubmit">批量删除</el-button>
+                    <el-form-item label="选择网格员:">
+                        <el-select size="small" v-model="formInline.region" placeholder="请选择网格员">
+                            <el-option label="选择区域" value="shanghai"></el-option>
+                            <el-option label="选择学校" value="beijing"></el-option>
+                        </el-select>
                     </el-form-item>
                 </el-form>
                 <el-table
@@ -132,16 +146,26 @@
                     <el-table-column
                             align="center"
                             prop="name"
-                            label="姓名">
+                            label="网格员">
                     </el-table-column>
                     <el-table-column
                             align="center"
                             prop="address"
-                            label="身份证号">
+                            label="地区">
                     </el-table-column>
                     <el-table-column
                             align="center"
-                            label="人脸图">
+                            prop="address"
+                            label="学校">
+                    </el-table-column>
+                    <el-table-column
+                            align="center"
+                            prop="address"
+                            label="违规选项">
+                    </el-table-column>
+                    <el-table-column
+                            align="center"
+                            label="图片信息">
                         <template slot-scope="scope">
                             <el-image
                                     style="width: 100px; height: 100px"
@@ -153,17 +177,12 @@
                     <el-table-column
                             align="center"
                             prop="time"
-                            label="添加时间">
+                            label="日期">
                     </el-table-column>
                     <el-table-column
                             align="center"
-                            fixed="right"
-                            label="操作"
-                            width="100">
-                        <template slot-scope="scope">
-                            <el-button type="text" size="small">编辑</el-button>
-                            <el-button type="text" size="small">删除</el-button>
-                        </template>
+                            prop="address"
+                            label="文字描述">
                     </el-table-column>
                 </el-table>
                 <div style="padding: 15px;display: flex;justify-content: flex-end;">
@@ -310,6 +329,14 @@
                     Message.error('上传头像图片大小不能超过 2MB!');
                 }
                 return isJPG && isLt2M;
+            },
+            tableRowClassName({row, rowIndex}) {
+                if (rowIndex === 1) {
+                    return 'warning-row';
+                } else if (rowIndex === 3) {
+                    return 'success-row';
+                }
+                return '';
             }
         },
     }
@@ -344,5 +371,12 @@
     width: 178px;
     height: 178px;
     display: block;
+}
+.el-table /deep/ .warning-row {
+    background: oldlace;
+}
+
+.el-table /deep/ .success-row {
+    background: #f0f9eb;
 }
 </style>
