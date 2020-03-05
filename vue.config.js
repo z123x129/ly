@@ -1,4 +1,8 @@
 // vue.config.js
+const path = require('path')
+const resolve = dir => {
+    return path.join(__dirname, dir)
+}
 
 module.exports = {
     publicPath: './',
@@ -22,6 +26,10 @@ module.exports = {
     productionSourceMap: false,
     chainWebpack: (config) => {
         config.plugins.delete('prefetch');
+        config.resolve.alias
+            .set('@', resolve('src')) // key,value自行定义，比如.set('@@', resolve('src/components'))
+            .set('_c', resolve('src/components'))
+            .set('_pl', resolve('public'))
     },
     configureWebpack: (config)=> {
         if (process.env.NODE_ENV === 'production') {
