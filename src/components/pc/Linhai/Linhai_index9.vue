@@ -197,41 +197,15 @@
                             :total="total">
                     </el-pagination>
                 </div>
-                <el-dialog title="添加重点人员" :visible.sync="dialogFormVisible">
-                    <el-form :model="form">
-                        <el-form-item label="姓名:" :label-width="formLabelWidth">
-                            <el-input style="width: 80%" v-model="form.name" autocomplete="off"></el-input>
-                        </el-form-item>
-                        <el-form-item label="身份证号:" :label-width="formLabelWidth">
-                            <el-input style="width: 80%" v-model="form.region" autocomplete="off"></el-input>
-                        </el-form-item>
-                        <el-form-item label="上传人物照片:" :label-width="formLabelWidth">
-                            <el-upload
-                                    class="avatar-uploader"
-                                    action="https://jsonplaceholder.typicode.com/posts/"
-                                    :show-file-list="false"
-                                    :on-success="handleAvatarSuccess"
-                                    :before-upload="beforeAvatarUpload">
-                                <img v-if="imageUrl" :src="imageUrl" class="avatar">
-                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                            </el-upload>
-                        </el-form-item>
-                    </el-form>
-                    <div slot="footer" class="dialog-footer">
-                        <el-button @click="dialogFormVisible = false">取 消</el-button>
-                        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
-                    </div>
-                </el-dialog>
             </el-tab-pane>
         </el-tabs>
     </div>
 </template>
 <script>
-    import { Form,FormItem,Select,Option,Button,DatePicker,Tabs,TabPane,Table,TableColumn,Image,Pagination,Input,Dialog,Upload,Message } from 'element-ui'
+    import { Form,FormItem,Select,Option,Button,DatePicker,Tabs,TabPane,Table,TableColumn,Image,Pagination,Input } from 'element-ui'
     import 'element-ui/lib/theme-chalk/index.css'
     export default {
         components:{
-            // Doughnut:()=>import('./Linhai_doughnut'),
             [Form.name]:Form,
             [FormItem.name]:FormItem,
             [Select.name]:Select,
@@ -245,9 +219,6 @@
             [Image.name]:Image,
             [Pagination.name]:Pagination,
             [Input.name]:Input,
-            [Dialog.name]:Dialog,
-            [Upload.name]:Upload,
-            [Message.name]:Message,
         },
         data(){
             return{
@@ -290,13 +261,6 @@
                 page:1,
                 paginate:5,
                 paginates:5,
-                dialogFormVisible: false,
-                form: {
-                    name: '',
-                    region: '',
-                },
-                formLabelWidth: '120px',
-                imageUrl: '',
             }
         },
         methods: {
@@ -314,21 +278,6 @@
             handleCurrentChange(val) {//分页器
                 this.page = val;
                 // this.getList();
-            },
-            handleAvatarSuccess(res, file) {
-                this.imageUrl = URL.createObjectURL(file.raw);
-            },
-            beforeAvatarUpload(file) {
-                const isJPG = file.type === 'image/jpeg';
-                const isLt2M = file.size / 1024 / 1024 < 2;
-
-                if (!isJPG) {
-                    Message.error('上传头像图片只能是 JPG 格式!');
-                }
-                if (!isLt2M) {
-                    Message.error('上传头像图片大小不能超过 2MB!');
-                }
-                return isJPG && isLt2M;
             },
             tableRowClassName({row, rowIndex}) {
                 if (rowIndex === 1) {
