@@ -1,33 +1,26 @@
 <template>
     <div>
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
-            <el-form-item label="选择区域:">
-                <el-select size="small" v-model="formInline.user" placeholder="请选择学校">
-                    <el-option label="选择区域" value="shanghai"></el-option>
-                    <el-option label="选择学校" value="beijing"></el-option>
-                </el-select>
-            </el-form-item>
             <el-form-item label="选择学校:">
                 <el-select size="small" v-model="formInline.region" placeholder="请选择学校">
                     <el-option label="选择区域" value="shanghai"></el-option>
                     <el-option label="选择学校" value="beijing"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="选择时间:">
-                <el-date-picker
-                        size="small"
-                        v-model="value1"
-                        type="datetimerange"
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期">
-                </el-date-picker>
-            </el-form-item>
             <el-form-item style="margin-top: 9px">
-                <el-button size="small" type="primary" @click="onSubmit">搜索</el-button>
-                <el-button size="small" type="primary" @click="onSubmit">批量下载</el-button>
+                <el-button size="small" type="primary" @click="onSubmit">确定</el-button>
             </el-form-item>
         </el-form>
+        <div class="header">
+            <p>学校被拍陌生人数量排列柱状图</p>
+            <Dataset style="width: 100%;height: 100%"></Dataset>
+        </div>
+        <div style="height: 8vh;background: #fff;"></div>
+        <div style="height: 40vh;display: flex;justify-content: space-around;background: #fff;">
+            <Dataset style="width: 33.3%;height: 100%"></Dataset>
+            <Dataset style="width: 33.3%;height: 100%"></Dataset>
+            <Dataset style="width: 33.3%;height: 100%"></Dataset>
+        </div>
     </div>
 </template>
 <script>
@@ -35,7 +28,7 @@
     import 'element-ui/lib/theme-chalk/index.css'
     export default {
         components:{
-            // Doughnut:()=>import('./Linhai_doughnut'),
+            Dataset:()=>import('./Linhai_dataset'),
             [Form.name]:Form,
             [FormItem.name]:FormItem,
             [Select.name]:Select,
@@ -46,10 +39,8 @@
         data(){
             return{
                 formInline: {
-                    user: '',
                     region: ''
                 },
-                value1: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
             }
         },
         methods: {
@@ -60,12 +51,22 @@
     }
 </script>
 <style scoped lang="less">
-.demo-form-inline{
-    padding: 0 10px;
-    background: #fff;
-}
-.el-form-item{
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
+    .demo-form-inline{
+        padding: 0 10px;
+        background: #fff;
+    }
+    .el-form-item{
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    .header{
+        width: 100%;
+        height: 40vh;
+        background: #fff;
+    }
+    .header p{
+        padding-bottom: 10px;
+        font-size: 16px;
+        text-align: center;
+    }
 </style>

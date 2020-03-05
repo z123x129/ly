@@ -4,6 +4,9 @@ const Linhai_index3 = () => import('../Linhai_index3');
 const Linhai_index4 = () => import('../Linhai_index4');
 const Linhai_index5 = () => import('../Linhai_index5');
 const Linhai_index6 = () => import('../Linhai_index6');
+const Linhai_index7 = () => import('../Linhai_index7');
+const Linhai_index8 = () => import('../Linhai_index8');
+const Linhai_index9 = () => import('../Linhai_index9');
 const Hik_video = () => import('../Hik_video');
 export default[
     { path: '/Linhai_index', name: 'Linhai_index', component: Linhai_index },
@@ -12,5 +15,8 @@ export default[
     { path: '/Linhai_index4', name: 'Linhai_index2', component: Linhai_index4 },
     { path: '/Linhai_index5', name: 'Linhai_index2', component: Linhai_index5 },
     { path: '/Linhai_index6', name: 'Linhai_index2', component: Linhai_index6 },
+    { path: '/Linhai_index7', name: 'Linhai_index7', component: Linhai_index7 },
+    { path: '/Linhai_index8', name: 'Linhai_index8', component: Linhai_index8 },
+    { path: '/Linhai_index9', name: 'Linhai_index9', component: Linhai_index9 },
     { path: '/Hik_video', name: 'Hik_video', component: Hik_video },
 ];
