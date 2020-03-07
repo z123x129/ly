@@ -1,7 +1,7 @@
 <!--柱形图-->
 <template>
     <div style="width: 100%;height: 100%;">
-        <div ref="chart" class="echarts"></div>
+        <div ref="chart"  class="echarts"></div>
     </div>
 </template>
 <script>
@@ -48,6 +48,14 @@
             window.addEventListener('resize', ()=> {
                 this.chart.resize();
             })
+
+            this.chart.on('click', function (params) {
+                // 控制台打印数据的名称
+                console.log(params);
+            });
+        },
+        methods:{
+
         }
     }
 </script>
