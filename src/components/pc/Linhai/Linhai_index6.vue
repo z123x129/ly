@@ -181,10 +181,10 @@
                 <el-dialog title="添加重点人员" :visible.sync="dialogFormVisible">
                     <el-form :model="form">
                         <el-form-item label="姓名:" :label-width="formLabelWidth">
-                            <el-input style="width: 80%" v-model="form.name" autocomplete="off"></el-input>
+                            <el-input style="width: 80%" v-model="form.name" placeholder="请输入姓名" autocomplete="off"></el-input>
                         </el-form-item>
                         <el-form-item label="身份证号:" :label-width="formLabelWidth">
-                            <el-input style="width: 80%" v-model="form.region" autocomplete="off"></el-input>
+                            <el-input style="width: 80%" v-model="form.region" placeholder="请输入身份证号" autocomplete="off"></el-input>
                         </el-form-item>
                         <el-form-item label="上传人物照片:" :label-width="formLabelWidth">
                             <el-upload
@@ -193,7 +193,7 @@
                                     :show-file-list="false"
                                     :on-success="handleAvatarSuccess"
                                     :before-upload="beforeAvatarUpload">
-                                <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                                <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar">
                                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                             </el-upload>
                         </el-form-item>
@@ -275,9 +275,9 @@
                 form: {
                     name: '',
                     region: '',
+                    imageUrl: '',
                 },
                 formLabelWidth: '120px',
-                imageUrl: '',
             }
         },
         methods: {
@@ -297,7 +297,7 @@
                 // this.getList();
             },
             handleAvatarSuccess(res, file) {
-                this.imageUrl = URL.createObjectURL(file.raw);
+                this.form.imageUrl = URL.createObjectURL(file.raw);
             },
             beforeAvatarUpload(file) {
                 const isJPG = file.type === 'image/jpeg';

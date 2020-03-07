@@ -5,7 +5,7 @@
 </template>
 
 <script>
-    import * as example from "_pl/js/Hik/jsWebControl-1.0.0.min.js";
+   // import * as example from "_pl/js/Hik/jsWebControl-1.0.0.min.js";
     export default {
 
         data(){
