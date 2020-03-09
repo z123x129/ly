@@ -211,6 +211,7 @@ export default {
 
 <style lang="less">
 @import './tags-nav.less';
+.main .tag-nav-wrapper{border-top: 1px solid #f0f0f0;}
 // .main {
 //   .tag-nav-wrapper{
 //     background-color: #fff !important;
