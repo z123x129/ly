@@ -84,16 +84,18 @@
                     </div>
 
 
-                    <div>
+                    <div class="user-logo">
+                        <fullscreen v-model="isFullscreen" style="margin-right: 10px;"/>
                         <user  :message-unread-count="0" :user-avatar="img"/>
+                        
                     </div>
                 </Header>
                 <Content class="main-content-con">
-                    <Layout class="main-layout-con">
+                    <Layout class="main-layout-con" style="background-color:#fff">
                         <div class="tag-nav-wrapper">
                             <tags-nav :value="$route" @input="handleClick" :list="tagsNav" @on-close="closeClick"/>
                         </div>
-                        <Content class="content-wrapper" :style="{margin: '15px 0 20px 20px', background: '#f5f7f9', minHeight: '260px'}">
+                        <Content class="content-wrapper" :style="{margin: '15px 0 20px 20px', background: '#fff', minHeight: '260px'}">
                            <keep-alive :include="cacheList">
                                 <router-view></router-view>
                            </keep-alive>
@@ -112,7 +114,7 @@
     import user from './component/user'
     import SideMenu from './component/side-menu'
     import TagsNav from './component/tags-nav'
-    // import fullscreen from './component/fullscreen'
+    import fullscreen from './component/fullscreen'
     import { mapMutations} from 'vuex'
     import {  routeEqual } from '@/libs/common'
     import './main.less'
@@ -625,7 +627,7 @@
             user,
             SideMenu,
             TagsNav,
-            // fullscreen
+            fullscreen
         },
         computed: {
             rotateIcon () {
@@ -717,3 +719,8 @@
         }
     }
 </script>
+<style lang="less">
+    .user-logo{
+        display: flex;
+    }
+</style>
