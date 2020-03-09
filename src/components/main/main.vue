@@ -660,7 +660,7 @@
                 this.$refs.side1.toggleCollapse();
             },
             turnToPage:function(route){
-                window.console.log(route);
+                // window.console.log(route);
                 let { name, params, query } = {}
                 if (typeof route === 'string') name = route
                 else {
@@ -669,7 +669,7 @@
                     query = route.query
                 }
                 if (name.indexOf('isTurnByHref_') > -1) {
-                    window.console.log(name)
+                    // window.console.log(name)
                     window.open(name.split('_')[1])
                     return
                 }
@@ -686,7 +686,7 @@
                 this.turnToPage(item.name)
             },
             closeClick:function(res, type, route){
-                window.console.log(res, type, route);
+                // window.console.log(res, type, route);
                 if (type !== 'others') {
                     if (type === 'all') {
                     this.turnToPage(this.$config.homeName)
@@ -705,14 +705,14 @@
             this.addTag({
                 route: { name, params, query, meta }
             });
-            window.console.log(this.menuList, 233);
+            // window.console.log(this.menuList, 233);
 
         },
         watch:{
             "$route"(newRoute){
 
-                window.console.log(newRoute);
-                window.console.log(2);
+                // window.console.log(newRoute);
+                // window.console.log(2);
                 let route = newRoute;
                 this.addTag({route});
             }
