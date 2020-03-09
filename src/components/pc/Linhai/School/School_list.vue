@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="i1">
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
             <el-form-item label="选择街道:">
                 <el-cascader
@@ -307,10 +307,14 @@
 </script>
 <style scoped lang="less">
     .demo-form-inline{
-        padding: 20px 10px 0;
+        background-color: #fff;
+        padding:10px;
+        // padding: 20px 10px 0;
+        margin-bottom: 10px;
     }
     .el-form-item{
         margin-top: 0;
+        margin-bottom: 0;
     }
     .avatar-uploader /deep/ .el-upload {
         border: 1px dashed #d9d9d9;
