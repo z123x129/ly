@@ -61,12 +61,12 @@
         text-align: center;
         color: #fff;
     }
-    .div-flex > .flex:nth-child(1) .iconfont{background-color: #f3bb45}
-    .div-flex > .flex:nth-child(2) .iconfont{background-color: #7ac29a}
-    .div-flex > .flex:nth-child(3) .iconfont{background-color: #eb5e28}
-    .div-flex > .flex:nth-child(4) .iconfont{background-color: #68b3c8}
-    .div-flex > .flex:nth-child(5) .iconfont{background-color: #eb6828}
-    .div-flex > .flex:nth-child(6) .iconfont{background-color: #69b3c8}
+    .div-flex > .flex:nth-child(1) .iconfont{background-color: #f3bb4580}
+    .div-flex > .flex:nth-child(2) .iconfont{background-color: #7ac29a80}
+    .div-flex > .flex:nth-child(3) .iconfont{background-color: #eb5e2880}
+    .div-flex > .flex:nth-child(4) .iconfont{background-color: #68b3c880}
+    .div-flex > .flex:nth-child(5) .iconfont{background-color: #eb682880}
+    .div-flex > .flex:nth-child(6) .iconfont{background-color: #69b3c880}
     .div-flex > .flex .text{
         text-align: right;
         flex: 1;
