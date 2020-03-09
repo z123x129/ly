@@ -43,18 +43,21 @@
         display: flex;
         display: -webkit-flex;
         align-items: center;
+        justify-content: center;
         width: calc(100% / 6 - 0.833333rem);
         margin-right: 1rem;
         border-radius: 6px;
         box-shadow: 0 2px 2px rgba(204,197,185,.5);
         background-color: #fff;
         color: #252422;
+        padding: 20px;;
     }
-    .div-flex > .flex:nth-child(6n){margin-right: 0}
+    .div-flex > .flex:nth-child(3n){margin-right: 0}
     .div-flex > .flex .iconfont{
-        font-size: 30px;
-        width: 80px;
-        line-height: 80px;
+        font-size: 25px;
+        width: 50px;
+        line-height: 50px;
+        border-radius: 50%;
         text-align: center;
         color: #fff;
     }
