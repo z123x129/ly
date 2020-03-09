@@ -723,12 +723,13 @@
     .user-logo{
         display: flex;
     }
-    #i1{
-        background-color:#fff;
-    }
+    // #i1{
+    //     background-color:#fff;
+    // }
+    .main .main-layout-con{background: #f0f0f0;}
     .main .content-wrapper{
         padding: 0;
-        margin: '15px 0 20px 20px';
+        margin: 15px 0 15px 15px;
         background: '#fff';
         min-Height: '260px'
     }
