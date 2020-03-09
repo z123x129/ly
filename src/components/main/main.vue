@@ -97,7 +97,10 @@
                         </div>
                         <Content class="content-wrapper" >
                            <keep-alive :include="cacheList">
-                                <router-view></router-view>
+                               <div style="background-color:#fff" id='i2'>
+                                    <router-view></router-view>
+                               </div>
+                                
                            </keep-alive>
 <!--                            <ABackTop :height="100" :bottom="80" :right="50" container=".content-wrapper"></ABackTop>-->
                         </Content>
@@ -723,9 +726,9 @@
     .user-logo{
         display: flex;
     }
-    // #i1{
-    //     background-color:#fff;
-    // }
+    #i1{
+        background-color:#f0f0f0;
+    }
     .main .main-layout-con{background: #f0f0f0;}
     .main .content-wrapper{
         padding: 0;
