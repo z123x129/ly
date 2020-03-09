@@ -30,25 +30,22 @@ export default {
     }
   },
   methods: {
-    logout () {
-      // this.handleLogOut().then(() => {
-      //   this.$router.push({
-      //     name: 'login'
-      //   })
-      // })
-    },
     message () {
       this.$router.push({
         name: 'message_page'
       })
     },
-    handleClick () {
-      // switch (name) {
-      //   case 'logout': this.logout()
-      //     break
-      //   case 'message': this.message()
-      //     break
-      // }
+    handleClick (name) {
+      switch (name) {
+        case 'logout': this.logout()
+          break
+        case 'message': //this.message()
+          break
+      }
+    },
+    logout(){
+      this.$store.commit('getUid','');
+      this.$router.push('/login');
     }
   }
 }

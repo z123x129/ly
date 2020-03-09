@@ -13,7 +13,7 @@
 
 <style lang="less">
 #app {
-  background: #F8F8F8;
+  background: #fff;
   height: 100%;
   font-size: 13px;
 }
