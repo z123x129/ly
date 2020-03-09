@@ -91,11 +91,11 @@
                     </div>
                 </Header>
                 <Content class="main-content-con">
-                    <Layout class="main-layout-con" style="background-color:#fff">
+                    <Layout class="main-layout-con">
                         <div class="tag-nav-wrapper">
                             <tags-nav :value="$route" @input="handleClick" :list="tagsNav" @on-close="closeClick"/>
                         </div>
-                        <Content class="content-wrapper" :style="{margin: '15px 0 20px 20px', background: '#fff', minHeight: '260px'}">
+                        <Content class="content-wrapper" >
                            <keep-alive :include="cacheList">
                                 <router-view></router-view>
                            </keep-alive>
@@ -722,5 +722,14 @@
 <style lang="less">
     .user-logo{
         display: flex;
+    }
+    #i1{
+        background-color:#fff;
+    }
+    .main .content-wrapper{
+        padding: 0;
+        margin: '15px 0 20px 20px';
+        background: '#fff';
+        min-Height: '260px'
     }
 </style>

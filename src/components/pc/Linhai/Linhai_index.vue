@@ -1,6 +1,6 @@
 <!--饼图-->
 <template>
-    <dv-full-screen-container class="box">
+    <div class="box" id=i1>
         <div class="logo">
             <h1 class="border1">市场监督局指挥实时数据大屏</h1>
         </div>
@@ -73,7 +73,7 @@
                 </div>
             </div>
         </div>
-    </dv-full-screen-container>
+    </div>
 </template>
 <script>
     export default {
