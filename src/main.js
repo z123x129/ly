@@ -1,11 +1,13 @@
 import Vue from 'vue'
 import App from './App.vue'
-import {router} from './router'
+import router from './router'
 import store from './store'
 import secret_key from '../public/js/secret_key'
 import https from "../public/js/api.request"
-
+import iView from 'iview'
+import 'iview/dist/styles/iview.css';
 import dataV from '@jiaminghi/data-view'
+import config from '@/config'
 Vue.use(dataV)
 
 Vue.prototype.$secret_key = secret_key;
@@ -14,15 +16,22 @@ Vue.config.productionTip = false;
 
 import infiniteScroll from 'vue-infinite-scroll'
 Vue.use(infiniteScroll);
-
+Vue.use(iView);
+Vue.prototype.$config = config
 import { Dialog } from 'vant';
 
-router().then(function(router){
-  new Vue({
-    router,
-    store,
-    render: h => h(App)
-  }).$mount('#app')
+new Vue({
+  router,
+  store,
+  render: h => h(App)
+}).$mount('#app')
+
+// router().then(function(router){
+//   new Vue({
+//     router,
+//     store,
+//     render: h => h(App)
+//   }).$mount('#app')
 
   //页面跳转的登录判断
 // router.beforeEach((to,from,next)=>{
@@ -65,6 +74,6 @@ router().then(function(router){
 //     next();
 //   }
 // });
-});
+// });
 
 
