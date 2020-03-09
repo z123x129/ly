@@ -19,7 +19,7 @@ let routerd =  new VueRouter({
     base: process.env.BASE_URL,
     routes
 });
-window.console.log(routerd)
+// window.console.log(routerd)
 store.commit("setRouteInfo", routes);
 export async function router(){
     // var routeList = await getRouteList();

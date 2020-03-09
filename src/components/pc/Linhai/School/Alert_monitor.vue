@@ -51,9 +51,9 @@
             </div>
         </div>
         <el-table v-if="show == true"
-                :data="tableData"
-                stripe
-                style="width: 100%">
+                  :data="tableData"
+                  stripe
+                  style="width: 100%">
             <el-table-column
                     align="center"
                     prop="date"
@@ -245,73 +245,74 @@
     }
 </script>
 <style scoped lang="less">
-.demo-form-inline{
-    background: #fff;
-}
-#form .el-form-item{
-    width: 25vw;
-    margin: 10px 0;
-}
-.big_box{
-    width: 100vw;
-    padding: 20px 50px;
-    background: #fff;
-}
-.box{
-    display: inline-block;
-    width: 130px;
-    height: 180px;
-    background: #f9f9f9;
-    border-radius: 5px;
-    overflow: hidden;
-    box-sizing: border-box;
-    margin-right: 15px;
-    margin-bottom: 15px;
-    transition: .3s;
-}
-.box:hover{
-    box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
-}
-.box img{
-    width: 100%;
-    height: 130px;
-    background: skyblue;
-}
-.box h5{
-    text-indent: 10px;
-    line-height: 25px;
-}
-.box p{
-    text-indent: 10px;
-    color: #999;
-}
-.el-dialog__wrapper /deep/ .el-dialog__body{
-    padding-top: 0;
-}
-.avatar-uploader /deep/ .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-}
-.avatar-uploader /deep/ .el-upload:hover {
-    border-color: #409EFF;
-}
-.avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
-}
-.avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
-}
-.message li{
-    line-height: 30px;
-}
+    .demo-form-inline{
+        background: #fff;
+    }
+    #form .el-form-item{
+        width: 25vw;
+        margin: 10px 0;
+    }
+    .big_box{
+        width: 100vw;
+        padding: 20px 50px;
+        background: #fff;
+    }
+    .box{
+        display: inline-block;
+        width: 130px;
+        height: 180px;
+        background: #f9f9f9;
+        border-radius: 5px;
+        overflow: hidden;
+        box-sizing: border-box;
+        margin-right: 15px;
+        margin-bottom: 15px;
+        transition: .3s;
+    }
+    .box:hover{
+        box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+    }
+    .box img{
+        width: 100%;
+        height: 130px;
+        background: skyblue;
+    }
+    .box h5{
+        text-indent: 10px;
+        line-height: 25px;
+    }
+    .box p{
+        text-indent: 10px;
+        color: #999;
+    }
+    .el-dialog__wrapper /deep/ .el-dialog__body{
+        padding-top: 0;
+    }
+    .avatar-uploader /deep/ .el-upload {
+        border: 1px dashed #d9d9d9;
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+    .avatar-uploader /deep/ .el-upload:hover {
+        border-color: #409EFF;
+    }
+    .avatar-uploader-icon {
+        font-size: 28px;
+        color: #8c939d;
+        width: 178px;
+        height: 178px;
+        line-height: 178px;
+        text-align: center;
+    }
+    .avatar {
+        width: 178px;
+        height: 178px;
+        display: block;
+    }
+    .message li{
+        line-height: 30px;
+    }
 </style>
+

@@ -12,7 +12,7 @@
                 </el-cascader>
             </el-form-item>
             <el-form-item label="所属学校:">
-                    <el-input size="small" v-model="formInline.dirName" ></el-input>
+                <el-input size="small" v-model="formInline.dirName" ></el-input>
             </el-form-item>
             <el-form-item style="margin-top: -2px">
                 <el-button size="small" type="primary" @click="getList">搜索</el-button>
@@ -64,20 +64,20 @@
             </el-table-column>
         </el-table>
         <div style="padding: 15px;display: flex;justify-content: flex-end;background: #fff">
-                <el-pagination
-                        @size-change="handleSizeChange"
-                        @current-change="handleCurrentChange"
-                        :current-page="currentPage"
-                        :page-sizes="[paginates, paginates*2, paginates*3, paginates*4]"
-                        :page-size="paginate"
-                        background
-                        layout="total, sizes, prev, pager, next, jumper"
-                        :total="total">
-                </el-pagination>
-            </div>
+            <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[paginates, paginates*2, paginates*3, paginates*4]"
+                    :page-size="paginate"
+                    background
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="total">
+            </el-pagination>
+        </div>
         <el-dialog :title="type == 1 ? '学校信息' : '上传报告'" :visible.sync="dialogFormVisible">
             <el-form :model="form" :rules="rules" ref="form">
-                <el-form-item label="学校名称:" prop="dirName" :label-width="formLabelWidth">
+                <el-form-item label="学校名称:" prop="name" :label-width="formLabelWidth">
                     <el-input disabled="disabled" style="width: 80%" size="small" v-model="form.dirName" placeholder="请输入学校名称" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="单位名称:" prop="company" :label-width="formLabelWidth">
@@ -93,29 +93,32 @@
                     <el-input style="width: 80%" size="small" v-model="form.street" placeholder="请输入学校地址" autocomplete="off"></el-input>
                 </el-form-item>
                 <div v-if="type == 2">
-                    <el-form-item label="违规选项:" prop="user" :label-width="formLabelWidth">
-                        <el-select style="width: 80%" size="small" v-model="form.user" placeholder="请选择">
-                            <el-option label="选择区域" value="shanghai"></el-option>
-                            <el-option label="选择学校" value="beijing"></el-option>
+                    <el-form-item label="违规选项:" prop="violation" :label-width="formLabelWidth">
+                        <el-select style="width: 80%" size="small" v-model="form.violation" placeholder="请选择">
+                            <el-option label="超市有熟食" value="超市有熟食"></el-option>
+                            <el-option label="健康证过期" value="健康证过期"></el-option>
+                            <el-option label="后厨不规范" value="后厨不规范"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="上报标题:" prop="region" :label-width="formLabelWidth">
-                        <el-input style="width: 80%" size="small" v-model="form.region" placeholder="请输入手机号" autocomplete="off"></el-input>
+                    <el-form-item label="上报标题:" prop="title" :label-width="formLabelWidth">
+                        <el-input style="width: 80%" size="small" v-model="form.title" placeholder="请输入上报标题" autocomplete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="上报内容:" prop="region" :label-width="formLabelWidth">
-                        <el-input type="textarea" style="width: 80%" size="small" v-model="form.region" placeholder="请输入手机号" autocomplete="off"></el-input>
+                    <el-form-item label="上报内容:" prop="content" :label-width="formLabelWidth">
+                        <el-input type="textarea" style="width: 80%" size="small" v-model="form.content" placeholder="请输入上报内容" autocomplete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="附件:" prop="imageUrl" :label-width="formLabelWidth">
-                    <el-upload
-                            class="avatar-uploader"
-                            action="https://jsonplaceholder.typicode.com/posts/"
-                            :show-file-list="false"
-                            :on-success="handleAvatarSuccess"
-                            :before-upload="beforeAvatarUpload">
-                        <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar">
-                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                    </el-upload>
-                </el-form-item>
+                    <el-form-item label="附件:" prop="file" :label-width="formLabelWidth">
+                        <el-upload
+                                class="upload-demo"
+                                drag
+                                action="https://jsonplaceholder.typicode.com/posts/"
+                                :on-success="handleAvatarSuccess"
+                                :before-upload="beforeAvatarUpload"
+                                multiple>
+                            <i class="el-icon-upload"></i>
+                            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                            <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+                        </el-upload>
+                    </el-form-item>
                 </div>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -148,7 +151,7 @@
         data(){
             return{
                 formInline: {
-                    cameraIndexCode: ["root000000","868955ff-9425-4a99-b7c9-277f4d7bb43b"],
+                    cameraIndexCode: [],
                     dirName: '',
                     name:'',
                 },
@@ -162,7 +165,7 @@
                 dialogFormVisible: false,
                 type: 1,
                 form: {
-                    personChargePhone:''
+                    file:[]
                 },
                 formLabelWidth: '140px',
                 rules: {
@@ -181,14 +184,17 @@
                     street: [
                         {required: true, message: '学校地址不能为空', trigger: 'blur'},
                     ],
-                    imageUrl: [
-                        {required: true, message: '请上传人脸照片', trigger: 'change'},
+                    violation: [
+                        {required: true, message: '请选择违规选项', trigger: 'change'},
                     ],
-                    imageUrl2: [
-                        {required: true, message: '请上传健康证照片', trigger: 'change'},
+                    title: [
+                        {required: true, message: '上报标题不能为空', trigger: 'blur'},
                     ],
-                    value1: [
-                        {required: true, message: '请选择到期时间', trigger: 'change'},
+                    content: [
+                        {required: true, message: '上报内容不能为空', trigger: 'blur'},
+                    ],
+                    file: [
+                        {required: true, message: '请上传附件', trigger: 'change'},
                     ],
                 }
             }
@@ -199,7 +205,7 @@
         },
         methods: {
             getList(){ //获取学校列表
-                let params ={'page':this.page,'paginate':this.paginate,'dirName':this.formInline.dirName,'cameraIndexCode':this.formInline.cameraIndexCode[1]};
+                let params ={'user_id':this.$store.state.route.uid,'page':this.page,'paginate':this.paginate,'dirName':this.formInline.dirName,'cameraIndexCode':this.formInline.cameraIndexCode[1]};
                 params = this.$secret_key.func(this.$store.state.on_off, params);
                 this.$https.fetchPost('/plugin/school/api_index/index',params).then((res) => {
                     var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
@@ -217,6 +223,18 @@
                 this.type = type;
                 this.form = this.deepClone(res);
                 this.dialogFormVisible = true;
+            },
+            handleAvatarSuccess(res, file) {
+                console.log(res, file)
+                this.form.file = file.raw;
+                console.log(this.form.file)
+            },
+            beforeAvatarUpload(file) {
+                const isJPG = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/bmp';
+                if (!isJPG) {
+                    Message.error('附件只能上传图片!');
+                }
+                return isJPG;
             },
             deepClone(target) {  //深拷贝
                 // 定义一个变量
@@ -259,30 +277,26 @@
                 this.page = val;
                 this.getList();
             },
-            handleAvatarSuccess(res, file) {
-                this.form.imageUrl = URL.createObjectURL(file.raw);
-            },
-            beforeAvatarUpload(file) {
-                const isJPG = file.type === 'image/jpeg';
-                const isLt2M = file.size / 1024 / 1024 < 2;
-
-                if (!isJPG) {
-                    Message.error('上传头像图片只能是 JPG 格式!');
-                }
-                if (!isLt2M) {
-                    Message.error('上传头像图片大小不能超过 2MB!');
-                }
-                return isJPG && isLt2M;
-            },
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
+                    console.log(this.form)
                     if (valid) {
-                        let params = this.form;
+                        let arr = {'user_id':this.$store.state.route.uid};
+                        let params = Object.assign(this.form,arr);
                         params = this.$secret_key.func(this.$store.state.on_off, params);
-                        this.$https.fetchPost('/plugin/school/api_index/school_edit',params).then((res) => {
-                            Message.success('编辑成功');
-                            this.dialogFormVisible = false;
-                        })
+                        if(this.type == 1){
+                            this.$https.fetchPost('/plugin/school/api_index/school_edit',params).then((res) => {
+                                this.getList();
+                                Message.success('编辑成功');
+                                this.dialogFormVisible = false;
+                            })
+                        }else if(this.type == 2){
+                            this.$https.fetchPost('/plugin/school/api_index/report_school',params).then((res) => {
+                                // this.getList();
+                                Message.success('上传成功');
+                                this.dialogFormVisible = false;
+                            })
+                        }
                     } else {
                         return false;
                     }
@@ -292,40 +306,40 @@
     }
 </script>
 <style scoped lang="less">
-.demo-form-inline{
-    padding: 20px 10px 0;
-}
-.el-form-item{
-    margin-top: 0;
-}
-.avatar-uploader /deep/ .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-}
-.avatar-uploader /deep/ .el-upload:hover {
-    border-color: #409EFF;
-}
-.avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
-}
-.avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
-}
-.el-table /deep/ .warning-row {
-    background: oldlace;
-}
+    .demo-form-inline{
+        padding: 20px 10px 0;
+    }
+    .el-form-item{
+        margin-top: 0;
+    }
+    .avatar-uploader /deep/ .el-upload {
+        border: 1px dashed #d9d9d9;
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+    .avatar-uploader /deep/ .el-upload:hover {
+        border-color: #409EFF;
+    }
+    .avatar-uploader-icon {
+        font-size: 28px;
+        color: #8c939d;
+        width: 178px;
+        height: 178px;
+        line-height: 178px;
+        text-align: center;
+    }
+    .avatar {
+        width: 178px;
+        height: 178px;
+        display: block;
+    }
+    .el-table /deep/ .warning-row {
+        background: oldlace;
+    }
 
-.el-table /deep/ .success-row {
-    background: #f0f9eb;
-}
+    .el-table /deep/ .success-row {
+        background: #f0f9eb;
+    }
 </style>
