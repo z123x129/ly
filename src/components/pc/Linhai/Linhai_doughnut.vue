@@ -1,6 +1,6 @@
 <!--饼图-->
 <template>
-    <div style="width: 100%;height: 100%;">
+    <div style="width: 100%;height: 100%;" >
         <div ref="chart" class="echarts"></div>
     </div>
 </template>
@@ -19,6 +19,7 @@
 
             // 指定图表的配置项和数据
             var option = {
+                color: ['#ff4d4f','#ffa940','#ffec3d', '#73d13d','#40a9ff','#9254de'],
                 tooltip: {
                     trigger: 'item',
                     formatter: '{a} <br/>{b}: {c} ({d}%)'

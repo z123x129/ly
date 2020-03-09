@@ -1,2 +1,2 @@
 import Fullscreen from './fullscreen.vue'
-export  { Fullscreen }
+export  default Fullscreen 
