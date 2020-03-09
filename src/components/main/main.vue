@@ -84,8 +84,10 @@
                     </div>
 
 
-                    <div>
+                    <div class="user-logo">
+                        <fullscreen v-model="isFullscreen" style="margin-right: 10px;"/>
                         <user  :message-unread-count="0" :user-avatar="img"/>
+                        
                     </div>
                 </Header>
                 <Content class="main-content-con">
@@ -93,7 +95,7 @@
                         <div class="tag-nav-wrapper">
                             <tags-nav :value="$route" @input="handleClick" :list="tagsNav" @on-close="closeClick"/>
                         </div>
-                        <Content class="content-wrapper" :style="{margin: '15px 0 20px 20px', background: '#f5f7f9', minHeight: '260px'}">
+                        <Content class="content-wrapper" >
                            <keep-alive :include="cacheList">
                                 <router-view></router-view>
                            </keep-alive>
@@ -112,7 +114,7 @@
     import user from './component/user'
     import SideMenu from './component/side-menu'
     import TagsNav from './component/tags-nav'
-    // import fullscreen from './component/fullscreen'
+    import fullscreen from './component/fullscreen'
     import { mapMutations} from 'vuex'
     import {  routeEqual } from '@/libs/common'
     import './main.less'
@@ -625,7 +627,7 @@
             user,
             SideMenu,
             TagsNav,
-            // fullscreen
+            fullscreen
         },
         computed: {
             rotateIcon () {
@@ -658,7 +660,7 @@
                 this.$refs.side1.toggleCollapse();
             },
             turnToPage:function(route){
-                window.console.log(route);
+                // window.console.log(route);
                 let { name, params, query } = {}
                 if (typeof route === 'string') name = route
                 else {
@@ -667,7 +669,7 @@
                     query = route.query
                 }
                 if (name.indexOf('isTurnByHref_') > -1) {
-                    window.console.log(name)
+                    // window.console.log(name)
                     window.open(name.split('_')[1])
                     return
                 }
@@ -684,7 +686,7 @@
                 this.turnToPage(item.name)
             },
             closeClick:function(res, type, route){
-                window.console.log(res, type, route);
+                // window.console.log(res, type, route);
                 if (type !== 'others') {
                     if (type === 'all') {
                     this.turnToPage(this.$config.homeName)
@@ -703,17 +705,31 @@
             this.addTag({
                 route: { name, params, query, meta }
             });
-            window.console.log(this.menuList, 233);
+            // window.console.log(this.menuList, 233);
 
         },
         watch:{
             "$route"(newRoute){
 
-                window.console.log(newRoute);
-                window.console.log(2);
+                // window.console.log(newRoute);
+                // window.console.log(2);
                 let route = newRoute;
                 this.addTag({route});
             }
         }
     }
 </script>
+<style lang="less">
+    .user-logo{
+        display: flex;
+    }
+    #i1{
+        background-color:#fff;
+    }
+    .main .content-wrapper{
+        padding: 0;
+        margin: '15px 0 20px 20px';
+        background: '#fff';
+        min-Height: '260px'
+    }
+</style>

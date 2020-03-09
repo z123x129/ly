@@ -111,4 +111,14 @@ export default {
 </script>
 <style lang="less">
 @import './side-menu.less';
+.ivu-layout-sider,.ivu-menu-dark.ivu-menu-vertical{
+  background: #001529 !important;
+    .ivu-menu-opened{
+      background: #000c17 !important;
+    }
+    .ivu-menu-submenu-title,.ivu-menu-submenu-title:hover{
+      background: #001529 !important;
+    }
+}
+
 </style>

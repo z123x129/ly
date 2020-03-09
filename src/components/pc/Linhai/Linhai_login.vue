@@ -1,7 +1,9 @@
 <template>
-    <div class="bg_login">
+    <div class="cont">
         <div class="header">
-            <p><img width="40px" height="40px" :src="logo" />卓远商城后台管理</p>
+            <p>
+                <img width="40px" height="40px" :src="logo" />
+                卓远商城后台管理</p>
         </div>
         <div class="container">
             <Row style="width: 360px;margin-right: 150px">
@@ -30,14 +32,9 @@
     </div>
 </template>
 <script>
-    import {Row,Col,Card,Form,FormItem,Icon,Button,Input} from 'iview'
-    import 'iview/dist/styles/iview.css'
     import { Message } from 'element-ui'
     import 'element-ui/lib/theme-chalk/index.css'
     export default {
-        components:{
-            Row,Col,Card,Form,FormItem,Icon,Button,Input,Message
-        },
         data(){
             return{
                 formInline: {
@@ -57,57 +54,34 @@
             }
         },
         mounted(){
-            this.$https.fetchPost('/plugin/site_configuration/apiIndex/getInfo').then((res) => {
-                this.logo = res.SEO.img_url;
-            })
+            // this.$https.fetchPost('/plugin/site_configuration/apiIndex/getInfo').then((res) => {
+            //     this.logo = res.SEO.img_url;
+            // })
         },
         methods:{
             handleSubmit() {
-                if(this.$store.state.on_off==true){
-                    this.Access_token();
-                }else{
-                    this.jinru();
-                }
-            },
-            Access_token(){
-                //获取access_token凭证
-                this.$https.fetchGet('/api/api_common/accessToken?appid='+this.$store.state.appid+'&appsecret='+this.$store.state.appsecret).then((res) => {
-                    this.access_token = res.access_token;
-                    //临时token票据
-                    this.$https.fetchGet('/api/api_common/getToken?jti='+this.access_token).then((res) => {
-                        this.$store.commit('getJsapi',res.jsapi_ticket);
-                        this.jinru();
-                    })
-                })
-            },
-            jinru(){
                 //登录
-                let params ={'account':this.formInline.user,'password':this.formInline.password};
-                params = this.$secret_key.func(this.$store.state.on_off, params,"important");
-                this.$https.fetchPost('/plugin/member/api_index/accountLogin',params).then((res) => {
-                    var res_data =this.$secret_key.func(this.$store.state.on_off, res ,"plain");
-                    // localStorage.setItem("uid",res_data.uid);
-                    // localStorage.setItem("expires_in",res_data.expires_in);
-                    this.$store.commit('getUid',res_data.uid);
-                    this.$store.commit('getExpires',res_data.expires_in);
+                let params ={'user_login':this.formInline.user,'user_pass':this.formInline.password};
+                params = this.$secret_key.func(this.$store.state.on_off, params);
+                this.$https.fetchPost('/plugin/school/api_index/user_login',params).then((res) => {
+                    var res_data =this.$secret_key.func(this.$store.state.on_off, res ,"key");
+                    this.$store.commit('getUid',res_data.id);
+                    this.$store.commit('getJurisdiction',res_data.user_type);
                     Message.success('登录成功');
-                    this.$router.push('/Member_pcstore')
+                    this.$router.push('/')
                 })
             },
         }
     }
 </script>
 <style scoped lang="less">
-    .bg_login{
-        width: 100%;
-        height: 100%;
-        background: #fff url('https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=676055513,116497977&fm=11&gp=0.jpg') no-repeat;
-        background-position: 200px center;
+    .cont{
+        max-width: 1366px;
+        min-width: 1100px;
+        margin: 0 auto;
     }
     .header {
         height: 10vh;
-        border-bottom: 1px solid #cfe4ea;
-        background: #e7f8fa;
     }
     .header p{
         color: #6d9494;
@@ -116,6 +90,10 @@
         margin-left: 80px;
     }
     .container{
+        width: 100%;
+        height: 90vh;
+        background: #fff url('https://rescdn.qqmail.com/zh_CN/htmledition/images/tg-chang1ea8a2.png') no-repeat;
+        background-position: 200px center;
         display: flex;
         align-items: center;
         justify-content: flex-end;

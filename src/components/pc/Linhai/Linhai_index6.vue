@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="i1">
         <el-tabs style="padding: 0 10px" v-model="activeName" @tab-click="handleClick">
             <el-tab-pane label="被抓拍到的重点人员" name="first">
                 <el-form :inline="true" :model="formInline" class="demo-form-inline">
@@ -344,5 +344,8 @@
     width: 178px;
     height: 178px;
     display: block;
+}
+.el-image /deep/ .el-icon-circle-close{
+    color: #fff;
 }
 </style>
