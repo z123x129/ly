@@ -211,4 +211,41 @@ export default {
 
 <style lang="less">
 @import './tags-nav.less';
+.main {
+  .tag-nav-wrapper{
+    background-color: #fff !important;
+    height: 3rem !important;
+  }
+  .tags-nav{
+    button{
+      outline:none;
+      box-shadow: none;
+    }
+    .scroll-outer{
+      box-shadow: none;
+    }
+    .btn-con{
+      border-top:1px solid #f0f0f0;
+      border-right:1px solid #f0f0f0;
+      &.right-btn{
+        border-left: 1px solid #f0f0f0;
+      }
+    }
+    .close-con{
+      border-top:1px solid #f0f0f0;
+    }
+  }
+  .scroll-body{
+    .ivu-tag-dot{
+      height: 2.46666rem;
+      line-height: 2.46666rem;
+      margin: 0.13333rem 0.26667rem 0.13333rem 0;
+    }
+  }
+
+}
+
+
+
+
 </style>
