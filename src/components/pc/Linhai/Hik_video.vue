@@ -11,6 +11,7 @@
 <script>
     // import "_pl/js/Hik/jsWebControl-1.0.0.min.js";
     import {JSEncrypt} from 'encryptlong'
+
     export default {
 
         data(){
