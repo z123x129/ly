@@ -10,7 +10,7 @@
             <el-form-item label="抓拍点:" :label-width="formLabelWidth">
                 <el-select size="small" v-model="formInline.region" placeholder="请选择区域">
                     <el-option label="选择区域" value="shanghai"></el-option>
-                    <el-option label="选择学校" value="beijing"></el-option>
+                    <el-option label="选择学校" value="beijing"></el-option>o
                 </el-select>
             </el-form-item>
             <el-form-item label="年龄段:" :label-width="formLabelWidth">
@@ -177,7 +177,7 @@
                     date1:'',
                     date2:'',
                     user: '',
-                    region: ''
+                    region: 'shanghai'
                 },
                 formLabelWidth: '100px',
                 radio: '图标',

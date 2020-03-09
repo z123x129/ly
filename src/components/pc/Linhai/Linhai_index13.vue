@@ -3,10 +3,13 @@
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
             <el-form-item label="选择街道:">
                 <el-cascader
+                        v-model="formInline.cameraIndexCode"
                         size="small"
                         placeholder="所属街道"
                         :options="options"
-                        filterable></el-cascader>
+                        clearable
+                        filterable>
+                </el-cascader>
             </el-form-item>
             <el-form-item label="所属学校:">
                     <el-input size="small" v-model="formInline.dirName" ></el-input>
@@ -145,6 +148,7 @@
         data(){
             return{
                 formInline: {
+                    cameraIndexCode: ["root000000","868955ff-9425-4a99-b7c9-277f4d7bb43b"],
                     dirName: '',
                     name:'',
                 },
@@ -191,10 +195,11 @@
         },
         mounted(){
             this.getList();
+            this.getCity();
         },
         methods: {
             getList(){ //获取学校列表
-                let params ={'page':this.page,'paginate':this.paginate,'dirName':this.formInline.dirName};
+                let params ={'page':this.page,'paginate':this.paginate,'dirName':this.formInline.dirName,'cameraIndexCode':this.formInline.cameraIndexCode[1]};
                 params = this.$secret_key.func(this.$store.state.on_off, params);
                 this.$https.fetchPost('/plugin/school/api_index/index',params).then((res) => {
                     var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
@@ -203,12 +208,47 @@
                     this.total = res_data.total;
                 })
             },
+            getCity(){
+                this.$https.fetchPost('/plugin/school/api_index/region_list').then((res) => {
+                    this.options = this.$secret_key.func(this.$store.state.on_off, res ,"key");
+                })
+            },
             dialogShow(type,res){
                 this.type = type;
-                this.form = res;
-                // console.log(this.form.personChargePhone)
+                this.form = this.deepClone(res);
                 this.dialogFormVisible = true;
-                // this.$refs['form'].resetFields();
+            },
+            deepClone(target) {  //深拷贝
+                // 定义一个变量
+                var result;
+                // 如果当前需要深拷贝的是一个对象的话
+                if (typeof target === 'object') {
+                    // 如果是一个数组的话
+                    if (Array.isArray(target)) {
+                        result = []; // 将result赋值为一个数组，并且执行遍历
+                        for (let i in target) {
+                            // 递归克隆数组中的每一项
+                            result.push(this.deepClone(target[i]))
+                        }
+                        // 判断如果当前的值是null的话；直接赋值为null
+                    } else if(target===null) {
+                        result = null;
+                        // 判断如果当前的值是一个RegExp对象的话，直接赋值
+                    } else if(target.constructor===RegExp){
+                        result = target;
+                    }else {
+                        // 否则是普通对象，直接for in循环，递归赋值对象的所有值
+                        result = {};
+                        for (let i in target) {
+                            result[i] = this.deepClone(target[i]);
+                        }
+                    }
+                    // 如果不是对象的话，就是基本数据类型，那么直接赋值
+                } else {
+                    result = target;
+                }
+                // 返回最终结果
+                return result;
             },
             handleSizeChange(val) {//分页器
                 this.paginate = val;
