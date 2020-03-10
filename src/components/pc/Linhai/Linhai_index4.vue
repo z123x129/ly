@@ -164,16 +164,18 @@
                 let placeSearch = new AMap.PlaceSearch();  //构造地点查询类
                 let infoWindow = new AMap.InfoWindow({});//信息
                 _this.map.on('hotspotclick', function (result) {
-                    // console.log(result)
                     placeSearch.getDetails(result.id, function (status, result) {
                         if (status === 'complete' && result.info === 'OK') {
                             let poiArr = result.poiList.pois;
                             let location = poiArr[0].location;
-                            // if(poiArr[0].name == '浙江省临海杜桥中学'){
+                            let code=[];
+                            code[0]=poiArr[0].name.indexOf("学");
+                            code[1]=poiArr[0].name.indexOf("幼儿园");
+                            if(code[0]>0||code[1]>0){
                                 infoWindow.setContent(_this.createContent(poiArr[0]));
                                 infoWindow.open(_this.map, location);
-                            // }
-                            
+                            }
+
                         }
                     });
                 });
