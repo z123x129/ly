@@ -11,8 +11,8 @@
                     class="filter-tree"
                     :data="data"
                     :props="defaultProps"
-                    default-expand-all
                     :filter-node-method="filterNode"
+                    @node-click="gotoMap"
                     ref="tree">
             </el-tree>
         </div>
@@ -36,42 +36,7 @@
         data(){
             return{
                 filterText: '',
-                data: [
-                    {
-                    id: 1,
-                    label: '一级 1',
-                    children: [{
-                        id: 4,
-                        label: '二级 1-1',
-                        children: [{
-                            id: 9,
-                            label: '三级 1-1-1'
-                        }, {
-                            id: 10,
-                            label: '三级 1-1-2'
-                        }]
-                    }]
-                }, {
-                    id: 2,
-                    label: '一级 2',
-                    children: [{
-                        id: 5,
-                        label: '二级 2-1'
-                    }, {
-                        id: 6,
-                        label: '二级 2-2'
-                    }]
-                }, {
-                    id: 3,
-                    label: '一级 3',
-                    children: [{
-                        id: 7,
-                        label: '二级 3-1'
-                    }, {
-                        id: 8,
-                        label: '二级 3-2'
-                    }]
-                }],
+                data: [],
                 defaultProps: {
                     children: 'children',
                     label: 'label'
@@ -106,8 +71,28 @@
             this.getxy();//经纬度
             this.redian();//热点
             this.addsite();//标点
+            this.getList()//获取地区列表
         },
         methods:{
+            getList(){ //获取地区列表
+                let params ={};
+                params = this.$secret_key.func(this.$store.state.on_off, params);
+                this.$https.fetchPost('/plugin/statistics/api_index/getRegionCatalog').then((res) => {
+                    var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
+                    this.data = res_data
+                    //在地图添加标记
+                    // for (var i = 0; i < res_data.length ; i++) {
+                    //     for (var y = 0;y<res_data[i].children.length; y++){
+                    // }
+                })
+            },
+            gotoMap(data){//地图跳转
+                let _this=this
+                if(!data.children){
+                    _this.map.setZoomAndCenter(17, [data.longitude-0.0058,data.latitude-0.0056]);
+                    _this.tzSite=[data.longitude-0.0058,data.latitude-0.0056];
+                }
+            },
             filterNode(value, data) {
                 if (!value) return true;
                 return data.label.indexOf(value) !== -1;
@@ -134,7 +119,7 @@
             addsite: function () {
                 let _this=this
                 _this.markerArr.map((va,key) => {
-                    console.log(key)
+                    // console.log(key)
                     _this.marker = new AMap.Marker({
                         position: va.xy,
                         map: _this.map,
@@ -147,7 +132,7 @@
                 })
             },
             markerClick:function(e) {
-                console.log(e)
+                // console.log(e)console
                 let _this=this
                 _this.infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -30)});
                 _this.infoWindow.setContent(e.target.content);
@@ -203,16 +188,17 @@
 </script>
 <style scoped lang="less">
     .demo{
-        width: 16%;
+        width: 18%;
         float: left;
         padding: 10px;
         box-sizing: border-box;
         height: 100vh;
         background: #fff;
+        overflow: auto;
     }
     .map_box{
         float: left;
-        width: 84%;
+        width: 82%;
         height: 100vh;
         background: skyblue;
     }
@@ -222,5 +208,21 @@
     .btn-info{margin-left: 6px;}
     [v-cloak] {
         display: none;
+    }
+    .el-tree /deep/ .el-tree-node{
+        .el-tree-node__content{
+            height: auto;
+            &>.el-tree-node__label{
+                line-height: 2.2rem;
+            }
+        }
+        .el-tree-node__children{
+            .el-tree-node{
+                .el-tree-node__content{
+                    .el-tree-node__expand-icon{padding: 0;}
+                    .el-tree-node__label{font-size: 0.9rem;color:#666;}
+                }
+            }
+        }
     }
 </style>
