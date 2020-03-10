@@ -36,7 +36,7 @@
         display: flex;
         display: -webkit-flex;
         align-items: center;
-        justify-content: space-around;
+        // justify-content: space-around;
     }
     .div-flex > .flex{
         overflow: hidden;
@@ -44,15 +44,15 @@
         display: -webkit-flex;
         align-items: center;
         justify-content: center;
-        width: calc(100% / 6 - 0.833333rem);
-        margin-right: 1rem;
+        width: calc(100% / 4 - 1.6rem);
+        margin-right: 1.2rem;
         border-radius: 6px;
-        box-shadow: 0 2px 2px rgba(204,197,185,.5);
+        box-shadow: 0 1px 6px rgba(0,0,0,0.1);
         background-color: #fff;
         color: #252422;
         padding: 20px;;
     }
-    .div-flex > .flex:nth-child(3n){margin-right: 0}
+    .div-flex > .flex:nth-child(4n){margin-right: 0}
     .div-flex > .flex .iconfont{
         font-size: 25px;
         width: 50px;
