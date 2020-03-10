@@ -1,5 +1,5 @@
 <template>
-    <div style="width: 100%">
+    <div id="i1" style="width: 100%">
         <div class="demo">
             <p>摄像点选择:</p>
             <el-input style="padding: 10px"
@@ -88,6 +88,7 @@
             },
             gotoMap(data){//地图跳转
                 let _this=this
+                
                 if(!data.children){
                     _this.map.setZoomAndCenter(17, [data.longitude-0.0058,data.latitude-0.0056]);
                     _this.tzSite=[data.longitude-0.0058,data.latitude-0.0056];
@@ -163,12 +164,16 @@
                 let placeSearch = new AMap.PlaceSearch();  //构造地点查询类
                 let infoWindow = new AMap.InfoWindow({});//信息
                 _this.map.on('hotspotclick', function (result) {
+                    // console.log(result)
                     placeSearch.getDetails(result.id, function (status, result) {
                         if (status === 'complete' && result.info === 'OK') {
                             let poiArr = result.poiList.pois;
                             let location = poiArr[0].location;
-                            infoWindow.setContent(_this.createContent(poiArr[0]));
-                            infoWindow.open(_this.map, location);
+                            // if(poiArr[0].name == '浙江省临海杜桥中学'){
+                                infoWindow.setContent(_this.createContent(poiArr[0]));
+                                infoWindow.open(_this.map, location);
+                            // }
+                            
                         }
                     });
                 });
@@ -187,19 +192,26 @@
     }
 </script>
 <style scoped lang="less">
+    #i1{
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+    }
     .demo{
-        width: 18%;
-        float: left;
+        // width: 18%;
+        // float: left;
         padding: 10px;
         box-sizing: border-box;
-        height: 100vh;
+        height: 100%;
         background: #fff;
         overflow: auto;
     }
     .map_box{
-        float: left;
-        width: 82%;
-        height: 100vh;
+        // float: left;
+        // width: 82%;
+        flex: 1;
+        height: 100%;
         background: skyblue;
     }
     .map{height:100vh;width:100%;float:left;}
