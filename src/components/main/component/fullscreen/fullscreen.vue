@@ -23,7 +23,7 @@ export default {
   },
   methods: {
     handleFullscreen () {
-      let main = document.getElementById("i1");
+      let main = document.getElementById("i2");
       if (this.value) {
         if (document.exitFullscreen) {
           document.exitFullscreen()

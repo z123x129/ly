@@ -96,9 +96,11 @@
                             <tags-nav :value="$route" @input="handleClick" :list="tagsNav" @on-close="closeClick"/>
                         </div>
                         <Content class="content-wrapper" >
-                           <keep-alive :include="cacheList">
-                                   <router-view></router-view>
+                            <div style="background-color:#fff;height:100%" id='i2'>
+                           <keep-alive :include="cacheList">   
+                                    <router-view></router-view>
                            </keep-alive>
+                             </div>
 <!--                            <ABackTop :height="100" :bottom="80" :right="50" container=".content-wrapper"></ABackTop>-->
                         </Content>
                     </Layout>
@@ -120,6 +122,7 @@
     import './main.less'
     //import 'swiper/dist/css/swiper.css'
     export default {
+        inject:["app"],
         data () {
             return {
                 isCollapsed: false,
@@ -718,9 +721,19 @@
         },
         watch:{
             "$route"(newRoute){
-
+                if(this.app.oWebControl != "" )
+                {
+                     window.console.log(newRoute.name );
+                    if(newRoute.name != "showVideo")
+                        this.app.oWebControl.JS_HideWnd();
+                    else
+                    {
+                        window.console.log(14565);
+                        this.app.oWebControl.JS_ShowWnd();
+                    }
+                }
                 // window.console.log(newRoute);
-                // window.console.log(2);
+                 window.console.log(newRoute, 1111);
                 let route = newRoute;
                 this.addTag({route});
             }
@@ -732,11 +745,13 @@
         display: flex;
     }
     #i1{
-        background-color:#fff;
+        background-color:#f0f0f0;
     }
+    #i1{}
+    .main .main-layout-con{background: #f0f0f0;}
     .main .content-wrapper{
         padding: 0;
-        margin: '15px 0 20px 20px';
+        margin: 15px 0 15px 15px;
         background: '#fff';
         min-Height: '260px'
     }

@@ -31,7 +31,6 @@ new Vue({
 router.beforeEach((to,from,next)=>{
   let toPath = ['/login','/'];//无需登录判断的页面
   if(toPath.indexOf(to.path)>=0){
-    console.log(to.path == '/login')
     if(to.path == '/login'&&store.state.route.uid!=''){
       next('/home');
     }
