@@ -43,7 +43,7 @@ export default [
 
             {
                 path: '/home',
-                name: 'home1',
+                name: 'showVideo',
                 meta: {
                     icon: 'md-arrow-dropdown-circle',
                     title: '首页'
