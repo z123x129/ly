@@ -1,4 +1,5 @@
 import Linhai_login from '@/components/pc/Linhai/Linhai_login.vue'
+import Linhai_index from '@/components/pc/Linhai/Linhai_index.vue'
 import Linhai_index2 from '@/components/pc/Linhai/Linhai_index2.vue'
 import Linhai_index3 from '@/components/pc/Linhai/Linhai_index3.vue'
 import Linhai_index4 from '@/components/pc/Linhai/Linhai_index4.vue'
@@ -36,15 +37,6 @@ export default [
         children:[
 
             {
-                path: '/Linhai_index6',
-                name: 'Linhai_index6',
-                meta: {
-                    icon: 'md-trending-up',
-                    title: '数字渐变1'
-                },
-                component: Linhai_index6
-            },
-            {
                 path: '/home',
                 name: 'home1',
                 meta: {
@@ -68,6 +60,7 @@ export default [
                 // which is lazy-loaded when the route is visited.
                 component: Linhai_index5
             },
+        
         ]
     },
     {
