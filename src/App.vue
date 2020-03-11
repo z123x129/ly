@@ -7,7 +7,17 @@
 <script>
   import "./assets/css/reset.css"
   export default {
-
+      provide(){
+        return {
+          app:this
+        }
+      },
+      data(){
+        return {
+          oWebControl:"",
+          aWebControl:""
+        }
+      }
   }
 </script>
 
