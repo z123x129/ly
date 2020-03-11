@@ -10,12 +10,12 @@ import Linhai_index9 from '@/components/pc/Linhai/Linhai_index9.vue'
 import Linhai_index10 from '@/components/pc/Linhai/Linhai_index10.vue'
 
 //学校路由
-import Maintain_list from '@/components/pc/Linhai/School/Maintain_list.vue'
+import Maintain_list from '@/components/pc/Linhai/School2/Maintain_list.vue'
 
 //网格员路由
-import School_list from '@/components/pc/Linhai/Grid/School_list.vue'
-import Violation_list from '@/components/pc/Linhai/Grid/Violation_list.vue'
-import Alert_monitor from '@/components/pc/Linhai/Grid/Alert_monitor.vue'
+import School_list from '@/components/pc/Linhai/School/School_list.vue'
+import Violation_list from '@/components/pc/Linhai/School/Violation_list.vue'
+import Alert_monitor from '@/components/pc/Linhai/School/Alert_monitor.vue'
 
 import Hik_video from '@/components/pc/Linhai/Hik_video.vue'
 import Main from '@/components/main'
