@@ -26,7 +26,7 @@
           return{
               height:100,
               width:200,
-              ddd:'sss'
+              ddd:'oWebControl'
           }
         },
         methods:{
@@ -37,7 +37,7 @@
                 this.$refs.H1.initVideo();
             },
             connent(){
-                this.$refs.H1.videoPlay();
+                this.$refs.H1.videoPlay("845b59c6c2b4496494ffc1660908b2d5");
             },
             show(){
                 this.$refs.H1.showVideo();
