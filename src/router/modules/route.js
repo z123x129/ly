@@ -1,4 +1,5 @@
 import Linhai_login from '@/components/pc/Linhai/Linhai_login.vue'
+import Linhai_index from '@/components/pc/Linhai/Linhai_index.vue'
 import Linhai_index2 from '@/components/pc/Linhai/Linhai_index2.vue'
 import Linhai_index3 from '@/components/pc/Linhai/Linhai_index3.vue'
 import Linhai_index4 from '@/components/pc/Linhai/Linhai_index4.vue'
@@ -16,8 +17,7 @@ import Maintain_list from '@/components/pc/Linhai/School2/Maintain_list.vue'
 import School_list from '@/components/pc/Linhai/School/School_list.vue'
 import Violation_list from '@/components/pc/Linhai/School/Violation_list.vue'
 import Alert_monitor from '@/components/pc/Linhai/School/Alert_monitor.vue'
-
-import Hik_video from '@/components/pc/Linhai/Hik_video.vue'
+import showVideo from '@/components/pc/Linhai/showVideo.vue'
 import Main from '@/components/main'
 
 export default [
@@ -42,16 +42,7 @@ export default [
         children:[
 
             {
-                path: 'Linhai_index6',
-                name: 'Linhai_index6',
-                meta: {
-                    icon: 'md-trending-up',
-                    title: '数字渐变1'
-                },
-                component: Linhai_index6
-            },
-            {
-                path: 'home',
+                path: '/home',
                 name: 'home1',
                 meta: {
                     icon: 'md-arrow-dropdown-circle',
@@ -60,7 +51,7 @@ export default [
                 // route level code-splitting
                 // this generates a separate chunk (about.[hash].js) for this route
                 // which is lazy-loaded when the route is visited.
-                component: Hik_video
+                component: showVideo
             },
             {
                 path: '/Linhai_index5',
@@ -74,6 +65,7 @@ export default [
                 // which is lazy-loaded when the route is visited.
                 component: Linhai_index5
             },
+        
         ]
     },
     {
@@ -105,15 +97,15 @@ export default [
             title: '查看监控'
         },
         children:[
-            {
-                path: 'Linhai_index2',
-                name: 'Linhai_index2',
-                meta: {
-                    icon: 'md-arrow-dropdown-circle',
-                    title: '实时监控'
-                },
-                component: Linhai_index2
-            },
+            // {
+            //     path: 'Linhai_index2',
+            //     name: 'Linhai_index2',
+            //     meta: {
+            //         icon: 'md-arrow-dropdown-circle',
+            //         title: '实时监控'
+            //     },
+            //     component: Linhai_index2
+            // },
             {
                 path: 'Linhai_index3',
                 name: 'Linhai_index3',

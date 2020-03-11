@@ -87,7 +87,7 @@
                     <div class="user-logo">
                         <fullscreen v-model="isFullscreen" style="margin-right: 10px;"/>
                         <user  :message-unread-count="0" :user-avatar="img"/>
-                        
+
                     </div>
                 </Header>
                 <Content class="main-content-con">
@@ -97,7 +97,11 @@
                         </div>
                         <Content class="content-wrapper" >
                            <keep-alive :include="cacheList">
-                                <router-view></router-view>
+
+                               <div style="background-color:#fff" id='i2'>
+                                    <router-view></router-view>
+                               </div>
+                                
                            </keep-alive>
 <!--                            <ABackTop :height="100" :bottom="80" :right="50" container=".content-wrapper"></ABackTop>-->
                         </Content>
@@ -123,7 +127,6 @@
         data () {
             return {
                 isCollapsed: false,
-                cacheList:['home'],
                 minLogo,
                 route,
                 collapsed:false,
@@ -642,12 +645,21 @@
                     this.isCollapsed ? 'collapsed-menu' : ''
                 ]
             },
+            tagNavList () {
+                return this.$store.state.app.tagNavList
+            },
             menuList () {
                 return this.$store.getters.menuList
             },
             tagsNav () {
                 return this.$store.state.app.tagNavList
-            }
+            },
+            cacheList () {
+                const list = ['ParentView', ...this.tagNavList.length ? this.tagNavList.filter(item => !(item.meta && item.meta.notCache)).map(item => item.name) : []]
+                // const x1 = (this.tagNavList.length);
+                window.console.log(list, 111);
+                return list
+            },
         },
         methods: {
             ...mapMutations([
@@ -724,11 +736,12 @@
         display: flex;
     }
     #i1{
-        background-color:#fff;
+        background-color:#f0f0f0;
     }
+    .main .main-layout-con{background: #f0f0f0;}
     .main .content-wrapper{
         padding: 0;
-        margin: '15px 0 20px 20px';
+        margin: 15px 0 15px 15px;
         background: '#fff';
         min-Height: '260px'
     }
