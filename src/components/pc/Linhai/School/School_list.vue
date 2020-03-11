@@ -132,6 +132,7 @@
     import { Form,FormItem,Select,Option,Button,Table,TableColumn,DatePicker,Pagination,Input,Dialog,Upload,Message,Cascader } from 'element-ui'
     import 'element-ui/lib/theme-chalk/index.css'
     export default {
+        name:"School_list",
         components:{
             [Form.name]:Form,
             [FormItem.name]:FormItem,

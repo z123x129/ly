@@ -12,7 +12,7 @@ import Linhai_index10 from '@/components/pc/Linhai/Linhai_index10.vue'
 import Linhai_index11 from '@/components/pc/Linhai/Linhai_index11.vue'
 import School_list from '@/components/pc/Linhai/School/School_list.vue'
 import Alert_monitor from '@/components/pc/Linhai/School/Alert_monitor.vue'
-import Hik_video from '@/components/pc/Linhai/Hik_video.vue'
+import showVideo from '@/components/pc/Linhai/showVideo.vue'
 import Main from '@/components/main'
 
 export default [
@@ -46,7 +46,19 @@ export default [
                 // route level code-splitting
                 // this generates a separate chunk (about.[hash].js) for this route
                 // which is lazy-loaded when the route is visited.
-                component: Linhai_index
+                component: showVideo
+            },
+            {
+                path: '/Linhai_index5',
+                name: 'Linhai_index5',
+                meta: {
+                    icon: 'md-arrow-dropdown-circle',
+                    title: '首页1'
+                },
+                // route level code-splitting
+                // this generates a separate chunk (about.[hash].js) for this route
+                // which is lazy-loaded when the route is visited.
+                component: Linhai_index5
             },
         
         ]
@@ -80,15 +92,15 @@ export default [
             title: '查看监控'
         },
         children:[
-            {
-                path: 'Linhai_index2',
-                name: 'Linhai_index2',
-                meta: {
-                    icon: 'md-arrow-dropdown-circle',
-                    title: '实时监控'
-                },
-                component: Linhai_index2
-            },
+            // {
+            //     path: 'Linhai_index2',
+            //     name: 'Linhai_index2',
+            //     meta: {
+            //         icon: 'md-arrow-dropdown-circle',
+            //         title: '实时监控'
+            //     },
+            //     component: Linhai_index2
+            // },
             {
                 path: 'Linhai_index3',
                 name: 'Linhai_index3',
