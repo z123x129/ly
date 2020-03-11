@@ -8,9 +8,15 @@ import Linhai_index7 from '@/components/pc/Linhai/Linhai_index7.vue'
 import Linhai_index8 from '@/components/pc/Linhai/Linhai_index8.vue'
 import Linhai_index9 from '@/components/pc/Linhai/Linhai_index9.vue'
 import Linhai_index10 from '@/components/pc/Linhai/Linhai_index10.vue'
-import Linhai_index11 from '@/components/pc/Linhai/Linhai_index11.vue'
-import School_list from '@/components/pc/Linhai/School/School_list.vue'
-import Alert_monitor from '@/components/pc/Linhai/School/Alert_monitor.vue'
+
+//学校路由
+import Maintain_list from '@/components/pc/Linhai/School/Maintain_list.vue'
+
+//网格员路由
+import School_list from '@/components/pc/Linhai/Grid/School_list.vue'
+import Violation_list from '@/components/pc/Linhai/Grid/Violation_list.vue'
+import Alert_monitor from '@/components/pc/Linhai/Grid/Alert_monitor.vue'
+
 import Hik_video from '@/components/pc/Linhai/Hik_video.vue'
 import Main from '@/components/main'
 
@@ -36,7 +42,7 @@ export default [
         children:[
 
             {
-                path: '/Linhai_index6',
+                path: 'Linhai_index6',
                 name: 'Linhai_index6',
                 meta: {
                     icon: 'md-trending-up',
@@ -45,7 +51,7 @@ export default [
                 component: Linhai_index6
             },
             {
-                path: '/home',
+                path: 'home',
                 name: 'home1',
                 meta: {
                     icon: 'md-arrow-dropdown-circle',
@@ -184,6 +190,30 @@ export default [
             },
         ]
     },
+
+    //学校路由
+    {
+        path: '/maintain',
+        name: 'maintain',
+        component: Main,
+        meta: {
+            icon: 'logo-buffer',
+            title: '人员信息维护'
+        },
+        children:[
+            {
+                path: '/Maintain_list',
+                name: 'Maintain_list',
+                meta: {
+                    icon: 'md-arrow-dropdown-circle',
+                    title: '人员信息维护'
+                },
+                component: Maintain_list
+            },
+        ]
+    },
+
+    //网格员路由
     {
         path: '/school',
         name: 'school',
@@ -202,6 +232,15 @@ export default [
                 },
                 component: School_list
             },
+            {
+                path: 'Violation_list',
+                name: 'Violation_list',
+                meta: {
+                    icon: 'md-arrow-dropdown-circle',
+                    title: '违规列表'
+                },
+                component: Violation_list
+            },
         ]
     },
     {
@@ -214,7 +253,7 @@ export default [
         },
         children:[
             {
-                path: 'Alert_monitor',
+                path: '/Alert_monitor',
                 name: 'Alert_monitor',
                 meta: {
                     icon: 'md-arrow-dropdown-circle',

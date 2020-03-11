@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id=i1>
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
             <el-form-item label="选择街道:">
                 <el-cascader
@@ -58,7 +58,7 @@
                     label="操作">
                 <template slot-scope="scope">
                     <el-button @click="dialogShow(2,scope.row)" type="text" size="small">上传报告</el-button>
-                    <el-button  type="text" size="small">查看违规</el-button>
+                    <el-button @click="goViolation(scope.row.id)" type="text" size="small">查看违规</el-button>
                     <el-button @click="dialogShow(1,scope.row)" type="text" size="small">编辑</el-button>
                 </template>
             </el-table-column>
@@ -75,7 +75,7 @@
                     :total="total">
             </el-pagination>
         </div>
-        <el-dialog :title="type == 1 ? '学校信息' : '上传报告'" :visible.sync="dialogFormVisible">
+        <el-dialog :title="type == 1 ? '学校信息' : '上传报告'" :visible.sync="dialogFormVisible" @closed="handleClose">
             <el-form :model="form" :rules="rules" ref="form">
                 <el-form-item label="学校名称:" prop="name" :label-width="formLabelWidth">
                     <el-input disabled="disabled" style="width: 80%" size="small" v-model="form.dirName" placeholder="请输入学校名称" autocomplete="off"></el-input>
@@ -106,17 +106,18 @@
                     <el-form-item label="上报内容:" prop="content" :label-width="formLabelWidth">
                         <el-input type="textarea" style="width: 80%" size="small" v-model="form.content" placeholder="请输入上报内容" autocomplete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="附件:" prop="file" :label-width="formLabelWidth">
-                        <el-upload
+                    <el-form-item label="附件:" :label-width="formLabelWidth">
+                        <el-upload ref="my-upload"
                                 class="upload-demo"
                                 drag
-                                action="https://jsonplaceholder.typicode.com/posts/"
+                                action="/public/plugin/file_manage/api_index/upload_img"
                                 :on-success="handleAvatarSuccess"
                                 :before-upload="beforeAvatarUpload"
+                                :on-remove="removeFile"
                                 multiple>
                             <i class="el-icon-upload"></i>
                             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                            <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+                            <div class="el-upload__tip" slot="tip">只能上传jpg/png/bmp文件</div>
                         </el-upload>
                     </el-form-item>
                 </div>
@@ -132,6 +133,7 @@
     import { Form,FormItem,Select,Option,Button,Table,TableColumn,DatePicker,Pagination,Input,Dialog,Upload,Message,Cascader } from 'element-ui'
     import 'element-ui/lib/theme-chalk/index.css'
     export default {
+        name:'School_list',
         components:{
             [Form.name]:Form,
             [FormItem.name]:FormItem,
@@ -153,7 +155,6 @@
                 formInline: {
                     cameraIndexCode: [],
                     dirName: '',
-                    name:'',
                 },
                 options: [],
                 tableData: [],
@@ -193,9 +194,6 @@
                     content: [
                         {required: true, message: '上报内容不能为空', trigger: 'blur'},
                     ],
-                    file: [
-                        {required: true, message: '请上传附件', trigger: 'change'},
-                    ],
                 }
             }
         },
@@ -222,12 +220,25 @@
             dialogShow(type,res){
                 this.type = type;
                 this.form = this.deepClone(res);
+                this.form.file= [];
+                if(this.$refs['my-upload'] != undefined){
+                    this.$refs['my-upload'].clearFiles();
+                }
                 this.dialogFormVisible = true;
+
+            },
+            handleClose(){
+                this.$refs.form.resetFields();
+            },
+            removeFile(file, fileList){
+                for (let i = 0; i <this.form.file.length ; i++) {
+                    if(this.form.file[i] == file.response.data.filepath){
+                        this.form.file.splice(i,1);
+                    }
+                }
             },
             handleAvatarSuccess(res, file) {
-                console.log(res, file)
-                this.form.file = file.raw;
-                console.log(this.form.file)
+                this.form.file.push(res.data.filepath);
             },
             beforeAvatarUpload(file) {
                 const isJPG = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/bmp';
@@ -236,7 +247,8 @@
                 }
                 return isJPG;
             },
-            deepClone(target) {  //深拷贝
+            deepClone(target) {
+                //深拷贝
                 // 定义一个变量
                 var result;
                 // 如果当前需要深拷贝的是一个对象的话
@@ -279,8 +291,8 @@
             },
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
-                    console.log(this.form)
                     if (valid) {
+                        this.form.file = String(this.form.file);
                         let arr = {'user_id':this.$store.state.route.uid};
                         let params = Object.assign(this.form,arr);
                         params = this.$secret_key.func(this.$store.state.on_off, params);
@@ -301,6 +313,14 @@
                         return false;
                     }
                 });
+            },
+            goViolation(id){
+                this.$router.push({
+                    path:'/school/Violation_list',
+                    query:{
+                        id : id
+                    }
+                })
             },
         },
     }
@@ -341,5 +361,8 @@
 
     .el-table /deep/ .success-row {
         background: #f0f9eb;
+    }
+    .el-dialog__wrapper /deep/ .el-dialog{
+        overflow: hidden;
     }
 </style>

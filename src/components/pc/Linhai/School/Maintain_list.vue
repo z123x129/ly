@@ -44,6 +44,16 @@
             </el-table-column>
             <el-table-column
                     align="center"
+                    prop="address"
+                    label="身份证号">
+            </el-table-column>
+            <el-table-column
+                    align="center"
+                    prop="address"
+                    label="健康证号">
+            </el-table-column>
+            <el-table-column
+                    align="center"
                     label="人脸照片">
                 <template slot-scope="scope">
                     <el-image
@@ -104,8 +114,8 @@
             </div>
         <el-dialog title="添加人员" :visible.sync="dialogFormVisible">
             <el-form :model="form" :rules="rules" ref="form">
-                <el-form-item label="姓名:" prop="name" :label-width="formLabelWidth">
-                    <el-input style="width: 80%" size="small" v-model="form.name" placeholder="请输入姓名" autocomplete="off"></el-input>
+                <el-form-item label="姓名:" prop="nickname" :label-width="formLabelWidth">
+                    <el-input style="width: 80%" size="small" v-model="form.nickname" placeholder="请输入姓名" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="单位名称:" prop="user" :label-width="formLabelWidth">
                     <el-select style="width: 80%" size="small" v-model="form.user" placeholder="请选择">
@@ -113,41 +123,47 @@
                         <el-option label="选择学校" value="beijing"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="人员类别:" prop="user2" :label-width="formLabelWidth">
-                    <el-select style="width: 80%" size="small" v-model="form.user2" placeholder="请选择">
-                        <el-option label="选择区域" value="shanghai"></el-option>
-                        <el-option label="选择学校" value="beijing"></el-option>
+                <el-form-item label="人员类别:" prop="member_type" :label-width="formLabelWidth">
+                    <el-select style="width: 80%" size="small" v-model="form.member_type" placeholder="请选择">
+                        <el-option label="食品安全管理员" value="食品安全管理员"></el-option>
+                        <el-option label="后厨人员" value="后厨人员"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="手机号码:" prop="region" :label-width="formLabelWidth">
-                    <el-input style="width: 80%" size="small" v-model="form.region" placeholder="请输入手机号" autocomplete="off"></el-input>
+                <el-form-item label="手机号码:" prop="mobile" :label-width="formLabelWidth">
+                    <el-input style="width: 80%" size="small" v-model="form.mobile" placeholder="请输入手机号" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="人脸照片:" prop="imageUrl" :label-width="formLabelWidth">
+                <el-form-item label="身份证号:" prop="id_card" :label-width="formLabelWidth">
+                    <el-input style="width: 80%" size="small" v-model="form.id_card" placeholder="请输入身份证" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="健康证号:" prop="health_id_card" :label-width="formLabelWidth">
+                    <el-input style="width: 80%" size="small" v-model="form.health_id_card" placeholder="请输入健康证" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="人脸照片:" prop="face_thumb" :label-width="formLabelWidth">
                     <el-upload
                             class="avatar-uploader"
-                            action="https://jsonplaceholder.typicode.com/posts/"
+                            action="/plugin/file_manage/api_index/upload_img"
                             :show-file-list="false"
                             :on-success="handleAvatarSuccess"
                             :before-upload="beforeAvatarUpload">
-                        <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar">
+                        <img v-if="form.face_thumb" :src="form.face_thumb" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
                 </el-form-item>
-                <el-form-item label="健康证照片:" prop="imageUrl2" :label-width="formLabelWidth">
+                <el-form-item label="健康证照片:" prop="health_card" :label-width="formLabelWidth">
                     <el-upload
                             class="avatar-uploader"
-                            action="https://jsonplaceholder.typicode.com/posts/"
+                            action="/plugin/file_manage/api_index/upload_img"
                             :show-file-list="false"
                             :on-success="handleAvatarSuccess2"
                             :before-upload="beforeAvatarUpload">
-                        <img v-if="form.imageUrl2" :src="form.imageUrl2" class="avatar">
+                        <img v-if="form.health_card" :src="form.health_card" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
                 </el-form-item>
-                <el-form-item label="健康证到期时间:" prop="value1" :label-width="formLabelWidth">
+                <el-form-item label="健康证到期时间:" prop="health_endtime" :label-width="formLabelWidth">
                     <el-date-picker
                             size="small"
-                            v-model="form.value1"
+                            v-model="form.health_endtime"
                             type="date"
                             placeholder="选择日期">
                     </el-date-picker>
@@ -187,28 +203,7 @@
                     region: '',
                     name:'',
                 },
-                tableData: [{
-                    id:'1',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄',
-                    image1:'',
-                    image2:'',
-                    time: '2016-05-02',
-                }, {
-                    id:'2',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄',
-                    image1:'',
-                    image2:'',
-                    time: '2016-05-02',
-                }, {
-                    id:'3',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄',
-                    image1:'',
-                    image2:'',
-                    time: '2016-05-02',
-                }, ],
+                tableData: [],
                 url: 'https://fuss10.elemecdn.com/8/27/f01c15bb73e1ef3793e64e6b7bbccjpeg.jpeg',
                 srcList: [
                     'https://fuss10.elemecdn.com/8/27/f01c15bb73e1ef3793e64e6b7bbccjpeg.jpeg',
@@ -221,42 +216,63 @@
                 paginates:5,
                 dialogFormVisible: false,
                 form: {
-                    name: '',
+                    nickname: '',
                     user: '',
-                    user2: '',
-                    region: '',
-                    imageUrl: '',
-                    imageUrl2: '',
-                    value1: '',
+                    member_type: '',
+                    mobile: '',
+                    id_card: '',
+                    health_id_card: '',
+                    face_thumb: '',
+                    health_card: '',
+                    health_endtime: '',
                 },
                 formLabelWidth: '140px',
                 rules: {
-                    name: [
-                        {required: true, message: '请输入姓名', trigger: 'blur'},
-                        {min: 1, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur'}
+                    nickname: [
+                        {required: true, message: '姓名不能为空', trigger: 'blur'},
+                        {min: 2, max: 5, message: '长度在 2 到 5 个字符', trigger: 'blur'}
                     ],
                     user: [
                         {required: true, message: '请选择单位', trigger: 'change'},
                     ],
-                    user2: [
+                    member_type: [
                         {required: true, message: '请选择人员类别', trigger: 'change'},
                     ],
-                    region: [
-                        {required: true, message: '请输入手机号码', trigger: 'blur'},
+                    mobile: [
+                        {required: true, message: '手机号码不能为空', trigger: 'blur'},
                     ],
-                    imageUrl: [
-                        {required: true, message: '请上传人脸照片', trigger: 'change'},
+                    id_card: [
+                        {required: true, message: '身份证号码不能为空', trigger: 'blur'},
                     ],
-                    imageUrl2: [
-                        {required: true, message: '请上传健康证照片', trigger: 'change'},
+                    health_id_card: [
+                        {required: true, message: '健康证号码不能为空', trigger: 'blur'},
                     ],
-                    value1: [
+                    face_thumb: [
+                        {required: true, message: '请上传人脸照片', trigger: 'blur'},
+                    ],
+                    health_card: [
+                        {required: true, message: '请上传健康证照片', trigger: 'blur'},
+                    ],
+                    health_endtime: [
                         {required: true, message: '请选择到期时间', trigger: 'change'},
                     ],
                 }
             }
         },
+        mounted(){
+            this.getList();
+        },
         methods: {
+            getList(){
+                let params ={'uid':this.$store.state.route.uid,'page':this.page,'paginate':this.paginate};
+                params = this.$secret_key.func(this.$store.state.on_off, params);
+                this.$https.fetchPost('/plugin/school/api_index/health_list',params).then((res) => {
+                    var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
+                    this.tableData = res_data.data;
+                    this.currentPage = res_data.current_page;
+                    this.total = res_data.total;
+                })
+            },
             onSubmit() {
                 window.console.log('submit!');
             },
@@ -269,24 +285,6 @@
                 this.page = val;
                 // this.getList();
             },
-            handleAvatarSuccess(res, file) {
-                this.form.imageUrl = URL.createObjectURL(file.raw);
-            },
-            handleAvatarSuccess2(res, file) {
-                this.form.imageUrl2 = URL.createObjectURL(file.raw);
-            },
-            beforeAvatarUpload(file) {
-                const isJPG = file.type === 'image/jpeg';
-                const isLt2M = file.size / 1024 / 1024 < 2;
-
-                if (!isJPG) {
-                    Message.error('上传头像图片只能是 JPG 格式!');
-                }
-                if (!isLt2M) {
-                    Message.error('上传头像图片大小不能超过 2MB!');
-                }
-                return isJPG && isLt2M;
-            },
             tableRowClassName({row, rowIndex}) {
                 if (rowIndex === 1) {
                     return 'warning-row';
@@ -294,6 +292,19 @@
                     return 'success-row';
                 }
                 return '';
+            },
+            handleAvatarSuccess(res, file) {
+                this.form.face_thumb = URL.createObjectURL(file.raw);
+            },
+            handleAvatarSuccess2(res, file) {
+                this.form.health_card = URL.createObjectURL(file.raw);
+            },
+            beforeAvatarUpload(file) {
+                const isJPG = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/bmp';
+                if (!isJPG) {
+                    Message.error('只能上传图片!');
+                }
+                return isJPG;
             },
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
