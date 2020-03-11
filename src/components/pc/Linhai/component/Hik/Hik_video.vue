@@ -55,7 +55,7 @@
 
         },
         methods:{
-            init(){
+            init(callback = ()=>{}){
                 let that = this;
                 if(this.app[this.openOWebName] != '')
                 {
@@ -74,6 +74,7 @@
                         }).then(function () {
                             that.app[that.openOWebName].JS_CreateWnd("playWnd", that.width, that.height).then(function () {
                                 window.console.log("JS_CreateWnd success");
+                                callback();
                             });
                         }, function () {
 
@@ -83,7 +84,8 @@
                 window.console.log(that.app[that.openOWebName]);
             },
             initVideo(snapDir = "D:\\SnapDir", videoDir = "D:\\VideoDir", layoutm = "2x2"){
-                this.checkWebC();
+                if(!this.checkWebC())
+                    return;
                 let that = this;
                 this.getPubKey(function () {
                     const secret = that.setEncrypt(that.secret);
@@ -110,7 +112,8 @@
                 });
             },
             close(){
-                this.checkWebC();
+                if(!this.checkWebC())
+                    return;
                 if(this.show)
                     this.app[this.openOWebName].JS_HideWnd()
                 else
@@ -119,14 +122,16 @@
                 window.console.log(this.show);
             },
             showVideo(){
-                this.checkWebC();
+                if(!this.checkWebC())
+                    return;
                 if(this.show)
                     return;
                 this.show = true;
                 this.app[this.openOWebName].JS_ShowWnd();
             },
             hideVideo(){
-                this.checkWebC();
+                if(!this.checkWebC())
+                    return;
                 if(!this.show)
                     return;
                 this.show = false;
@@ -139,7 +144,8 @@
                 this.app[this.openOWebName].JS_Resize(width, height);
             },
             videoPlay(cameraIndexCode, callback = ()=>{}, wndId = 0, streamMode = 0, transMode = 1, gpuMode= 0){
-                this.checkWebC();
+                if(!this.checkWebC())
+                    return;
                 this.app[this.openOWebName].JS_RequestInterface({
                     funcName: "startPreview",
                     argument: JSON.stringify({
@@ -156,7 +162,8 @@
             },
             //获取公钥  callback去初始化
             getPubKey (callback) {
-                this.checkWebC();
+                if(!this.checkWebC())
+                    return;
                 let that = this;
                 this.app[this.openOWebName].JS_RequestInterface({
                     funcName: "getRSAPubKey",
@@ -182,26 +189,27 @@
                 if(this.app[this.openOWebName] == '')
                 {
                     window.console.log("请先初始化视频插件");
-                    return
+                    return false;
                 }
+                return true;
             }
         },
         beforeDestroy() {
             let that = this;
-            if(this.app[this.openOWebName] != '')
-            {
-                this.app[this.openOWebName].JS_RequestInterface({
-                    funcName: "uninit"
-                }).then(function(data){
-                    if(data.code == 0)
-                    {
-                        window.console.log(data);
-                        that.app[that.openOWebName].JS_Disconnect();
-                    }
+            // if(this.app[this.openOWebName] != '')
+            // {
+            //     this.app[this.openOWebName].JS_RequestInterface({
+            //         funcName: "uninit"
+            //     }).then(function(data){
+            //         if(data.code == 0)
+            //         {
+            //             window.console.log(data);
+            //             that.app[that.openOWebName].JS_Disconnect();
+            //         }
 
-                })
-            }
-            //this.app[this.openOWebName].JS_HideWnd();
+            //     })
+            // }
+            this.app[this.openOWebName].JS_HideWnd();
 
 
         }
