@@ -87,7 +87,7 @@
                     <div class="user-logo">
                         <fullscreen v-model="isFullscreen" style="margin-right: 10px;"/>
                         <user  :message-unread-count="0" :user-avatar="img"/>
-                        
+
                     </div>
                 </Header>
                 <Content class="main-content-con">
@@ -97,7 +97,7 @@
                         </div>
                         <Content class="content-wrapper" >
                            <keep-alive :include="cacheList">
-                                <router-view></router-view>
+                                   <router-view></router-view>
                            </keep-alive>
 <!--                            <ABackTop :height="100" :bottom="80" :right="50" container=".content-wrapper"></ABackTop>-->
                         </Content>
@@ -123,7 +123,6 @@
         data () {
             return {
                 isCollapsed: false,
-                cacheList:['home'],
                 minLogo,
                 route,
                 collapsed:false,
@@ -642,12 +641,21 @@
                     this.isCollapsed ? 'collapsed-menu' : ''
                 ]
             },
+            tagNavList () {
+                return this.$store.state.app.tagNavList
+            },
             menuList () {
                 return this.$store.getters.menuList
             },
             tagsNav () {
                 return this.$store.state.app.tagNavList
-            }
+            },
+            cacheList () {
+                const list = ['ParentView', ...this.tagNavList.length ? this.tagNavList.filter(item => !(item.meta && item.meta.notCache)).map(item => item.name) : []]
+                // const x1 = (this.tagNavList.length);
+                window.console.log(list, 111);
+                return list
+            },
         },
         methods: {
             ...mapMutations([
