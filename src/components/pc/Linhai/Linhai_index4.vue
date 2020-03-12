@@ -84,8 +84,9 @@
             },
             gotoMap(data){//地图跳转
                 let _this=this
-                
-                if(!data.children){
+                if(data.parentIndexCode){
+                    _this.map.setZoomAndCenter(12, [data.longitude,data.latitude]);
+                }else if(!data.children){
                     _this.map.setZoomAndCenter(17, [data.longitude-0.0058,data.latitude-0.0056]);
                     _this.tzSite=[data.longitude-0.0058,data.latitude-0.0056];
                 }
@@ -191,7 +192,7 @@
 </script>
 <style scoped lang="less">
     #i1{
-        height: 100vh;
+        height: 100%;
         overflow: hidden;
         display: flex;
         align-items: center;
