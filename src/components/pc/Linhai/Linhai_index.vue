@@ -79,7 +79,7 @@
         components:{
             Mixed:()=>import('./Linhai_mixed'),
             Editor:()=>import('./Linhai_editor'),
-            Map:()=>import('./Linhai_map'),
+            Map:()=>import('./component/Map'),
         },
         data(){
                 return{

@@ -36,7 +36,7 @@ export default [
     },
     {
         path: '/',
-        name: 'home',
+        name: '_home',
         component: Main,
         meta: {
             icon: 'logo-buffer',
@@ -45,8 +45,20 @@ export default [
         children:[
 
             {
+                path: '/Linhai_index',
+                name: 'Linhai_index',
+                meta: {
+                    icon: 'md-arrow-dropdown-circle',
+                    title: '数据大屏'
+                },
+                // route level code-splitting
+                // this generates a separate chunk (about.[hash].js) for this route
+                // which is lazy-loaded when the route is visited.
+                component: Linhai_index
+            },
+            {
                 path: '/home',
-                name: 'home1',
+                name: 'home',
                 meta: {
                     icon: 'md-arrow-dropdown-circle',
                     title: '首页'
@@ -68,6 +80,7 @@ export default [
                 // which is lazy-loaded when the route is visited.
                 component: Linhai_index5
             },
+
             {
                 path: '/Linhai_index',
                 name: 'Linhai_index',
@@ -80,6 +93,7 @@ export default [
                 // which is lazy-loaded when the route is visited.
                 component: Linhai_index
             },
+
 
         ]
     },

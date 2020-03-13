@@ -213,3 +213,56 @@ export const objEqual = (obj1, obj2) => {
   /* eslint-disable-next-line */
   else return !keysArr1.some(key => obj1[key] != obj2[key])
 }
+
+
+export const showTitle = (item) => {
+  let { title} = item.meta
+  if (!title) return
+  title = (item.meta && item.meta.title) || item.name
+  return title
+}
+
+export const getBreadCrumbList = (route, homeRoute) => {
+  let homeItem = { ...homeRoute, icon: homeRoute.meta.icon }
+  let routeMetched = route.matched
+  if (routeMetched.some(item => item.name === homeRoute.name)) return [homeItem]
+  let res = routeMetched.filter(item => {
+    return item.meta === undefined || !item.meta.hideInBread
+  }).map(item => {
+    let meta = { ...item.meta }
+    if (meta.title && typeof meta.title === 'function') {
+      meta.__titleIsFunction__ = true
+      meta.title = meta.title(route)
+    }
+    let obj = {
+      icon: (item.meta && item.meta.icon) || '',
+      name: item.name,
+      meta: meta
+    }
+    return obj
+  })
+  res = res.filter(item => {
+    return !item.meta.hideInMenu
+  })
+  return [{ ...homeItem, to: homeRoute.path }, ...res]
+}
+
+/**
+ * @param {Array} routers 路由列表数组
+ * @description 用于找到路由列表中name为home的对象
+ */
+export const getHomeRoute = (routers, homeName = 'home') => {
+  let i = -1
+  let len = routers.length
+  let homeRoute = {}
+  while (++i < len) {
+    let item = routers[i]
+    if (item.children && item.children.length) {
+      let res = getHomeRoute(item.children, homeName)
+      if (res.name) return res
+    } else {
+      if (item.name === homeName) homeRoute = item
+    }
+  }
+  return homeRoute
+}

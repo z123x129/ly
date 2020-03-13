@@ -77,13 +77,9 @@
             getList(){ //获取地区列表
                 let params ={};
                 params = this.$secret_key.func(this.$store.state.on_off, params);
-                this.$https.fetchPost('/plugin/statistics/api_index/getRegionCatalog').then((res) => {
+                this.$https.fetchPost('/plugin/statistics/api_index/getSchoolDir').then((res) => {
                     var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
                     this.data = res_data
-                    //在地图添加标记
-                    // for (var i = 0; i < res_data.length ; i++) {
-                    //     for (var y = 0;y<res_data[i].children.length; y++){
-                    // }
                 })
             },
             gotoMap(data){//地图跳转
@@ -214,7 +210,6 @@
         // width: 82%;
         flex: 1;
         height: 100%;
-        background: skyblue;
     }
     .map{height:100vh;width:100%;float:left;}
     .info-content img{float:left;margin:3px;}
