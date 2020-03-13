@@ -26,7 +26,9 @@
             <input v-model="height"/>
             <input v-model="width"/>
             <Button @click="resizeWindow">修改大小</Button>
+
             </div> -->
+
     </div>
 </template>
 
@@ -43,6 +45,7 @@
         },
         data(){
           return{
+
             filterText: '',
             data: [],
             defaultProps: {
@@ -52,6 +55,7 @@
             height:650,
             width:800,
             ddd:'oWebControl',
+
           }
         },
         watch: {

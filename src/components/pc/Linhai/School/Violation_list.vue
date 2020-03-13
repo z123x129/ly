@@ -1,7 +1,7 @@
 <template>
     <div id=i1>
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
-            <el-form-item label="违规事件:" prop="violation">
+            <el-form-item label="违规时间:">
                 <el-date-picker
                         v-model="formInline.timeStr"
                         size="small"
@@ -48,16 +48,24 @@
                             <span>{{ props.row.title }}</span>
                         </el-form-item>
                         <el-form-item label="上报内容">
-                            <span>{{ props.row.content }}</span>
+                            <el-button @click="look(props.row.title,props.row.content)" type="text" size="small">查看</el-button>
                         </el-form-item>
                         <el-form-item label="附件">
-                            <el-badge :value="props.row.path.length" class="item">
+                            <el-badge v-if="props.row.path.length>1" :value="props.row.path.length" class="item">
                                 <el-image
+                                        v-if="props.row.path.length>0"
                                         style="width: 100px; height: 100px"
                                         :src="props.row.path[0]"
                                         :preview-src-list="props.row.path">
                                 </el-image>
                             </el-badge>
+                            <el-image
+                                    v-else-if="props.row.path.length == 1"
+                                    style="width: 100px; height: 100px"
+                                    :src="props.row.path[0]"
+                                    :preview-src-list="props.row.path">
+                            </el-image>
+                            <span v-else>无</span>
                         </el-form-item>
                     </el-form>
                 </template>
@@ -113,10 +121,15 @@
                     :total="total">
             </el-pagination>
         </div>
+        <el-dialog
+                :title=title
+                :visible.sync="dialogFormVisible">
+            <span v-html="content"></span>
+        </el-dialog>
     </div>
 </template>
 <script>
-    import { Form,FormItem,Select,Option,Table,TableColumn,DatePicker,Pagination,Button,Image,Badge } from 'element-ui'
+    import { Form,FormItem,Select,Option,Table,TableColumn,DatePicker,Pagination,Button,Image,Badge,Dialog } from 'element-ui'
     import 'element-ui/lib/theme-chalk/index.css'
     export default {
         name:'School_list',
@@ -132,6 +145,7 @@
             [Button.name]:Button,
             [Image.name]:Image,
             [Badge.name]:Badge,
+            [Dialog.name]:Dialog,
         },
         data(){
             return{
@@ -173,6 +187,9 @@
                 page:1,
                 paginate:10,
                 paginates:5,
+                title: '',
+                content: '',
+                dialogFormVisible: false,
             }
         },
         mounted(){
@@ -180,7 +197,17 @@
         },
         methods: {
             getList(){ //获取学校列表
-                let params ={'id':this.$route.query.id,'page':this.page,'paginate':this.paginate,'timeStart':this.formInline.timeStr[0],'timeEnd':this.formInline.timeStr[1],'violation':this.formInline.violation,'status':this.formInline.status};
+                var timeStart = '',timeEnd = '';
+                if(this.formInline.timeStr !== null){
+                    timeStart = this.formInline.timeStr[0];
+                    timeEnd = this.formInline.timeStr[1];
+                }
+                let params ={'id':this.$route.query.id,
+                    'page':this.page,'paginate':this.paginate,
+                    'timeStart':timeStart,
+                    'timeEnd':timeEnd,
+                    'violation':this.formInline.violation,
+                    'status':this.formInline.status};
                 params = this.$secret_key.func(this.$store.state.on_off, params);
                 this.$https.fetchPost('/plugin/school/api_index/report_list',params).then((res) => {
                     var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
@@ -188,6 +215,11 @@
                     this.currentPage = res_data.current_page;
                     this.total = res_data.total;
                 })
+            },
+            look(title,content){
+                this.title = title;
+                this.content = content;
+                this.dialogFormVisible = true;
             },
             handleSizeChange(val) {//分页器
                 this.paginate = val;
@@ -251,7 +283,7 @@
     .el-table /deep/ .demo-table-expand .el-form-item {
         margin-right: 0;
         margin-bottom: 0;
-        width: 100%;
+        width: 50%;
     }
     .item {
         margin-top: 10px;
