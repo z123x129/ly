@@ -123,7 +123,7 @@ export default{
   overflow-x: hidden;
   overflow-y: auto;
   position: relative;
-  padding: 20px;
+  padding: 10px;
   text-align: left;
   box-sizing: border-box;
 }
