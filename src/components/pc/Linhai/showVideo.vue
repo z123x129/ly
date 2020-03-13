@@ -49,8 +49,8 @@
                 children: 'children',
                 label: 'label'
             },
-            height:650,
-            width:800,
+            // height:650,
+            // width:800,
             ddd:'oWebControl',
           }
         },
