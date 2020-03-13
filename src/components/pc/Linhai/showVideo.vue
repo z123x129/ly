@@ -11,7 +11,6 @@
             <input v-model="width"/>
             <Button @click="resizeWindow">修改大小</Button>
         </div>
-
     </div>
 </template>
 
@@ -26,7 +25,7 @@
           return{
               height:100,
               width:200,
-              ddd:'sss'
+              ddd:'oWebControl'
           }
         },
         methods:{

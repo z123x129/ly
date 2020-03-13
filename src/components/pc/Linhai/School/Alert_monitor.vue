@@ -220,11 +220,11 @@
             handleSizeChange(val) {//分页器
                 this.paginate = val;
                 this.page = 1;
-                // this.getList();
+                this.getList();
             },
             handleCurrentChange(val) {//分页器
                 this.page = val;
-                // this.getList();
+                this.getList();
             },
             handleAvatarSuccess(res, file) {
                 this.form.imageUrl = URL.createObjectURL(file.raw);
