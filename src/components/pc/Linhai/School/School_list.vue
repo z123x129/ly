@@ -104,7 +104,7 @@
                         <el-input style="width: 80%" size="small" v-model="form.title" placeholder="请输入上报标题" autocomplete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="上报内容:" prop="content" :label-width="formLabelWidth">
-                        <el-input type="textarea" style="width: 80%" size="small" v-model="form.content" placeholder="请输入上报内容" autocomplete="off"></el-input>
+                        <textarea v-model="form.content" placeholder="请输入上报内容" id="demo" style="display: none;"></textarea>
                     </el-form-item>
                     <el-form-item label="附件:" :label-width="formLabelWidth">
                         <el-upload ref="my-upload"
@@ -132,6 +132,7 @@
 <script>
     import { Form,FormItem,Select,Option,Button,Table,TableColumn,DatePicker,Pagination,Input,Dialog,Upload,Message,Cascader } from 'element-ui'
     import 'element-ui/lib/theme-chalk/index.css'
+    var layedit,index;
     export default {
         name:'School_list',
         components:{
@@ -200,6 +201,18 @@
         mounted(){
             this.getList();
             this.getCity();
+        },
+        updated(){
+            layui.use('layedit', function () {
+                layedit = layui.layedit;
+                index = layedit.build('demo', {
+                    tool: ['strong' //加粗
+                        ,'left' //左对齐
+                        ,'center' //居中对齐
+                        ,'right' //右对齐
+                    ]
+                });
+            });
         },
         methods: {
             getList(){ //获取学校列表
@@ -290,6 +303,9 @@
                 this.getList();
             },
             submitForm(formName) {
+                if(this.type == 2){
+                    this.form.content = layedit.getContent(index);
+                }
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         this.form.file = String(this.form.file);
@@ -332,39 +348,9 @@
         // padding: 20px 10px 0;
         margin-bottom: 10px;
     }
-    .el-form-item{
+    .demo-form-inline .el-form-item{
         margin-top: 0;
         margin-bottom: 0;
-    }
-    .avatar-uploader /deep/ .el-upload {
-        border: 1px dashed #d9d9d9;
-        border-radius: 6px;
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-    }
-    .avatar-uploader /deep/ .el-upload:hover {
-        border-color: #409EFF;
-    }
-    .avatar-uploader-icon {
-        font-size: 28px;
-        color: #8c939d;
-        width: 178px;
-        height: 178px;
-        line-height: 178px;
-        text-align: center;
-    }
-    .avatar {
-        width: 178px;
-        height: 178px;
-        display: block;
-    }
-    .el-table /deep/ .warning-row {
-        background: oldlace;
-    }
-
-    .el-table /deep/ .success-row {
-        background: #f0f9eb;
     }
     .el-dialog__wrapper /deep/ .el-dialog{
         overflow: hidden;

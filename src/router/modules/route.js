@@ -8,15 +8,18 @@ import Linhai_index6 from '@/components/pc/Linhai/Linhai_index6.vue'
 import Linhai_index7 from '@/components/pc/Linhai/Linhai_index7.vue'
 import Linhai_index8 from '@/components/pc/Linhai/Linhai_index8.vue'
 import Linhai_index9 from '@/components/pc/Linhai/Linhai_index9.vue'
-import Linhai_index10 from '@/components/pc/Linhai/Linhai_index10.vue'
 
 //学校路由
 import Maintain_list from '@/components/pc/Linhai/School2/Maintain_list.vue'
+import Message_edit from '@/components/pc/Linhai/School2/Message_edit.vue'
+import Report_msg from '@/components/pc/Linhai/School2/Report_msg.vue'
 
 //网格员路由
+import Wgy_home from '@/components/pc/Linhai/School/Wgy_home.vue'
 import School_list from '@/components/pc/Linhai/School/School_list.vue'
 import Violation_list from '@/components/pc/Linhai/School/Violation_list.vue'
 import Alert_monitor from '@/components/pc/Linhai/School/Alert_monitor.vue'
+
 import showVideo from '@/components/pc/Linhai/showVideo.vue'
 import Main from '@/components/main'
 
@@ -77,6 +80,20 @@ export default [
                 // which is lazy-loaded when the route is visited.
                 component: Linhai_index5
             },
+
+            {
+                path: '/Linhai_index',
+                name: 'Linhai_index',
+                meta: {
+                    icon: 'md-arrow-dropdown-circle',
+                    title: '数据大屏'
+                },
+                // route level code-splitting
+                // this generates a separate chunk (about.[hash].js) for this route
+                // which is lazy-loaded when the route is visited.
+                component: Linhai_index
+            },
+
 
         ]
     },
@@ -190,7 +207,7 @@ export default [
                     icon: 'md-arrow-dropdown-circle',
                     title: '学校列表展示'
                 },
-                component: Linhai_index10
+                component: Linhai_index9
             },
         ]
     },
@@ -216,8 +233,68 @@ export default [
             },
         ]
     },
+    {
+        path: '/message',
+        name: 'message',
+        component: Main,
+        meta: {
+            icon: 'logo-buffer',
+            title: '学校信息维护'
+        },
+        children:[
+            {
+                path: '/Message_edit',
+                name: 'Message_edit',
+                meta: {
+                    icon: 'md-arrow-dropdown-circle',
+                    title: '学校信息维护'
+                },
+                component: Message_edit
+            },
+        ]
+    },
+    {
+        path: '/report',
+        name: 'report',
+        component: Main,
+        meta: {
+            icon: 'logo-buffer',
+            title: '网格员上报信息'
+        },
+        children:[
+            {
+                path: '/Report_msg',
+                name: 'Report_msg',
+                meta: {
+                    icon: 'md-arrow-dropdown-circle',
+                    title: '网格员上报信息'
+                },
+                component: Report_msg
+            },
+        ]
+    },
 
     //网格员路由
+    {
+        path: '/wgy',
+        name: 'wgy',
+        component: Main,
+        meta: {
+            icon: 'logo-buffer',
+            title: '首页'
+        },
+        children:[
+            {
+                path: 'Wgy_home',
+                name: 'Wgy_home',
+                meta: {
+                    icon: 'md-arrow-dropdown-circle',
+                    title: '首页'
+                },
+                component: Wgy_home
+            }
+        ]
+    },
     {
         path: '/school',
         name: 'school',

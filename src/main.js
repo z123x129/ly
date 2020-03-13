@@ -16,9 +16,10 @@ Vue.config.productionTip = false;
 
 import infiniteScroll from 'vue-infinite-scroll'
 Vue.use(infiniteScroll);
+
 Vue.use(iView);
 Vue.prototype.$config = config
-import { Dialog } from 'vant';
+import { MessageBox } from 'element-ui';
 
 new Vue({
   router,
@@ -36,10 +37,16 @@ router.beforeEach((to,from,next)=>{
     }
     next();
   }else if(store.state.route.uid==''){
-    Dialog.alert({
-      message: '您还没有登录，请先登录'
-    }).then(() => {
-      next('/login');
+    // Dialog.alert({
+    //   message: '您还没有登录，请先登录'
+    // }).then(() => {
+    //   next('/login');
+    // });
+    MessageBox.alert('您还没有登录，请先登录', '提示', {
+      confirmButtonText: '确定',
+      callback: action => {
+        next('/login');
+      }
     });
   }else{
     next();
