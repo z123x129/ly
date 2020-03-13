@@ -2,9 +2,9 @@
     <div id="i1" style="width: 100%">
         <div class="demo">
             <p>摄像点选择:</p>
-            <el-input style="padding: 10px"
+            <el-input
                     size="small"
-                    placeholder="输入关键字进行过滤"
+                    placeholder="输入关键字搜索"
                     v-model="filterText">
             </el-input>
             <el-tree
@@ -21,17 +21,45 @@
                 <div id="container" class="map"></div>
                 <div id="xy" style="color: red;height: 80px;width: 160px;"></div>
             </div>
+            <!-- <Hik class="videobox" ref="H1" :openOWebName="ddd"></Hik> -->
         </div>
+        <videoDialog class="dialog" :visible.sync="videoVisible" >
+            <div class="videobox">
+                <div class="demo">
+                    <p>摄像点选择:</p>
+                    <el-input style="padding: 10px"
+                            size="small"
+                            placeholder="输入关键字搜索"
+                            v-model="filterText">
+                    </el-input>
+                    <el-tree
+                            class="filter-tree"
+                            :data="data"
+                            :props="defaultProps"
+                            :filter-node-method="filterNode"
+                            ref="tree">
+                    </el-tree> <!-- @node-click="gotoMap" -->
+                </div>
+                <Hik class="videobox" ref="H1" :openOWebName="ddd"></Hik>
+            </div>
+
+        </videoDialog>
     </div>
 </template>
 <script>
-    import { Input,Tree } from 'element-ui'
+    import { Input,Tree,Button} from 'element-ui'
     import 'element-ui/lib/theme-chalk/index.css'
     import 'iview/dist/styles/iview.css'
+    import Hik from "./component/Hik"
+    import videoDialog from './videoDialog'
     export default {
+        inject:["app"],
         components:{
             [Input.name]:Input,
             [Tree.name]:Tree,
+            [Button.name]:Button,
+            Hik,
+            videoDialog
         },
         data(){
             return{
@@ -51,7 +79,9 @@
                     {id:1,isSign:false,unit:0,text:'单',xy:[121.156569,28.86646],line:[[121.156569,28.86646],[121.140984,28.853966],[121.106308,28.859078]]},
                     {id:2,isSign:false,unit:0,text:'车',xy:[121.214848,28.871721],line:[[121.214848,28.871721],[121.193855,28.892148],[121.211365,28.921301]]},
                     {id:3,isSign:false,unit:0,text:'车',xy:[121.150561,28.830675],line:[[121.150561,28.830675],[121.151798,28.810491],[121.131027,28.815605]]}
-                ]
+                ],
+                videoVisible:false,
+                ddd:'aWebControl',
             }
         },
         watch: {
@@ -72,8 +102,35 @@
             this.redian();//热点
             this.addsite();//标点
             this.getList()//获取地区列表
+            this.resize()//实时更改视频插件窗口大小
         },
         methods:{
+            videoinit(){//初始化视频插件
+                this.$refs.H1.init(()=>{
+                    this.$refs.H1.initVideo()
+                    this.$refs.H1.resizeWindow(this.$refs.H1.$el.offsetHeight,this.$refs.H1.$el.offsetWidth);//初始化大小
+                });
+            },
+            hideVideo(){//隐藏视频插件
+                this.app[this.ddd].JS_HideWnd();
+            },
+            resize(){//视频插件窗口大小
+                const that = this
+                window.onresize = () => {
+                    var target = this;
+                    if (target.resizeFlag) {
+                        clearTimeout(target.resizeFlag);
+                    }
+                    target.resizeFlag = setTimeout(function() {
+                        console.log(that.$refs.H1.$el.offsetHeight)
+                        that.$refs.H1.resizeWindow(that.$refs.H1.$el.offsetHeight,that.$refs.H1.$el.offsetWidth);
+                        target.resizeFlag = null;
+                    }, 200);
+                    // that.$refs.H1.resizeWindow(that.$refs.H1.$el.offsetHeight,that.$refs.H1.$el.offsetWidth);
+                    // console.log('高度',that.$refs.H1.$el.offsetHeight)
+                    // console.log('宽度',that.$refs.H1.$el.offsetWidth)
+                }
+            },
             getList(){ //获取地区列表
                 let params ={};
                 params = this.$secret_key.func(this.$store.state.on_off, params);
@@ -152,9 +209,16 @@
             },
             //查看监控
             opvideo:function(){
-                alert('监控视频');
+                this.videoVisible = true
+                this.videoinit()
+                // alert('监控视频');
                 return false;
             },
+            //返回学校列表
+            // returnList(){
+            //     this.buttonif = false
+            //     this.hideVideo()
+            // },
             //显示热点
             redian:function(){
                 let _this=this
@@ -168,7 +232,8 @@
                             let code=[];
                             code[0]=poiArr[0].name.indexOf("学");
                             code[1]=poiArr[0].name.indexOf("幼儿园");
-                            if(code[0]>0||code[1]>0){
+                            code[2]=poiArr[0].name.indexOf("校");
+                            if(code[0]>0||code[1]>0||code[2]>0){
                                 infoWindow.setContent(_this.createContent(poiArr[0]));
                                 infoWindow.open(_this.map, location);
                             }
@@ -197,19 +262,31 @@
         display: flex;
         align-items: center;
     }
+    .videobox{
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+    }
     .demo{
         // width: 18%;
         // float: left;
+        min-width: 200px;
         padding: 10px;
         box-sizing: border-box;
         height: 100%;
         background: #fff;
         overflow: auto;
+         transition: all .8s ease;
     }
     .map_box{
         // float: left;
         // width: 82%;
         flex: 1;
+        height: 100%;
+        max-width: calc(~'100% - 200px');
+    }
+    .videobox{
+        width: 100%;
         height: 100%;
     }
     .map{height:100vh;width:100%;float:left;}
@@ -233,6 +310,18 @@
                     .el-tree-node__label{font-size: 0.9rem;color:#666;}
                 }
             }
+        }
+    }
+
+    .tree_input{
+        display: flex;
+        align-items: center;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        .el-input{flex: 1;}
+        button{
+            margin-left: 5px;
+            font-size: 12px;
         }
     }
 </style>
