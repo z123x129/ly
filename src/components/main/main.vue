@@ -81,6 +81,7 @@
                 <Header class="layout-header-bar">
                     <div>
                         <Icon @click.native="collapsedSider" :class="rotateIcon" :style="{margin: '20px'}" type="md-menu" size="24"></Icon>
+                        <custom-bread-crumb show-icon style="margin-left: 30px;" :list="breadCrumbList"></custom-bread-crumb>
                     </div>
 
 
@@ -97,7 +98,7 @@
                         </div>
                         <Content class="content-wrapper" >
                             <div style="background-color:#fff;height:100%" id='i2'>
-                           <keep-alive :include="cacheList">   
+                           <keep-alive :include="cacheList">
                                     <router-view></router-view>
                            </keep-alive>
                              </div>
@@ -119,6 +120,8 @@
     import fullscreen from './component/fullscreen'
     import { mapMutations} from 'vuex'
     import {  routeEqual } from '@/libs/common'
+    import routers from '@/router/modules/route'
+    import customBreadCrumb from './component/custom-bread-crumb'
     import './main.less'
     //import 'swiper/dist/css/swiper.css'
     export default {
@@ -130,508 +133,21 @@
                 route,
                 collapsed:false,
                 img:headImg,
-                dataf:[
-                    {
-                        "icon":"ios-book",
-                        "name":"doc",
-                        "meta":{
-                            "title":"文档",
-                            "href":"https://lison16.github.io/iview-admin-doc/#/",
-                            "icon":"ios-book"
-                        },
-                        "href":"https://lison16.github.io/iview-admin-doc/#/"
-                    },
-                    {
-                        "icon":"",
-                        "name":"join",
-                        "meta":{
-                            "hideInBread":true
-                        },
-                        "children":[
-                            {
-                                "icon":"_qq",
-                                "name":"join_page",
-                                "meta":{
-                                    "icon":"_qq",
-                                    "title":"QQ群"
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        "icon":"logo-buffer",
-                        "name":"components",
-                        "meta":{
-                            "icon":"logo-buffer",
-                            "title":"组件"
-                        },
-                        "children":[
-                            {
-                                "icon":"md-arrow-dropdown-circle",
-                                "name":"tree_select_page",
-                                "meta":{
-                                    "icon":"md-arrow-dropdown-circle",
-                                    "title":"树状下拉选择器"
-                                }
-                            },
-                            {
-                                "icon":"md-trending-up",
-                                "name":"count_to_page",
-                                "meta":{
-                                    "icon":"md-trending-up",
-                                    "title":"数字渐变"
-                                }
-                            },
-                            {
-                                "icon":"ios-infinite",
-                                "name":"drag_list_page",
-                                "meta":{
-                                    "icon":"ios-infinite",
-                                    "title":"拖拽列表"
-                                }
-                            },
-                            {
-                                "icon":"md-list",
-                                "name":"drag_drawer_page",
-                                "meta":{
-                                    "icon":"md-list",
-                                    "title":"可拖拽抽屉"
-                                }
-                            },
-                            {
-                                "icon":"ios-people",
-                                "name":"org_tree_page",
-                                "meta":{
-                                    "icon":"ios-people",
-                                    "title":"组织结构树"
-                                }
-                            },
-                            {
-                                "icon":"md-git-branch",
-                                "name":"tree_table_page",
-                                "meta":{
-                                    "icon":"md-git-branch",
-                                    "title":"树状表格"
-                                }
-                            },
-                            {
-                                "icon":"md-crop",
-                                "name":"cropper_page",
-                                "meta":{
-                                    "icon":"md-crop",
-                                    "title":"图片裁剪"
-                                }
-                            },
-                            {
-                                "icon":"md-grid",
-                                "name":"tables_page",
-                                "meta":{
-                                    "icon":"md-grid",
-                                    "title":"多功能表格"
-                                }
-                            },
-                            {
-                                "icon":"md-pause",
-                                "name":"split_pane_page",
-                                "meta":{
-                                    "icon":"md-pause",
-                                    "title":"分割窗口"
-                                }
-                            },
-                            {
-                                "icon":"logo-markdown",
-                                "name":"markdown_page",
-                                "meta":{
-                                    "icon":"logo-markdown",
-                                    "title":"Markdown编辑器"
-                                }
-                            },
-                            {
-                                "icon":"ios-create",
-                                "name":"editor_page",
-                                "meta":{
-                                    "icon":"ios-create",
-                                    "title":"富文本编辑器"
-                                }
-                            },
-                            {
-                                "icon":"_bear",
-                                "name":"icons_page",
-                                "meta":{
-                                    "icon":"_bear",
-                                    "title":"自定义图标"
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        "icon":"md-cloud-upload",
-                        "name":"update",
-                        "meta":{
-                            "icon":"md-cloud-upload",
-                            "title":"数据上传"
-                        },
-                        "children":[
-                            {
-                                "icon":"ios-document",
-                                "name":"update_table_page",
-                                "meta":{
-                                    "icon":"ios-document",
-                                    "title":"上传Csv"
-                                }
-                            },
-                            {
-                                "icon":"md-clipboard",
-                                "name":"update_paste_page",
-                                "meta":{
-                                    "icon":"md-clipboard",
-                                    "title":"粘贴表格数据"
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        "icon":"ios-stats",
-                        "name":"excel",
-                        "meta":{
-                            "icon":"ios-stats",
-                            "title":"EXCEL导入导出"
-                        },
-                        "children":[
-                            {
-                                "icon":"md-add",
-                                "name":"upload-excel",
-                                "meta":{
-                                    "icon":"md-add",
-                                    "title":"导入EXCEL"
-                                }
-                            },
-                            {
-                                "icon":"md-download",
-                                "name":"export-excel",
-                                "meta":{
-                                    "icon":"md-download",
-                                    "title":"导出EXCEL"
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        "icon":"",
-                        "name":"tools_methods",
-                        "meta":{
-                            "hideInBread":true
-                        },
-                        "children":[
-                            {
-                                "icon":"ios-hammer",
-                                "name":"tools_methods_page",
-                                "meta":{
-                                    "icon":"ios-hammer",
-                                    "title":"工具方法",
-                                    "beforeCloseName":"before_close_normal"
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        "icon":"",
-                        "name":"i18n",
-                        "meta":{
-                            "hideInBread":true
-                        },
-                        "children":[
-                            {
-                                "icon":"md-planet",
-                                "name":"i18n_page",
-                                "meta":{
-                                    "icon":"md-planet",
-                                    "title":"i18n - {{ i18n_page }}"
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        "icon":"",
-                        "name":"error_store",
-                        "meta":{
-                            "hideInBread":true
-                        },
-                        "children":[
-                            {
-                                "icon":"ios-bug",
-                                "name":"error_store_page",
-                                "meta":{
-                                    "icon":"ios-bug",
-                                    "title":"错误收集"
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        "icon":"",
-                        "name":"directive",
-                        "meta":{
-                            "hideInBread":true
-                        },
-                        "children":[
-                            {
-                                "icon":"ios-navigate",
-                                "name":"directive_page",
-                                "meta":{
-                                    "icon":"ios-navigate",
-                                    "title":"指令"
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        "icon":"md-menu",
-                        "name":"multilevel",
-                        "meta":{
-                            "icon":"md-menu",
-                            "title":"多级菜单"
-                        },
-                        "children":[
-                            {
-                                "icon":"md-funnel",
-                                "name":"level_2_1",
-                                "meta":{
-                                    "icon":"md-funnel",
-                                    "title":"二级-1"
-                                }
-                            },
-                            {
-                                "icon":"md-funnel",
-                                "name":"level_2_2",
-                                "meta":{
-                                    "access":[
-                                        "super_admin"
-                                    ],
-                                    "icon":"md-funnel",
-                                    "showAlways":true,
-                                    "title":"二级-2"
-                                },
+                isFullscreen:false
 
-                            },
-                            {
-                                "icon":"md-funnel",
-                                "name":"level_2_3",
-                                "meta":{
-                                    "icon":"md-funnel",
-                                    "title":"二级-3"
-                                }
-                            }
-                        ]
-                    }
-                ],
-                dds:[
-                    {
-                        "name": "home",
-                        "params": {
-
-                        },
-                        "query": {
-
-                        },
-                        "meta": {
-                            "hideInMenu": true,
-                            "title": "首页",
-                            "notCache": true,
-                            "icon": "md-home"
-                        }
-                    },
-                    {
-                        "name": "update_table_page",
-                        "query": {
-
-                        },
-                        "params": {
-
-                        },
-                        "meta": {
-                            "icon": "ios-document",
-                            "title": "上传Csv"
-                        }
-                    },
-                    {
-                        "name": "export-excel",
-                        "query": {
-
-                        },
-                        "params": {
-
-                        },
-                        "meta": {
-                            "icon": "md-download",
-                            "title": "导出EXCEL"
-                        }
-                    },
-                    {
-                        "name": "i18n_page",
-                        "query": {
-
-                        },
-                        "params": {
-
-                        },
-                        "meta": {
-                            "icon": "md-planet",
-                            "title": "i18n - {{ i18n_page }}"
-                        }
-                    },
-                    {
-                        "name": "tree_select_page",
-                        "query": {
-
-                        },
-                        "params": {
-
-                        },
-                        "meta": {
-                            "icon": "md-arrow-dropdown-circle",
-                            "title": "树状下拉选择器"
-                        }
-                    },
-                    {
-                        "name": "drag_list_page",
-                        "query": {
-
-                        },
-                        "params": {
-
-                        },
-                        "meta": {
-                            "icon": "ios-infinite",
-                            "title": "拖拽列表"
-                        }
-                    },
-                    {
-                        "name": "drag_drawer_page",
-                        "query": {
-
-                        },
-                        "params": {
-
-                        },
-                        "meta": {
-                            "icon": "md-list",
-                            "title": "可拖拽抽屉"
-                        }
-                    },
-                    {
-                        "name": "org_tree_page",
-                        "query": {
-
-                        },
-                        "params": {
-
-                        },
-                        "meta": {
-                            "icon": "ios-people",
-                            "title": "组织结构树"
-                        }
-                    },
-                    {
-                        "name": "tree_table_page",
-                        "query": {
-
-                        },
-                        "params": {
-
-                        },
-                        "meta": {
-                            "icon": "md-git-branch",
-                            "title": "树状表格"
-                        }
-                    },
-                    {
-                        "name": "cropper_page",
-                        "query": {
-
-                        },
-                        "params": {
-
-                        },
-                        "meta": {
-                            "icon": "md-crop",
-                            "title": "图片裁剪"
-                        }
-                    },
-                    {
-                        "name": "tables_page",
-                        "query": {
-
-                        },
-                        "params": {
-
-                        },
-                        "meta": {
-                            "icon": "md-grid",
-                            "title": "多功能表格"
-                        }
-                    },
-                    {
-                        "name": "split_pane_page",
-                        "query": {
-
-                        },
-                        "params": {
-
-                        },
-                        "meta": {
-                            "icon": "md-pause",
-                            "title": "分割窗口"
-                        }
-                    },
-                    {
-                        "name": "markdown_page",
-                        "query": {
-
-                        },
-                        "params": {
-
-                        },
-                        "meta": {
-                            "icon": "logo-markdown",
-                            "title": "Markdown编辑器"
-                        }
-                    },
-                    {
-                        "name": "editor_page",
-                        "query": {
-
-                        },
-                        "params": {
-
-                        },
-                        "meta": {
-                            "icon": "ios-create",
-                            "title": "富文本编辑器"
-                        }
-                    }, {
-                        "name": "count_to_page",
-                        "query": {
-
-                        },
-                        "params": {
-
-                        },
-                        "meta": {
-                            "icon": "md-trending-up",
-                            "title": "数字渐变"
-                        }
-                    }
-                ]
             }
         },
         components:{
             user,
             SideMenu,
             TagsNav,
-            fullscreen
+            fullscreen,
+            customBreadCrumb
         },
         computed: {
+            breadCrumbList () {
+                return this.$store.state.app.breadCrumbList
+            },
             rotateIcon () {
                 return [
                     'menu-icon',
@@ -664,7 +180,9 @@
             ...mapMutations([
                 'addTag',
                 'closeTag',
-                'setTagNavList'
+                'setTagNavList',
+                'setBreadCrumb',
+                'setHomeRoute'
             ]),
             collapsedSider () {
                 this.collapsed = !this.collapsed;
@@ -712,6 +230,8 @@
         },
         mounted() {
             this.setTagNavList();
+            this.setHomeRoute(routers)
+            this.setBreadCrumb(this.$route)
             const { name, params, query, meta } = this.$route;
             this.addTag({
                 route: { name, params, query, meta }
@@ -735,6 +255,7 @@
                 // window.console.log(newRoute);
                  window.console.log(newRoute, 1111);
                 let route = newRoute;
+                this.setBreadCrumb(newRoute)
                 this.addTag({route});
             }
         }

@@ -26,14 +26,16 @@
             <input v-model="height"/>
             <input v-model="width"/>
             <Button @click="resizeWindow">修改大小</Button>
+
             </div> -->
+
     </div>
 </template>
 
 <script>
     import { Input,Tree } from 'element-ui'
     import Hik from "./component/Hik";
-    
+
     export default {
         name: "showVideo",
         components:{
@@ -43,6 +45,7 @@
         },
         data(){
           return{
+
             filterText: '',
             data: [],
             defaultProps: {
@@ -52,6 +55,7 @@
             // height:650,
             // width:800,
             ddd:'oWebControl',
+
           }
         },
         watch: {

@@ -1,4 +1,3 @@
-<!--饼图-->
 <template>
     <div class="box" id=i1>
         <div class="logo">
@@ -80,7 +79,7 @@
         components:{
             Mixed:()=>import('./Linhai_mixed'),
             Editor:()=>import('./Linhai_editor'),
-            Map:()=>import('./Linhai_map'),
+            Map:()=>import('./component/Map'),
         },
         data(){
                 return{
@@ -136,7 +135,8 @@
         display: flex;
         justify-content: space-around;
         width: 85%;
-        margin: 10px auto 0;
+        margin: 0 auto;
+        padding-top: 10px;
         color: #fff;
     }
     .border1{
