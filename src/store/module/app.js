@@ -1,4 +1,5 @@
 import {getMenuByRouter, getRouteTitleHandled, routeHasExist, routeEqual, getNextRoute} from "../../libs/common";
+import {getBreadCrumbList, getHomeRoute} from "../../libs/tools";
 import config from '@/config'
 import router from '@/router'
 const { homeName } = config
@@ -14,11 +15,19 @@ const home = {'meta':{hideInMenu:true, icon:"md-home", notCache:true, title:"首
 export default {
     state:{
         app1:"",
-        tagNavList:[]
+        tagNavList:[],
+        breadCrumbList: [],
+        homeRoute:{}
     },
     mutations:{
         setapp:function(state, routeInfo){
             state.app = routeInfo;
+        },
+        setBreadCrumb (state, route) {
+            state.breadCrumbList = getBreadCrumbList(route, state.homeRoute)
+        },
+        setHomeRoute (state, routes) {
+            state.homeRoute = getHomeRoute(routes, homeName)
         },
         addTag (state, { route, type = 'unshift' }) {
 
@@ -34,7 +43,7 @@ export default {
         closeTag (state, route) {
             let tag = state.tagNavList.filter(item => routeEqual(item, route))
             route = tag[0] ? tag[0] : null
-            
+
             if (!route) return
             closePage(state, route)
         },
