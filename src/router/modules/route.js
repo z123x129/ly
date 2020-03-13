@@ -1,4 +1,5 @@
 import Linhai_login from '@/components/pc/Linhai/Linhai_login.vue'
+import Linhai_index from '@/components/pc/Linhai/Linhai_index.vue'
 import Linhai_index2 from '@/components/pc/Linhai/Linhai_index2.vue'
 import Linhai_index3 from '@/components/pc/Linhai/Linhai_index3.vue'
 import Linhai_index4 from '@/components/pc/Linhai/Linhai_index4.vue'
@@ -8,8 +9,13 @@ import Linhai_index7 from '@/components/pc/Linhai/Linhai_index7.vue'
 import Linhai_index8 from '@/components/pc/Linhai/Linhai_index8.vue'
 import Linhai_index9 from '@/components/pc/Linhai/Linhai_index9.vue'
 import Linhai_index10 from '@/components/pc/Linhai/Linhai_index10.vue'
-import Linhai_index11 from '@/components/pc/Linhai/Linhai_index11.vue'
+
+//学校路由
+import Maintain_list from '@/components/pc/Linhai/School2/Maintain_list.vue'
+
+//网格员路由
 import School_list from '@/components/pc/Linhai/School/School_list.vue'
+import Violation_list from '@/components/pc/Linhai/School/Violation_list.vue'
 import Alert_monitor from '@/components/pc/Linhai/School/Alert_monitor.vue'
 import showVideo from '@/components/pc/Linhai/showVideo.vue'
 import Main from '@/components/main'
@@ -27,7 +33,7 @@ export default [
     },
     {
         path: '/',
-        name: 'home',
+        name: '_home',
         component: Main,
         meta: {
             icon: 'logo-buffer',
@@ -36,17 +42,20 @@ export default [
         children:[
 
             {
-                path: '/Linhai_index6',
-                name: 'Linhai_index6',
+                path: '/Linhai_index',
+                name: 'Linhai_index',
                 meta: {
-                    icon: 'md-trending-up',
-                    title: '数字渐变1'
+                    icon: 'md-arrow-dropdown-circle',
+                    title: '数据大屏'
                 },
-                component: Linhai_index6
+                // route level code-splitting
+                // this generates a separate chunk (about.[hash].js) for this route
+                // which is lazy-loaded when the route is visited.
+                component: Linhai_index
             },
             {
                 path: '/home',
-                name: 'home1',
+                name: 'home',
                 meta: {
                     icon: 'md-arrow-dropdown-circle',
                     title: '首页'
@@ -68,6 +77,7 @@ export default [
                 // which is lazy-loaded when the route is visited.
                 component: Linhai_index5
             },
+
         ]
     },
     {
@@ -184,6 +194,30 @@ export default [
             },
         ]
     },
+
+    //学校路由
+    {
+        path: '/maintain',
+        name: 'maintain',
+        component: Main,
+        meta: {
+            icon: 'logo-buffer',
+            title: '人员信息维护'
+        },
+        children:[
+            {
+                path: '/Maintain_list',
+                name: 'Maintain_list',
+                meta: {
+                    icon: 'md-arrow-dropdown-circle',
+                    title: '人员信息维护'
+                },
+                component: Maintain_list
+            },
+        ]
+    },
+
+    //网格员路由
     {
         path: '/school',
         name: 'school',
@@ -202,6 +236,15 @@ export default [
                 },
                 component: School_list
             },
+            {
+                path: 'Violation_list',
+                name: 'Violation_list',
+                meta: {
+                    icon: 'md-arrow-dropdown-circle',
+                    title: '违规列表'
+                },
+                component: Violation_list
+            },
         ]
     },
     {
@@ -214,7 +257,7 @@ export default [
         },
         children:[
             {
-                path: 'Alert_monitor',
+                path: '/Alert_monitor',
                 name: 'Alert_monitor',
                 meta: {
                     icon: 'md-arrow-dropdown-circle',
