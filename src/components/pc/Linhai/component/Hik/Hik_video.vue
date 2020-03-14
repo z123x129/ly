@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div id="playWnd" :style="{height:dHeight + 'px', width:dWidth + 'px'}"></div>
+        <div id="playWnd" style="height:100%;width:100%"></div>
     </div>
 </template>
 
@@ -139,8 +139,8 @@
             },
             resizeWindow(height, width)
             {
-                this.dWidth = width;
-                this.dHeight = height;
+                // this.dWidth = width;
+                // this.dHeight = height;
                 this.app[this.openOWebName].JS_Resize(width, height);
             },
             videoPlay(cameraIndexCode, callback = ()=>{}, wndId = 0, streamMode = 0, transMode = 1, gpuMode= 0){
