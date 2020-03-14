@@ -217,7 +217,7 @@
                 }, 100);
             },
             //显示热点
-            redian:function(x,y,name){
+            redian:function(){//x,y,name
                 let _this=this
                 let placeSearch = new AMap.PlaceSearch();  //构造地点查询类
                 let infoWindow = new AMap.InfoWindow({});//信息
@@ -244,6 +244,7 @@
                 });
             },
             createContent:function(e){
+                console.log(e)
                 let s = [];
                 s.push('<div style="width: 200px">是否查看【' + e.name + '】视频？</div><a class=\'btn btn-info\' onclick=\'opvideo()\' style="margin-left: 12px;margin-top: 10px">查看视频</a>');
                 s.push('<div>');
