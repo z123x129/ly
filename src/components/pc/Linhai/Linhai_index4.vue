@@ -3,6 +3,7 @@
         <div class="demo">
             <p>摄像点选择:</p>
             <el-input
+                    style="padding:10px;"
                     size="small"
                     placeholder="输入关键字搜索"
                     v-model="filterText">
@@ -30,14 +31,15 @@
                     <el-input style="padding: 10px"
                             size="small"
                             placeholder="输入关键字搜索"
-                            v-model="filterText">
+                            v-model="filterText2">
                     </el-input>
                     <el-tree
                             class="filter-tree"
                             :data="data"
                             :props="defaultProps"
-                            :filter-node-method="filterNode"
-                            ref="tree">
+                            :filter-node-method="filterNode2"
+                            @node-click="playvideo"
+                            ref="tree2">
                     </el-tree>
                 </div>
                 <Hik class="videobox" ref="H1" :openOWebName="ddd"></Hik>
@@ -63,6 +65,7 @@
         data(){
             return{
                 filterText: '',
+                filterText2: '',
                 data: [],
                 defaultProps: {
                     children: 'children',
@@ -86,6 +89,9 @@
         watch: {
             filterText(val) {
                 this.$refs.tree.filter(val);
+            },
+            filterText2(val) {
+                this.$refs.tree2.filter(val);
             }
         },
         created:function(){
@@ -128,11 +134,23 @@
                 if(data.parentIndexCode){
                     _this.map.setZoomAndCenter(12, [data.longitude,data.latitude]);
                 }else if(!data.children){
-                    _this.map.setZoomAndCenter(17, [data.longitude-0.0058,data.latitude-0.0056]);
-                    _this.tzSite=[data.longitude-0.0058,data.latitude-0.0056];
+                    _this.map.setZoomAndCenter(17, [data.longitude,data.latitude]);
+                    // _this.tzSite=[data.longitude,data.latitude];
+                    // _this.redian(data.longitude,data.latitude,data.dirName)
+
+                }
+            },
+            playvideo(data){//地图跳转
+                let _this=this
+                if(!data.children){
+                    console.log("播放录像")
                 }
             },
             filterNode(value, data) {
+                if (!value) return true;
+                return data.label.indexOf(value) !== -1;
+            },
+            filterNode2(value, data) {
                 if (!value) return true;
                 return data.label.indexOf(value) !== -1;
             },
@@ -146,7 +164,6 @@
                     isHotspot: true//是否开启地图热点和标注效果
                 });
             },
-
             //点击经纬度
             getxy:function(){
                 let _this=this
@@ -198,29 +215,26 @@
                 setTimeout(() => {
                     this.videoinit()
                 }, 100);
-                // alert('监控视频');
-                // return false;
             },
-            //返回学校列表
-            // returnList(){
-            //     this.buttonif = false
-            //     this.hideVideo()
-            // },
             //显示热点
-            redian:function(){
+            redian:function(x,y,name){
                 let _this=this
                 let placeSearch = new AMap.PlaceSearch();  //构造地点查询类
                 let infoWindow = new AMap.InfoWindow({});//信息
+                // infoWindow.setContent(_this.createContent(name));
+                // infoWindow.open(_this.map, [x,y]);
                 _this.map.on('hotspotclick', function (result) {
                     placeSearch.getDetails(result.id, function (status, result) {
                         if (status === 'complete' && result.info === 'OK') {
                             let poiArr = result.poiList.pois;
                             let location = poiArr[0].location;
                             let code=[];
-                            code[0]=poiArr[0].name.indexOf("学");
+                            code[0]=poiArr[0].name.indexOf("学校");
                             code[1]=poiArr[0].name.indexOf("幼儿园");
-                            code[2]=poiArr[0].name.indexOf("校");
-                            if(code[0]>0||code[1]>0||code[2]>0){
+                            code[2]=poiArr[0].name.indexOf("中学");
+                            code[3]=poiArr[0].name.indexOf("小学");
+                            code[4]=poiArr[0].name.indexOf("中心校");
+                            if(code[0]>0||code[1]>0||code[2]>0||code[3]>0||code[4]>0){
                                 infoWindow.setContent(_this.createContent(poiArr[0]));
                                 infoWindow.open(_this.map, location);
                             }
@@ -284,10 +298,18 @@
         display: none;
     }
     .el-tree /deep/ .el-tree-node{
+        &:focus{
+            &>.el-tree-node__content{
+                background-color: #f0f0f0
+            }
+        }
         .el-tree-node__content{
             height: auto;
             &>.el-tree-node__label{
                 line-height: 2.2rem;
+            }
+            &:hover{
+                background-color: #f0f0f0
             }
         }
         .el-tree-node__children{
