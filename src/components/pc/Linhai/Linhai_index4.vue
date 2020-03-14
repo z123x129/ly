@@ -23,7 +23,7 @@
             </div>
             <!-- <Hik class="videobox" ref="H1" :openOWebName="ddd"></Hik> -->
         </div>
-        <videoDialog class="dialog" :visible.sync="videoVisible" >
+        <videoDialog class="dialog" :visible.sync="videoVisible" @resize="resize" @videoinit ="videoinit">
             <div class="videobox">
                 <div class="demo">
                     <p>摄像点选择:</p>
@@ -38,11 +38,10 @@
                             :props="defaultProps"
                             :filter-node-method="filterNode"
                             ref="tree">
-                    </el-tree> <!-- @node-click="gotoMap" -->
+                    </el-tree>
                 </div>
                 <Hik class="videobox" ref="H1" :openOWebName="ddd"></Hik>
             </div>
-
         </videoDialog>
     </div>
 </template>
@@ -102,7 +101,6 @@
             this.redian();//热点
             this.addsite();//标点
             this.getList()//获取地区列表
-            this.resize()//实时更改视频插件窗口大小
         },
         methods:{
             videoinit(){//初始化视频插件
@@ -114,22 +112,8 @@
             hideVideo(){//隐藏视频插件
                 this.app[this.ddd].JS_HideWnd();
             },
-            resize(){//视频插件窗口大小
-                const that = this
-                window.onresize = () => {
-                    var target = this;
-                    if (target.resizeFlag) {
-                        clearTimeout(target.resizeFlag);
-                    }
-                    target.resizeFlag = setTimeout(function() {
-                        console.log(that.$refs.H1.$el.offsetHeight)
-                        that.$refs.H1.resizeWindow(that.$refs.H1.$el.offsetHeight,that.$refs.H1.$el.offsetWidth);
-                        target.resizeFlag = null;
-                    }, 200);
-                    // that.$refs.H1.resizeWindow(that.$refs.H1.$el.offsetHeight,that.$refs.H1.$el.offsetWidth);
-                    // console.log('高度',that.$refs.H1.$el.offsetHeight)
-                    // console.log('宽度',that.$refs.H1.$el.offsetWidth)
-                }
+            resize(){//视频插件窗口大小this
+                this.$refs.H1.resizeWindow(this.$refs.H1.$el.offsetHeight,this.$refs.H1.$el.offsetWidth);
             },
             getList(){ //获取地区列表
                 let params ={};
@@ -210,9 +194,12 @@
             //查看监控
             opvideo:function(){
                 this.videoVisible = true
-                this.videoinit()
+                
+                setTimeout(() => {
+                    this.videoinit()
+                }, 100);
                 // alert('监控视频');
-                return false;
+                // return false;
             },
             //返回学校列表
             // returnList(){
@@ -270,7 +257,7 @@
     .demo{
         // width: 18%;
         // float: left;
-        min-width: 200px;
+        // min-width: 200px;
         padding: 10px;
         box-sizing: border-box;
         height: 100%;
@@ -283,7 +270,7 @@
         // width: 82%;
         flex: 1;
         height: 100%;
-        max-width: calc(~'100% - 200px');
+        // max-width: calc(~'100% - 200px');
     }
     .videobox{
         width: 100%;
