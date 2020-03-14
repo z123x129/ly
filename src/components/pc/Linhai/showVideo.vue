@@ -165,10 +165,18 @@
         display: none;
     }
     .el-tree /deep/ .el-tree-node{
+        &:focus{
+            &>.el-tree-node__content{
+                background-color: #f0f0f0
+            }
+        }
         .el-tree-node__content{
             height: auto;
             &>.el-tree-node__label{
                 line-height: 2.2rem;
+            }
+            &:hover{
+                background-color: #f0f0f0
             }
         }
         .el-tree-node__children{
