@@ -103,7 +103,7 @@
                         clearTimeout(target.resizeFlag);
                     }
                     target.resizeFlag = setTimeout(function() {
-                        console.log(that.$refs.H1.$el.offsetHeight)
+                        // console.log(that.$refs.H1.$el.offsetHeight)
                         that.$refs.H1.resizeWindow(that.$refs.H1.$el.offsetHeight,that.$refs.H1.$el.offsetWidth);
                         target.resizeFlag = null;
                     }, 200);
@@ -145,7 +145,7 @@
     .demo{
         // width: 18%;
         // float: left;
-        min-width: 200px;
+        // min-width: 200px;
         padding: 10px;
         box-sizing: border-box;
         height: 100%;
@@ -156,7 +156,7 @@
         // float: left;
         // width: 82%;
         flex: 1;
-        max-width: calc(~'100% - 200px');
+        // max-width: calc(~'100% - 200px');
         height: 100%;
     }
     .amap-info-combo .keyword-input{height:auto;}
