@@ -44,18 +44,7 @@ export default [
         },
         children:[
 
-            {
-                path: '/Linhai_index',
-                name: 'Linhai_index',
-                meta: {
-                    icon: 'md-arrow-dropdown-circle',
-                    title: '数据大屏'
-                },
-                // route level code-splitting
-                // this generates a separate chunk (about.[hash].js) for this route
-                // which is lazy-loaded when the route is visited.
-                component: Linhai_index
-            },
+    
             {
                 path: '/home',
                 name: 'home',
