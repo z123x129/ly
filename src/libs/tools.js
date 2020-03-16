@@ -234,6 +234,7 @@ export const getBreadCrumbList = (route, homeRoute) => {
       meta.__titleIsFunction__ = true
       meta.title = meta.title(route)
     }
+
     let obj = {
       icon: (item.meta && item.meta.icon) || '',
       name: item.name,
