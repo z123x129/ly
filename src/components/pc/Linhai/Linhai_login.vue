@@ -34,6 +34,8 @@
 <script>
     import { Message } from 'element-ui'
     import 'element-ui/lib/theme-chalk/index.css'
+    import router from '@/router'
+    import {constantRouterMap} from '@/router/modules/route'
     export default {
         data(){
             return{
@@ -53,6 +55,11 @@
                 logo:''
             }
         },
+        components:{
+            orderList () {
+                return this.$store.getters.orderList
+            },
+        },
         mounted(){
             // this.$https.fetchPost('/plugin/site_configuration/apiIndex/getInfo').then((res) => {
             //     this.logo = res.SEO.img_url;
@@ -68,6 +75,8 @@
                     this.$store.commit('getUid',res_data.id);
                     this.$store.commit('getJurisdiction',res_data.user_type);
                     Message.success('登录成功');
+                    router.addRoutes(constantRouterMap)
+                    window.console.log(router);
                     this.$router.push('/')
                 })
             },

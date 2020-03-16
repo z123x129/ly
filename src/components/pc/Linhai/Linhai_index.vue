@@ -25,7 +25,8 @@
                     </dv-border-box-12>
                 </div>
                 <div class="cont2">
-                    <Map style="width: 100%;height: 100%"></Map>
+                    <Button @click="back">back</Button>
+                    <Map style="width: 100%;height: 100%" :address_info="address_info" ref="map"></Map>
                     <ul>
                         <li>学校个数: <span>142</span></li>
                         <li>没有异常的学校: <span>122</span></li>
@@ -83,6 +84,7 @@
         },
         data(){
                 return{
+                address_info:[],
                 config:{
                     header: ['列1', '列2', '列3'],
                     data: [
@@ -118,9 +120,28 @@
                     index: true,
                     columnWidth: [50],
                     align: ['center'],
-                    carousel: 'page'
+                    carousel: 'page',
+
                 },
+
             }
+        },
+        methods:{
+            getAddress(){
+                let that = this;
+                this.$https.fetchGet("/plugin/statistics/api_index/getAbbrArea", []).then(function(data){
+                   that.address_info = data;
+                   that.$nextTick(()=>{
+                       that.$refs.map.init("LinHai");
+                   })
+                })
+            },
+            back(){
+                this.$refs.map.init("LinHai");
+            }
+        },
+        created() {
+            this.getAddress();
         }
     }
 </script>

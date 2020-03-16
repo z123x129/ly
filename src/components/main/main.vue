@@ -97,7 +97,7 @@
                             <tags-nav :value="$route" @input="handleClick" :list="tagsNav" @on-close="closeClick"/>
                         </div>
                         <Content class="content-wrapper" >
-                            <div style="background-color:#fff;height:100%" id='i2'>
+                            <div style="background-color:#fff;height:100vh" id='i2'>
                            <keep-alive :include="cacheList">
                                     <router-view></router-view>
                            </keep-alive>
@@ -113,14 +113,13 @@
 <script>
     import minLogo from '@/assets/logo.png'
     import headImg from '@/assets/11.jpeg'
-    import route from '@/router/modules/route';
     import user from './component/user'
     import SideMenu from './component/side-menu'
     import TagsNav from './component/tags-nav'
     import fullscreen from './component/fullscreen'
     import { mapMutations} from 'vuex'
     import {  routeEqual } from '@/libs/common'
-    import routers from '@/router/modules/route'
+    import {asyncRouterMap} from '@/router/modules/route'
     import customBreadCrumb from './component/custom-bread-crumb'
     import './main.less'
     //import 'swiper/dist/css/swiper.css'
@@ -130,7 +129,6 @@
             return {
                 isCollapsed: false,
                 minLogo,
-                route,
                 collapsed:false,
                 img:headImg,
                 isFullscreen:false
@@ -230,7 +228,7 @@
         },
         mounted() {
             this.setTagNavList();
-            this.setHomeRoute(routers)
+            this.setHomeRoute(asyncRouterMap)
             this.setBreadCrumb(this.$route)
             const { name, params, query, meta } = this.$route;
             this.addTag({
@@ -255,6 +253,7 @@
                 // window.console.log(newRoute);
                  window.console.log(newRoute, 1111);
                 let route = newRoute;
+
                 this.setBreadCrumb(newRoute)
                 this.addTag({route});
             }
