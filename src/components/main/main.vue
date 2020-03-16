@@ -170,7 +170,6 @@
             cacheList () {
                 const list = ['ParentView', ...this.tagNavList.length ? this.tagNavList.filter(item => !(item.meta && item.meta.notCache)).map(item => item.name) : []]
                 // const x1 = (this.tagNavList.length);
-                window.console.log(list, 111);
                 return list
             },
         },
@@ -187,7 +186,6 @@
                 this.$refs.side1.toggleCollapse();
             },
             turnToPage:function(route){
-                // window.console.log(route);
                 let { name, params, query } = {}
                 if (typeof route === 'string') name = route
                 else {
@@ -196,7 +194,6 @@
                     query = route.query
                 }
                 if (name.indexOf('isTurnByHref_') > -1) {
-                    // window.console.log(name)
                     window.open(name.split('_')[1])
                     return
                 }
@@ -213,7 +210,6 @@
                 this.turnToPage(item.name)
             },
             closeClick:function(res, type, route){
-                // window.console.log(res, type, route);
                 if (type !== 'others') {
                     if (type === 'all') {
                     this.turnToPage(this.$config.homeName)
@@ -234,24 +230,19 @@
             this.addTag({
                 route: { name, params, query, meta }
             });
-            // window.console.log(this.menuList, 233);
 
         },
         watch:{
             "$route"(newRoute){
                 if(this.app.oWebControl != "" )
                 {
-                     window.console.log(newRoute.name );
                     if(newRoute.name != "showVideo")
                         this.app.oWebControl.JS_HideWnd();
                     else
                     {
-                        window.console.log(14565);
                         this.app.oWebControl.JS_ShowWnd();
                     }
                 }
-                // window.console.log(newRoute);
-                 window.console.log(newRoute, 1111);
                 let route = newRoute;
 
                 this.setBreadCrumb(newRoute)

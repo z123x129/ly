@@ -35,8 +35,11 @@
     import { Message } from 'element-ui'
     import 'element-ui/lib/theme-chalk/index.css'
     import router from '@/router'
-    import {constantRouterMap} from '@/router/modules/route'
+    import VueRouter from 'vue-router'
+    import {getRouterByOrder} from '@/libs/common'
+    import {constantRouterMap , asyncRouterMap} from '@/router/modules/route'
     export default {
+        name:'Linhai_login',
         data(){
             return{
                 formInline: {
@@ -67,6 +70,14 @@
         },
         methods:{
             handleSubmit() {
+
+                const createRouter = () => new VueRouter({
+                    routes: constantRouterMap
+                });
+                const routers = createRouter();
+                // 添加其他项目路由前，重置 matcher
+                router.matcher = routers.matcher;
+
                 //登录
                 let params ={'user_login':this.formInline.user,'user_pass':this.formInline.password};
                 params = this.$secret_key.func(this.$store.state.on_off, params);
@@ -75,8 +86,8 @@
                     this.$store.commit('getUid',res_data.id);
                     this.$store.commit('getJurisdiction',res_data.user_type);
                     Message.success('登录成功');
-                    router.addRoutes(constantRouterMap)
-                    window.console.log(router);
+                    router.addRoutes(getRouterByOrder(asyncRouterMap, res_data.user_type))
+                    this.$store.commit("setRouteInfo", asyncRouterMap);
                     this.$router.push('/')
                 })
             },
