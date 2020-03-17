@@ -22,7 +22,6 @@
                 <div id="container" class="map"></div>
                 <div id="xy" style="color: red;height: 80px;width: 160px;"></div>
             </div>
-            <!-- <Hik class="videobox" ref="H1" :openOWebName="ddd"></Hik> -->
         </div>
         <videoDialog class="dialog" :visible.sync="videoVisible" @resize="resize" @videoinit ="videoinit">
             <div class="videobox">
@@ -35,31 +34,30 @@
                     </el-input>
                     <el-tree
                             class="filter-tree"
-                            :data="data"
+                            :data="data2"
                             :props="defaultProps"
                             :filter-node-method="filterNode2"
                             @node-click="playvideo"
                             ref="tree2">
                     </el-tree>
                 </div>
-                <Hik class="videobox" ref="H1" :openOWebName="ddd"></Hik>
+                <Hikr class="videobox" ref="H1" :openOWebName="ddd"></Hikr>
             </div>
         </videoDialog>
     </div>
 </template>
 <script>
-    import { Input,Tree,Button} from 'element-ui'
+    import { Input,Tree} from 'element-ui'//,DatePicker
     import 'element-ui/lib/theme-chalk/index.css'
     import 'iview/dist/styles/iview.css'
-    import Hik from "./component/Hik"
+    import Hikr from "./component/Hik/Hik_revideo"
     import videoDialog from './videoDialog'
     export default {
         inject:["app"],
         components:{
             [Input.name]:Input,
             [Tree.name]:Tree,
-            [Button.name]:Button,
-            Hik,
+            Hikr,
             videoDialog
         },
         data(){
@@ -67,6 +65,7 @@
                 filterText: '',
                 filterText2: '',
                 data: [],
+                data2: [],
                 defaultProps: {
                     children: 'children',
                     label: 'label'
@@ -107,6 +106,7 @@
             this.redian();//热点
             this.addsite();//标点
             this.getList()//获取地区列表
+            this.getList2()//获取摄像头列表
         },
         methods:{
             videoinit(){//初始化视频插件
@@ -118,7 +118,7 @@
             hideVideo(){//隐藏视频插件
                 this.app[this.ddd].JS_HideWnd();
             },
-            resize(){//视频插件窗口大小this
+            resize(){//拖动窗口时视频插件跟随移动
                 this.$refs.H1.resizeWindow(this.$refs.H1.$el.offsetHeight,this.$refs.H1.$el.offsetWidth);
             },
             getList(){ //获取地区列表
@@ -129,13 +129,21 @@
                     this.data = res_data
                 })
             },
+            getList2(){ //获取摄像头列表
+                let params ={};
+                params = this.$secret_key.func(this.$store.state.on_off, params);
+                this.$https.fetchPost('/plugin/statistics/api_index/getRegionCatalog').then((res) => {
+                    var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
+                    this.data2 = res_data
+                })
+            },
             gotoMap(data){//地图跳转
                 let _this=this
                 if(data.parentIndexCode){
                     _this.map.setZoomAndCenter(12, [data.longitude,data.latitude]);
                 }else if(!data.children){
                     _this.map.setZoomAndCenter(17, [data.longitude,data.latitude]);
-                    // _this.tzSite=[data.longitude,data.latitude];
+                    // console.log(data.longitude,data.latitude)
                     // _this.redian(data.longitude,data.latitude,data.dirName)
 
                 }
@@ -143,7 +151,7 @@
             playvideo(data){//地图跳转
                 let _this=this
                 if(!data.children){
-                    console.log("播放录像")
+                    this.$refs.H1.videoPlay(data.cameraIndexCode,null,null,null,null,null,1579104000,1584374399)
                 }
             },
             filterNode(value, data) {
@@ -229,6 +237,7 @@
                             let poiArr = result.poiList.pois;
                             let location = poiArr[0].location;
                             let code=[];
+                            console.log('lng:'+location.lng,'lat:'+location.lat)
                             code[0]=poiArr[0].name.indexOf("学校");
                             code[1]=poiArr[0].name.indexOf("幼儿园");
                             code[2]=poiArr[0].name.indexOf("中学");
@@ -244,7 +253,6 @@
                 });
             },
             createContent:function(e){
-                console.log(e)
                 let s = [];
                 s.push('<div style="width: 200px">是否查看【' + e.name + '】视频？</div><a class=\'btn btn-info\' onclick=\'opvideo()\' style="margin-left: 12px;margin-top: 10px">查看视频</a>');
                 s.push('<div>');
@@ -273,12 +281,17 @@
         // width: 18%;
         // float: left;
         // min-width: 200px;
+        max-width:20vw;
         padding: 10px;
         box-sizing: border-box;
         height: 100%;
         background: #fff;
         overflow: auto;
-         transition: all .8s ease;
+        // transition: all .8s ease;
+        // .el-date-editor{
+        //     max-width: calc(~'100% - 20px');
+        //     margin:0 10px;
+        // }
     }
     .map_box{
         // float: left;
