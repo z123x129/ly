@@ -1,17 +1,21 @@
 import store from '../../store'
 
-import Linhai_login from '@/components/pc/Linhai/Linhai_login.vue'
 import Linhai_index from '@/components/pc/Linhai/Linhai_index.vue'
 import Linhai_index2 from '@/components/pc/Linhai/Linhai_index2.vue'
 import Linhai_index3 from '@/components/pc/Linhai/Linhai_index3.vue'
 import Linhai_index4 from '@/components/pc/Linhai/Linhai_index4.vue'
 import Linhai_index5 from '@/components/pc/Linhai/Linhai_index5.vue'
-import Linhai_index6 from '@/components/pc/Linhai/Linhai_index6.vue'
-import Linhai_index7 from '@/components/pc/Linhai/Linhai_index7.vue'
+
 import Linhai_index8 from '@/components/pc/Linhai/Linhai_index8.vue'
 import Linhai_index9 from '@/components/pc/Linhai/Linhai_index9.vue'
+
+//公共路由
+import Linhai_login from '@/components/pc/Linhai/Linhai_login.vue'
 import notfount from '@/components/error-page/404.vue'
 
+//管理员路由
+import Key_personnel from '@/components/pc/Linhai/Admin/Key_personnel.vue'
+import Strange_people from '@/components/pc/Linhai/Admin/Strange_people.vue'
 
 //学校路由
 import Maintain_list from '@/components/pc/Linhai/School2/Maintain_list.vue'
@@ -86,7 +90,7 @@ export const asyncRouterMap = [
                 meta: {
                     icon: 'md-arrow-dropdown-circle',
                     title: '数据大屏',
-                    role: [3],
+                    role: [1],
                 },
                 // route level code-splitting
                 // this generates a separate chunk (about.[hash].js) for this route
@@ -148,14 +152,14 @@ export const asyncRouterMap = [
                 component: Linhai_index5
             },
             {
-                path: 'Linhai_index6',
-                name: 'Linhai_index6',
+                path: 'Linhai_index8',
+                name: 'Linhai_index8',
                 meta: {
                     icon: 'md-arrow-dropdown-circle',
                     title: '录像检索',
                     role: [1],
                 },
-                component: Linhai_index6
+                component: Linhai_index8
             },
         ]
     },
@@ -170,24 +174,24 @@ export const asyncRouterMap = [
         },
         children:[
             {
-                path: 'Linhai_index7',
-                name: 'Linhai_index7',
+                path: 'Key_personnel',
+                name: 'Key_personnel',
                 meta: {
                     icon: 'md-arrow-dropdown-circle',
                     title: '重点人员监控',
                     role: [1],
                 },
-                component: Linhai_index7
+                component: Key_personnel
             },
             {
-                path: 'Linhai_index8',
-                name: 'Linhai_index8',
+                path: 'Strange_people',
+                name: 'Strange_people',
                 meta: {
                     icon: 'md-arrow-dropdown-circle',
                     title: '陌生人员监控',
                     role: [1],
                 },
-                component: Linhai_index8
+                component: Strange_people
             },
             {
                 path: 'Linhai_index9',
@@ -357,11 +361,11 @@ export const asyncRouterMap = [
         ]
     }, //学校后台通用
     //404页面
-    {
-        path: "*", // 此处需特别注意置于最底部
-        meta: {
-            role: [1,2,3],
-        },
-        component: notfount
-    }
+    // {
+    //     path: "*", // 此处需特别注意置于最底部
+    //     meta: {
+    //         role: [1,2,3],
+    //     },
+    //     component: notfount
+    // }
 ];

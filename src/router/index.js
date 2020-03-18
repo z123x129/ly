@@ -36,11 +36,11 @@ let routerd =  new VueRouter({
 routerd.beforeEach((to,from,next)=>{
   let toPath = ['/login'];//无需登录判断的页面
   if(toPath.indexOf(to.path)>=0){
-    if(to.path == '/login'&&store.state.route.uid!=''){
+    if(to.path == '/login'&&store.state.user.uid!=''){
       next('/');
     }
     next();
-  }else if(store.state.route.uid==''){
+  }else if(store.state.user.uid==''){
     MessageBox.alert('您还没有登录，请先登录', '提示', {
       confirmButtonText: '确定',
       callback: action => {

@@ -38,6 +38,7 @@
     import VueRouter from 'vue-router'
     import {getRouterByOrder} from '@/libs/common'
     import {constantRouterMap , asyncRouterMap} from '@/router/modules/route'
+    import { Base64 } from 'js-base64';
     export default {
         name:'Linhai_login',
         data(){
@@ -84,9 +85,9 @@
                 this.$https.fetchPost('/plugin/school/api_index/user_login',params).then((res) => {
                     var res_data =this.$secret_key.func(this.$store.state.on_off, res ,"key");
                     this.$store.commit('getUid',res_data.id);
-                    this.$store.commit('getJurisdiction',res_data.user_type);
+                    this.$store.commit('getJurisdiction',Number(Base64.decode(res_data.user_type)));
                     Message.success('登录成功');
-                    router.addRoutes(getRouterByOrder(asyncRouterMap, res_data.user_type))
+                    router.addRoutes(getRouterByOrder(asyncRouterMap, Number(Base64.decode(res_data.user_type))))
                     this.$store.commit("setRouteInfo", asyncRouterMap);
                     this.$router.push('/')
                 })

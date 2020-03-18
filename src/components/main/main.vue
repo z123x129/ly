@@ -122,7 +122,8 @@
     import {asyncRouterMap} from '@/router/modules/route'
     import customBreadCrumb from './component/custom-bread-crumb'
     import './main.less'
-    //import 'swiper/dist/css/swiper.css'
+
+    import { Notification } from 'element-ui';
     export default {
         inject:["app"],
         data () {
@@ -131,8 +132,8 @@
                 minLogo,
                 collapsed:false,
                 img:headImg,
-                isFullscreen:false
-
+                isFullscreen:false,
+                ws:new WebSocket("ws://"+"192.168.0.3"+":7272")
             }
         },
         components:{
@@ -220,7 +221,25 @@
                     }
                 }
                 this.setTagNavList(res)
-            }
+            },
+            open(msg,content,type) {
+                var that = this;
+                Notification({
+                    title: msg,
+                    message: content,
+                    type: 'warning',
+                    onClick:function () {
+                        switch(type){
+                            case 'Emphasis':
+                                that.$router.push('/Intelligence/Key_personnel');
+                                break;
+                            case 'stranger':
+                                that.$router.push('/Intelligence/Strange_people');
+                                break;
+                        }
+                    }
+                });
+            },
         },
         mounted() {
             this.setTagNavList();
@@ -230,6 +249,28 @@
             this.addTag({
                 route: { name, params, query, meta }
             });
+            var that = this;
+            this.ws.onmessage = function(e){
+                let data = eval("("+e.data+")");
+                let type = data.type || '';
+                switch(type){
+                    case 'init':
+                        let params_1 ={'uid':2,'client_id':data.client_id};
+                        that.$https.fetchPost('/plugin/statistics/api_index/bindUser',params_1).then((res) => {
+                            console.log('连接成功');
+                        });
+                        break;
+                    case 'Emphasis':
+                        that.open(data.content.msg,data.content.faceInfoName,type);
+                        break;
+                    case 'stranger':
+                        that.open(data.content.msg,data.content.ageGroup,type);
+                        break;
+                }
+            };
+            setInterval(()=>{
+                that.ws.send('')
+            }, 3000)
 
         },
         watch:{
