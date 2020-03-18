@@ -85,10 +85,10 @@
                 });
                 window.console.log(that.app[that.openOWebName]);
             },
-            initVideo(snapDir = "D:\\SnapDir", videoDir = "D:\\VideoDir", layoutm = "1x1"){
-                var timer = new Date().getFullYear() +''+ (new Date().getMonth()+1) + new Date().getDate()
+            initVideo(snapDir = "D:\\SnapDir", videoDir = "D:\\VideoDir", layoutm = "2x2"){
                 if(!this.checkWebC())
                     return;
+                var timer = new Date().getFullYear() +''+ (new Date().getMonth()+1) + new Date().getDate()
                 let that = this;
                 this.getPubKey(function () {
                     const secret = that.setEncrypt(that.secret);

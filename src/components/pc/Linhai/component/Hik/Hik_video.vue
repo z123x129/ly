@@ -86,6 +86,7 @@
             initVideo(snapDir = "D:\\SnapDir", videoDir = "D:\\VideoDir", layoutm = "2x2"){
                 if(!this.checkWebC())
                     return;
+                var timer = new Date().getFullYear() +''+ (new Date().getMonth()+1) + new Date().getDate()   
                 let that = this;
                 this.getPubKey(function () {
                     const secret = that.setEncrypt(that.secret);
@@ -99,8 +100,8 @@
                         ip: that.ip,
                         playMode: 0, // 预览
                         port: port,
-                        snapDir: snapDir,
-                        videoDir: videoDir,
+                        snapDir: snapDir+'\\'+timer,
+                        videoDir: videoDir+'\\'+timer,
                         layout: layoutm,
                         enableHTTPS: enableHttps,
                         encryptedFields: encryptedFields
