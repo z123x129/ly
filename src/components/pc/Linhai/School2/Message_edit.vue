@@ -27,6 +27,7 @@
     import { Form,FormItem,Button,Input,Message } from 'element-ui'
     import 'element-ui/lib/theme-chalk/index.css'
     export default {
+        name:'Message_edit',
         components:{
             [Form.name]:Form,
             [FormItem.name]:FormItem,
@@ -44,7 +45,7 @@
         },
         methods: {
             getList(){
-                let params ={'uid':this.$store.state.route.uid};
+                let params ={'uid':this.$store.state.user.uid};
                 params = this.$secret_key.func(this.$store.state.on_off, params);
                 this.$https.fetchPost('/plugin/school/api_index/school_detail',params).then((res) => {
                     this.form = res;
@@ -53,7 +54,7 @@
             onSubmit(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        let arr = {'user_id':this.$store.state.route.uid};
+                        let arr = {'user_id':this.$store.state.user.uid};
                         let params = Object.assign(this.form,arr);
                         params = this.$secret_key.func(this.$store.state.on_off, params);
                         this.$https.fetchPost('/plugin/school/api_index/school_edit',params).then((res) => {

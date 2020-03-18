@@ -216,7 +216,7 @@
         },
         methods: {
             getList(){ //获取学校列表
-                let params ={'user_id':this.$store.state.route.uid,'page':this.page,'paginate':this.paginate,'dirName':this.formInline.dirName,'cameraIndexCode':this.formInline.cameraIndexCode[1]};
+                let params ={'user_id':this.$store.state.user.uid,'page':this.page,'paginate':this.paginate,'dirName':this.formInline.dirName,'cameraIndexCode':this.formInline.cameraIndexCode[1]};
                 params = this.$secret_key.func(this.$store.state.on_off, params);
                 this.$https.fetchPost('/plugin/school/api_index/index',params).then((res) => {
                     var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
@@ -309,7 +309,7 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         this.form.file = String(this.form.file);
-                        let arr = {'user_id':this.$store.state.route.uid};
+                        let arr = {'user_id':this.$store.state.user.uid};
                         let params = Object.assign(this.form,arr);
                         params = this.$secret_key.func(this.$store.state.on_off, params);
                         if(this.type == 1){

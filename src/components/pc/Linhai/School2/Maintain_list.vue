@@ -195,6 +195,7 @@
     import { Form,FormItem,Select,Option,Button,Table,TableColumn,DatePicker,Image,Pagination,Input,Dialog,Upload,Message,Popconfirm } from 'element-ui'
     import 'element-ui/lib/theme-chalk/index.css'
     export default {
+        name:'Maintain_list',
         components:{
             [Form.name]:Form,
             [FormItem.name]:FormItem,
@@ -307,7 +308,7 @@
                     time_start = this.formInline.timeStr[0];
                     time_end = this.formInline.timeStr[1];
                 }
-                let params ={'uid':this.$store.state.route.uid,
+                let params ={'uid':this.$store.state.user.uid,
                     'page':this.page,'paginate':this.paginate,
                     'nickname':this.formInline.nickname,
                     'id_card':this.formInline.id_card,
@@ -397,7 +398,7 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        let arr = {'uid':this.$store.state.route.uid};
+                        let arr = {'uid':this.$store.state.user.uid};
                         let params = Object.assign(this.form,arr);
                         params = this.$secret_key.func(this.$store.state.on_off, params);
                         this.$https.fetchPost('/plugin/school/api_index/add_health_person',params).then((res) => {

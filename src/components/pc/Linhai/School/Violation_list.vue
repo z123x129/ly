@@ -132,7 +132,7 @@
     import { Form,FormItem,Select,Option,Table,TableColumn,DatePicker,Pagination,Button,Image,Badge,Dialog } from 'element-ui'
     import 'element-ui/lib/theme-chalk/index.css'
     export default {
-        name:'School_list',
+        name:'Violation_list',
         components:{
             [Form.name]:Form,
             [FormItem.name]:FormItem,

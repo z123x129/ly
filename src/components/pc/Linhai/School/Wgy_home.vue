@@ -9,6 +9,7 @@
 </template>
 <script>
     export default {
+        name:'Wgy_home',
         components:{
             chartcard:()=>import('../Linhai_chartcard'),
             Doughnut:()=>import('../Linhai_doughnut'),
@@ -24,7 +25,7 @@
             this.$refs.child.init();
         },
         mounted(){
-            let params ={'uid':this.$store.state.route.uid};
+            let params ={'uid':this.$store.state.user.uid};
             params = this.$secret_key.func(this.$store.state.on_off, params);
             this.$https.fetchPost('/plugin/school/api_index/wgy_index',params).then((res) => {
                 var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
