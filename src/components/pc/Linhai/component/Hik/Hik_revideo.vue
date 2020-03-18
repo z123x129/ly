@@ -87,7 +87,6 @@
             },
             initVideo(snapDir = "D:\\SnapDir", videoDir = "D:\\VideoDir", layoutm = "1x1"){
                 var timer = new Date().getFullYear() +''+ (new Date().getMonth()+1) + new Date().getDate()
-                console.log(timer)
                 if(!this.checkWebC())
                     return;
                 let that = this;
