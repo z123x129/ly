@@ -313,6 +313,7 @@ switch (1) {
             title: '首页'
         },
         children:[
+
             {
                 path: '/home',
                 name: 'Wgy_home',
