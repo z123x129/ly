@@ -1,11 +1,11 @@
 <template>
     <div class="cont">
-        <div class="header">
+        <!-- <div class="header">
             <p>
                 <img width="40px" height="40px" :src="logo" />
                 卓远商城后台管理</p>
-        </div>
-        <div class="container">
+        </div> -->
+        <!-- <div class="container">
             <Row style="width: 360px;margin-right: 150px">
                 <Col style="width: 100%" span="11">
                     <Card style="border: 1px solid #cfe4ea;">
@@ -28,6 +28,22 @@
                     </Card>
                 </Col>
             </Row>
+        </div> -->
+        <div class="loginBox">
+            <div class="title">
+                <h3>用户登录</h3>
+            </div>
+            <div class="login-form">
+                <div class="input">
+                    <Icon type="ios-person-outline" slot="prepend"></Icon>
+                    <input type="text" v-model="formInline.user" placeholder="请输入用户名" @keyup.enter="handleSubmit('formInline')">
+                </div>
+                <div class="input">
+                    <Icon type="ios-lock-outline" slot="prepend"></Icon>
+                    <input type="password" v-model="formInline.password" placeholder="请输入密码" @keyup.enter="handleSubmit('formInline')">
+                </div>
+            </div>
+            <button type="primary" @click="handleSubmit('formInline')">登录</button>
         </div>
     </div>
 </template>
@@ -71,7 +87,13 @@
         },
         methods:{
             handleSubmit() {
-
+                if(!this.formInline.user){
+                    Message.error('用户名不能为空');
+                    return
+                }else if(!this.formInline.password){
+                    Message.error('密码不能为空');
+                    return
+                }
                 const createRouter = () => new VueRouter({
                     routes: constantRouterMap
                 });
@@ -97,19 +119,81 @@
 </script>
 <style scoped lang="less">
     .cont{
-        max-width: 1366px;
-        min-width: 1100px;
-        margin: 0 auto;
+        // max-width: 1366px;
+        // min-width: 1100px;
+        // margin: 0 auto;
+        height: 100vh;
+        width: 100vw;
+        background-color: #fefefe;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        // background-image: url('https://images.pexels.com/photos/3183171/pexels-photo-3183171.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');
+        background-image: url('https://images.pexels.com/photos/830891/pexels-photo-830891.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');
+        // background-image: url('https://images.pexels.com/photos/943096/pexels-photo-943096.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
     }
-    .header {
-        height: 10vh;
+    .loginBox{
+        background-color: #fff;
+        padding: 40px;
+        border-radius: 5px;
+        width: 23vw;
+        min-width: 300px;
+        // box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+        box-shadow: 0 12px 18px 2px rgba(34,0,51,.04),0 6px 22px 4px rgba(7,48,114,.12),0 6px 10px -4px rgba(14,13,26,.12);
+        .title{
+            text-align: center;
+            padding-bottom: 30px;
+            h3{
+                font-size: 22px;
+                font-weight: 400;
+                color: #20123b;
+                line-height: 26px;
+            }
+        }
+        .login-form{
+            padding-bottom: 40px;
+            .input{
+                display: flex;
+                align-items: center;
+                border: 1px solid #eee;
+                border-radius: 3px;
+                margin-bottom: 20px;
+                &:last-of-type{
+                    margin-bottom: 0;
+                }
+                input{
+                    flex: 1;
+                    line-height: 36px;
+                    padding-left: 5px;
+                    font-size: 13px;
+                }
+                .ivu-icon{
+                    font-size:20px;
+                }
+            }
+        }
+        >button{
+            background-color: #40a9ff;
+            color: #fff;
+            width:100%;
+            font-size: 15px;
+            font-weight: 700;
+            line-height: 40px;
+            border-radius: 5px;;
+        }
+
     }
-    .header p{
-        color: #6d9494;
-        font-size: 16px;
-        line-height: 10vh;
-        margin-left: 80px;
-    }
+    // .header {
+    //     height: 10vh;
+    // }
+    // .header p{
+    //     color: #6d9494;
+    //     font-size: 16px;
+    //     line-height: 10vh;
+    //     margin-left: 80px;
+    // }
     .container{
         width: 100%;
         height: 90vh;
