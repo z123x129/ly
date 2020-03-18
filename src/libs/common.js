@@ -124,8 +124,34 @@ export const getMenuByRouter = (list, access) => {
                 obj.children = getMenuByRouter(item.children, access)
             }
             if (item.meta && item.meta.href) obj.href = item.meta.href;
-           res.push(obj)
+            if (!item.meta.role || item.meta.role.indexOf(access) !== -1)
+                res.push(obj)
         }
+    })
+    return res
+}
+/**
+ *
+ * @param list
+ * @param access
+ * @returns {Array}
+ */
+export const getRouterByOrder = (list, access) => {
+    let res = []
+    forEach(list, item => {
+            let obj = {
+                path: item.path,
+                name: item.name,
+                icon: (item.meta && item.meta.icon) || '',
+                meta: item.meta,
+                component: item.component,
+            }
+            if ((hasChild(item) || (item.meta && item.meta.showAlways))) {
+                obj.children = getRouterByOrder(item.children, access)
+            }
+            if (item.meta && item.meta.href) obj.href = item.meta.href;
+            if (!item.meta.role || item.meta.role.indexOf(access) !== -1)
+                res.push(obj)
     })
     return res
 }

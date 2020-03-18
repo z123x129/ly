@@ -1,3 +1,5 @@
+import store from '../../store'
+
 import Linhai_login from '@/components/pc/Linhai/Linhai_login.vue'
 import Linhai_index from '@/components/pc/Linhai/Linhai_index.vue'
 import Linhai_index2 from '@/components/pc/Linhai/Linhai_index2.vue'
@@ -8,6 +10,7 @@ import Linhai_index6 from '@/components/pc/Linhai/Linhai_index6.vue'
 import Linhai_index7 from '@/components/pc/Linhai/Linhai_index7.vue'
 import Linhai_index8 from '@/components/pc/Linhai/Linhai_index8.vue'
 import Linhai_index9 from '@/components/pc/Linhai/Linhai_index9.vue'
+
 
 //学校路由
 import Maintain_list from '@/components/pc/Linhai/School2/Maintain_list.vue'
@@ -23,8 +26,9 @@ import Alert_monitor from '@/components/pc/Linhai/School/Alert_monitor.vue'
 import showVideo from '@/components/pc/Linhai/showVideo.vue'
 import Main from '@/components/main'
 
-export default [
-    {
+let route_list = [];
+switch (1) {
+    case 1: route_list = [{
         path:'/login',
         name:'login',
         meta: {
@@ -34,175 +38,202 @@ export default [
         },
         component: Linhai_login
     },
-    {
+        {
+            path: '/',
+            name: '_home',
+            component: Main,
+            meta: {
+                icon: 'logo-buffer',
+                title: '首页'
+            },
+            children:[
+                {
+                    path: '/home',
+                    name: 'home',
+                    meta: {
+                        icon: 'md-arrow-dropdown-circle',
+                        title: '首页'
+                    },
+                    // route level code-splitting
+                    // this generates a separate chunk (about.[hash].js) for this route
+                    // which is lazy-loaded when the route is visited.
+                    component: showVideo
+                },
+                {
+                    path: '/Linhai_index5',
+                    name: 'Linhai_index5',
+                    meta: {
+                        icon: 'md-arrow-dropdown-circle',
+                        title: '首页1'
+                    },
+                    // route level code-splitting
+                    // this generates a separate chunk (about.[hash].js) for this route
+                    // which is lazy-loaded when the route is visited.
+                    component: Linhai_index5
+                },
+
+                {
+                    path: '/Linhai_index',
+                    name: 'Linhai_index',
+                    meta: {
+                        icon: 'md-arrow-dropdown-circle',
+                        title: '数据大屏'
+                    },
+                    // route level code-splitting
+                    // this generates a separate chunk (about.[hash].js) for this route
+                    // which is lazy-loaded when the route is visited.
+                    component: Linhai_index
+                },
+
+
+            ]
+        },
+        {
+            path: '/command',
+            name: 'command',
+            component: Main,
+            meta: {
+                icon: 'logo-buffer',
+                title: '指挥中心'
+            },
+            children:[
+                {
+                    path: 'Linhai_index4',
+                    name: 'Linhai_index4',
+                    meta: {
+                        icon: 'md-arrow-dropdown-circle',
+                        title: '指挥中心'
+                    },
+                    component: Linhai_index4
+                },
+            ]
+        },
+        {
+            path: '/monitor',
+            name: 'monitor',
+            component: Main,
+            meta: {
+                icon: 'logo-buffer',
+                title: '查看监控'
+            },
+            children:[
+                // {
+                //     path: 'Linhai_index2',
+                //     name: 'Linhai_index2',
+                //     meta: {
+                //         icon: 'md-arrow-dropdown-circle',
+                //         title: '实时监控'
+                //     },
+                //     component: Linhai_index2
+                // },
+                {
+                    path: 'Linhai_index3',
+                    name: 'Linhai_index3',
+                    meta: {
+                        icon: 'md-arrow-dropdown-circle',
+                        title: '单兵监控'
+                    },
+                    component: Linhai_index3
+                },
+                {
+                    path: 'Linhai_index5',
+                    name: 'Linhai_index5',
+                    meta: {
+                        icon: 'md-arrow-dropdown-circle',
+                        title: '车载监控'
+                    },
+                    component: Linhai_index5
+                },
+                {
+                    path: 'Linhai_index6',
+                    name: 'Linhai_index6',
+                    meta: {
+                        icon: 'md-arrow-dropdown-circle',
+                        title: '录像检索'
+                    },
+                    component: Linhai_index6
+                },
+            ]
+        },
+        {
+            path: '/Intelligence',
+            name: 'Intelligence',
+            component: Main,
+            meta: {
+                icon: 'logo-buffer',
+                title: '智能分析'
+            },
+            children:[
+                {
+                    path: 'Linhai_index7',
+                    name: 'Linhai_index7',
+                    meta: {
+                        icon: 'md-arrow-dropdown-circle',
+                        title: '重点人员监控'
+                    },
+                    component: Linhai_index7
+                },
+                {
+                    path: 'Linhai_index8',
+                    name: 'Linhai_index8',
+                    meta: {
+                        icon: 'md-arrow-dropdown-circle',
+                        title: '陌生人员监控'
+                    },
+                    component: Linhai_index8
+                },
+                {
+                    path: 'Linhai_index9',
+                    name: 'Linhai_index9',
+                    meta: {
+                        icon: 'md-arrow-dropdown-circle',
+                        title: '数据对比'
+                    },
+                    component: Linhai_index9
+                },
+                {
+                    path: 'Linhai_index10',
+                    name: 'Linhai_index10',
+                    meta: {
+                        icon: 'md-arrow-dropdown-circle',
+                        title: '学校列表展示'
+                    },
+                    component: Linhai_index9
+                },
+            ]
+        },];
+        break;
+    case 2: route_list = [{
+        path:'/login',
+        name:'login',
+        meta: {
+            //icon: 'logo-buffer',
+            hideInMenu: true,
+            title: '登录页'
+        },
+        component: Linhai_login
+    },
+        {
         path: '/',
-        name: '_home',
+        name: 'wgy',
         component: Main,
         meta: {
             icon: 'logo-buffer',
             title: '首页'
         },
         children:[
-
-    
             {
                 path: '/home',
-                name: 'home',
+                name: 'Wgy_home',
                 meta: {
                     icon: 'md-arrow-dropdown-circle',
                     title: '首页'
                 },
-                // route level code-splitting
-                // this generates a separate chunk (about.[hash].js) for this route
-                // which is lazy-loaded when the route is visited.
-                component: showVideo
-            },
-            {
-                path: '/Linhai_index5',
-                name: 'Linhai_index5',
-                meta: {
-                    icon: 'md-arrow-dropdown-circle',
-                    title: '首页1'
-                },
-                // route level code-splitting
-                // this generates a separate chunk (about.[hash].js) for this route
-                // which is lazy-loaded when the route is visited.
-                component: Linhai_index5
-            },
-
-            {
-                path: '/Linhai_index',
-                name: 'Linhai_index',
-                meta: {
-                    icon: 'md-arrow-dropdown-circle',
-                    title: '数据大屏'
-                },
-                // route level code-splitting
-                // this generates a separate chunk (about.[hash].js) for this route
-                // which is lazy-loaded when the route is visited.
-                component: Linhai_index
-            },
-
-
+                component: Wgy_home
+            }
         ]
     },
-    {
-        path: '/command',
-        name: 'command',
-        component: Main,
-        meta: {
-            icon: 'logo-buffer',
-            title: '指挥中心'
-        },
-        children:[
-            {
-                path: 'Linhai_index4',
-                name: 'Linhai_index4',
-                meta: {
-                    icon: 'md-arrow-dropdown-circle',
-                    title: '指挥中心'
-                },
-                component: Linhai_index4
-            },
-        ]
-    },
-    {
-        path: '/monitor',
-        name: 'monitor',
-        component: Main,
-        meta: {
-            icon: 'logo-buffer',
-            title: '查看监控'
-        },
-        children:[
-            // {
-            //     path: 'Linhai_index2',
-            //     name: 'Linhai_index2',
-            //     meta: {
-            //         icon: 'md-arrow-dropdown-circle',
-            //         title: '实时监控'
-            //     },
-            //     component: Linhai_index2
-            // },
-            {
-                path: 'Linhai_index3',
-                name: 'Linhai_index3',
-                meta: {
-                    icon: 'md-arrow-dropdown-circle',
-                    title: '单兵监控'
-                },
-                component: Linhai_index3
-            },
-            {
-                path: 'Linhai_index5',
-                name: 'Linhai_index5',
-                meta: {
-                    icon: 'md-arrow-dropdown-circle',
-                    title: '车载监控'
-                },
-                component: Linhai_index5
-            },
-            {
-                path: 'Linhai_index6',
-                name: 'Linhai_index6',
-                meta: {
-                    icon: 'md-arrow-dropdown-circle',
-                    title: '录像检索'
-                },
-                component: Linhai_index6
-            },
-        ]
-    },
-    {
-        path: '/Intelligence',
-        name: 'Intelligence',
-        component: Main,
-        meta: {
-            icon: 'logo-buffer',
-            title: '智能分析'
-        },
-        children:[
-            {
-                path: 'Linhai_index7',
-                name: 'Linhai_index7',
-                meta: {
-                    icon: 'md-arrow-dropdown-circle',
-                    title: '重点人员监控'
-                },
-                component: Linhai_index7
-            },
-            {
-                path: 'Linhai_index8',
-                name: 'Linhai_index8',
-                meta: {
-                    icon: 'md-arrow-dropdown-circle',
-                    title: '陌生人员监控'
-                },
-                component: Linhai_index8
-            },
-            {
-                path: 'Linhai_index9',
-                name: 'Linhai_index9',
-                meta: {
-                    icon: 'md-arrow-dropdown-circle',
-                    title: '数据对比'
-                },
-                component: Linhai_index9
-            },
-            {
-                path: 'Linhai_index10',
-                name: 'Linhai_index10',
-                meta: {
-                    icon: 'md-arrow-dropdown-circle',
-                    title: '学校列表展示'
-                },
-                component: Linhai_index9
-            },
-        ]
-    },
-
-    //学校路由
-    {
+        {
         path: '/maintain',
         name: 'maintain',
         component: Main,
@@ -222,50 +253,59 @@ export default [
             },
         ]
     },
-    {
-        path: '/message',
-        name: 'message',
-        component: Main,
-        meta: {
-            icon: 'logo-buffer',
-            title: '学校信息维护'
-        },
-        children:[
-            {
-                path: '/Message_edit',
-                name: 'Message_edit',
-                meta: {
-                    icon: 'md-arrow-dropdown-circle',
-                    title: '学校信息维护'
-                },
-                component: Message_edit
+        {
+            path: '/message',
+            name: 'message',
+            component: Main,
+            meta: {
+                icon: 'logo-buffer',
+                title: '学校信息维护'
             },
-        ]
-    },
-    {
-        path: '/report',
-        name: 'report',
-        component: Main,
-        meta: {
-            icon: 'logo-buffer',
-            title: '网格员上报信息'
-        },
-        children:[
-            {
-                path: '/Report_msg',
-                name: 'Report_msg',
-                meta: {
-                    icon: 'md-arrow-dropdown-circle',
-                    title: '网格员上报信息'
+            children:[
+                {
+                    path: '/Message_edit',
+                    name: 'Message_edit',
+                    meta: {
+                        icon: 'md-arrow-dropdown-circle',
+                        title: '学校信息维护'
+                    },
+                    component: Message_edit
                 },
-                component: Report_msg
+            ]
+        },
+        {
+            path: '/report',
+            name: 'report',
+            component: Main,
+            meta: {
+                icon: 'logo-buffer',
+                title: '网格员上报信息'
             },
-        ]
+            children:[
+                {
+                    path: '/Report_msg',
+                    name: 'Report_msg',
+                    meta: {
+                        icon: 'md-arrow-dropdown-circle',
+                        title: '网格员上报信息'
+                    },
+                    component: Report_msg
+                },
+            ]
+        },];
+        break;
+    case 3: route_list = [{
+        path:'/login',
+        name:'login',
+        meta: {
+            //icon: 'logo-buffer',
+            hideInMenu: true,
+            title: '登录页'
+        },
+        component: Linhai_login
     },
-
-    //网格员路由
-    {
-        path: '/wgy',
+        {
+        path: '/',
         name: 'wgy',
         component: Main,
         meta: {
@@ -273,8 +313,9 @@ export default [
             title: '首页'
         },
         children:[
+
             {
-                path: 'Wgy_home',
+                path: '/home',
                 name: 'Wgy_home',
                 meta: {
                     icon: 'md-arrow-dropdown-circle',
@@ -284,53 +325,241 @@ export default [
             }
         ]
     },
+        {
+            path: '/school',
+            name: 'school',
+            component: Main,
+            meta: {
+                icon: 'logo-buffer',
+                title: '学校列表'
+            },
+            children:[
+                {
+                    path: 'School_list',
+                    name: 'School_list',
+                    meta: {
+                        icon: 'md-arrow-dropdown-circle',
+                        title: '学校列表'
+                    },
+                    component: School_list
+                },
+                {
+                    path: 'Violation_list',
+                    name: 'Violation_list',
+                    meta: {
+                        icon: 'md-arrow-dropdown-circle',
+                        title: '违规列表'
+                    },
+                    component: Violation_list
+                },
+            ]
+        },
+        {
+            path: '/alert',
+            name: 'alert',
+            component: Main,
+            meta: {
+                icon: 'logo-buffer',
+                title: '警报监测'
+            },
+            children:[
+                {
+                    path: '/Alert_monitor',
+                    name: 'Alert_monitor',
+                    meta: {
+                        icon: 'md-arrow-dropdown-circle',
+                        title: '警报监测'
+                    },
+                    component: Alert_monitor
+                },
+            ]
+        },];
+        break;
+}
+
+
+//所有权限通用路由表
+export const constantRouterMap = [
     {
-        path: '/school',
-        name: 'school',
+        path:'/login',
+        name:'login',
+        meta: {
+            //icon: 'logo-buffer',
+            hideInMenu: true,
+            title: '登录页'
+        },
+        component: Linhai_login
+    },
+];
+
+
+//异步挂载的路由
+//动态需要根据权限加载的路由表
+export const asyncRouterMap = [
+    {
+        path: '/',
+        name: '_home',
         component: Main,
         meta: {
             icon: 'logo-buffer',
-            title: '学校列表'
+            title: '首页',
+            role: [3],//页面需要的权限
         },
         children:[
             {
-                path: 'School_list',
-                name: 'School_list',
+                path: '/home',
+                name: 'home',
                 meta: {
                     icon: 'md-arrow-dropdown-circle',
-                    title: '学校列表'
+                    title: '首页',
+                    role: [3],
                 },
-                component: School_list
+                component: showVideo
             },
             {
-                path: 'Violation_list',
-                name: 'Violation_list',
+                path: '/Linhai_index5',
+                name: 'Linhai_index5',
                 meta: {
                     icon: 'md-arrow-dropdown-circle',
-                    title: '违规列表'
+                    title: '首页1',
+                    role: [3],
                 },
-                component: Violation_list
+                // route level code-splitting
+                // this generates a separate chunk (about.[hash].js) for this route
+                // which is lazy-loaded when the route is visited.
+                component: Linhai_index5
+            },
+            {
+                path: '/Linhai_index',
+                name: 'Linhai_index',
+                meta: {
+                    icon: 'md-arrow-dropdown-circle',
+                    title: '数据大屏',
+                    role: [3],
+                },
+                // route level code-splitting
+                // this generates a separate chunk (about.[hash].js) for this route
+                // which is lazy-loaded when the route is visited.
+                component: Linhai_index
             },
         ]
     },
     {
-        path: '/alert',
-        name: 'alert',
+        path: '/command',
+        name: 'command',
         component: Main,
         meta: {
             icon: 'logo-buffer',
-            title: '警报监测'
+            title: '指挥中心',
+            role: [3],
         },
         children:[
             {
-                path: '/Alert_monitor',
-                name: 'Alert_monitor',
+                path: 'Linhai_index4',
+                name: 'Linhai_index4',
                 meta: {
                     icon: 'md-arrow-dropdown-circle',
-                    title: '警报监测'
+                    title: '指挥中心',
+                    role: [3],
                 },
-                component: Alert_monitor
+                component: Linhai_index4
             },
         ]
     },
+    {
+        path: '/monitor',
+        name: 'monitor',
+        component: Main,
+        meta: {
+            icon: 'logo-buffer',
+            title: '查看监控',
+            role: [3],
+        },
+        children:[
+            {
+                path: 'Linhai_index3',
+                name: 'Linhai_index3',
+                meta: {
+                    icon: 'md-arrow-dropdown-circle',
+                    title: '单兵监控',
+                    role: [3],
+                },
+                component: Linhai_index3
+            },
+            {
+                path: 'Linhai_index5',
+                name: 'Linhai_index5',
+                meta: {
+                    icon: 'md-arrow-dropdown-circle',
+                    title: '车载监控',
+                    role: [3],
+                },
+                component: Linhai_index5
+            },
+            {
+                path: 'Linhai_index6',
+                name: 'Linhai_index6',
+                meta: {
+                    icon: 'md-arrow-dropdown-circle',
+                    title: '录像检索',
+                    role: [3],
+                },
+                component: Linhai_index6
+            },
+        ]
+    },
+    {
+        path: '/Intelligence',
+        name: 'Intelligence',
+        component: Main,
+        meta: {
+            icon: 'logo-buffer',
+            title: '智能分析',
+            role: [2],
+        },
+        children:[
+            {
+                path: 'Linhai_index7',
+                name: 'Linhai_index7',
+                meta: {
+                    icon: 'md-arrow-dropdown-circle',
+                    title: '重点人员监控',
+                    role: [2],
+                },
+                component: Linhai_index7
+            },
+            {
+                path: 'Linhai_index8',
+                name: 'Linhai_index8',
+                meta: {
+                    icon: 'md-arrow-dropdown-circle',
+                    title: '陌生人员监控',
+                    role: [2],
+                },
+                component: Linhai_index8
+            },
+            {
+                path: 'Linhai_index9',
+                name: 'Linhai_index9',
+                meta: {
+                    icon: 'md-arrow-dropdown-circle',
+                    title: '数据对比',
+                    role: [2],
+                    hideInMenu: true
+                },
+                component: Linhai_index9
+            },
+            {
+                path: 'Linhai_index10',
+                name: 'Linhai_index10',
+                meta: {
+                    icon: 'md-arrow-dropdown-circle',
+                    title: '学校列表展示',
+                    role: [2],
+                },
+                component: Linhai_index9
+            },
+        ]
+    },
+    // { path: '*', redirect: '/404', hidden: true }
 ];
