@@ -1,5 +1,5 @@
 <template>
-    <div class="box" id=i1>
+    <div class="box">
         <div class="logo">
             <h1 class="border1">市场监督局指挥实时数据大屏</h1>
         </div>
@@ -77,6 +77,7 @@
 </template>
 <script>
     export default {
+        name:'Linhai_index',
         components:{
             Mixed:()=>import('./Linhai_mixed'),
             Editor:()=>import('./Linhai_editor'),

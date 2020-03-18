@@ -20,7 +20,7 @@
             <el-form-item label="选择时间:">
                 <el-date-picker
                         size="small"
-                        v-model="value1"
+                        v-model="value"
                         type="datetimerange"
                         range-separator="至"
                         start-placeholder="开始日期"
@@ -44,35 +44,43 @@
             </el-table-column>
             <el-table-column
                     align="center"
-                    type="index"
-                    label="ID"
-                    width="50">
+                    prop="id"
+                    label="ID">
             </el-table-column>
             <el-table-column
                     align="center"
                     prop="name"
-                    label="姓名">
+                    label="抓拍区域">
             </el-table-column>
             <el-table-column
                     align="center"
-                    prop="address"
-                    label="身份证号">
+                    prop="cameraName"
+                    label="抓拍地点">
             </el-table-column>
             <el-table-column
                     align="center"
-                    label="人脸图">
+                    label="抓拍图片">
                 <template slot-scope="scope">
                     <el-image
                             style="width: 100px; height: 100px"
-                            :src="url"
-                            :preview-src-list="srcList">
+                            :src="scope.row.faceUrl"
+                            :preview-src-list="scope.row.faceUrl">
                     </el-image>
                 </template>
             </el-table-column>
             <el-table-column
                     align="center"
-                    prop="time"
-                    label="添加时间">
+                    prop="faceTime"
+                    label="抓拍时间">
+            </el-table-column>
+            <el-table-column
+                    align="center"
+                    prop="stranger_status"
+                    label="当前状态">
+                <template slot-scope="scope">
+                    <span v-if="scope.row.stranger_status==0">未处理</span>
+                    <span v-if="scope.row.stranger_status==1">学校以反馈</span>
+                </template>
             </el-table-column>
             <el-table-column
                     align="center"
@@ -104,7 +112,7 @@
     import 'element-ui/lib/theme-chalk/index.css'
     export default {
         components:{
-            Dataset:()=>import('./Linhai_dataset'),
+            Dataset:()=>import('../Linhai_dataset'),
             [Form.name]:Form,
             [FormItem.name]:FormItem,
             [Select.name]:Select,
@@ -122,42 +130,29 @@
                     user: '',
                     region: ''
                 },
-                value1: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
-                tableData: [{
-                    id:'1',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄',
-                    image1:'',
-                    image2:'',
-                    time: '2016-05-02',
-                }, {
-                    id:'2',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄',
-                    image1:'',
-                    image2:'',
-                    time: '2016-05-02',
-                }, {
-                    id:'3',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄',
-                    image1:'',
-                    image2:'',
-                    time: '2016-05-02',
-                }, ],
-                url: 'https://fuss10.elemecdn.com/8/27/f01c15bb73e1ef3793e64e6b7bbccjpeg.jpeg',
-                srcList: [
-                    'https://fuss10.elemecdn.com/8/27/f01c15bb73e1ef3793e64e6b7bbccjpeg.jpeg',
-                    'https://fuss10.elemecdn.com/1/8e/aeffeb4de74e2fde4bd74fc7b4486jpeg.jpeg'
-                ],
+                value: '',
+                tableData: [],
                 currentPage: 1,
                 total:0,
                 page:1,
-                paginate:5,
-                paginates:5,
+                paginate:10,
+                paginates:10,
             }
         },
+        mounted(){
+            this.getList()
+        },
         methods: {
+            getList(){ //获取学校列表
+                let params ={'uid':this.$store.state.user.uid,'page':this.page,'paginate':this.paginate};
+                params = this.$secret_key.func(this.$store.state.on_off, params);
+                this.$https.fetchPost('/plugin/statistics/api_index/manageStranger',params).then((res) => {
+                    var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
+                    this.tableData = res_data.data;
+                    this.currentPage = res_data.current_page;
+                    this.total = res_data.total;
+                })
+            },
             onSubmit() {
                 console.log('submit!');
             },

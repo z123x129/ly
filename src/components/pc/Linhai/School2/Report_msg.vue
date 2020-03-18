@@ -137,6 +137,7 @@
     import 'element-ui/lib/theme-chalk/index.css'
     var layedit,index;
     export default {
+        name:'Report_msg',
         components:{
             [Form.name]:Form,
             [FormItem.name]:FormItem,
@@ -233,7 +234,7 @@
                     timeStart = this.formInline.timeStr[0];
                     timeEnd = this.formInline.timeStr[1];
                 }
-                let params ={'uid':this.$store.state.route.uid,
+                let params ={'uid':this.$store.state.user.uid,
                     'page':this.page,'paginate':this.paginate,
                     'user_login':this.formInline.user_login,'personCharge':this.formInline.personCharge,
                     'timeStart':timeStart,
