@@ -86,6 +86,8 @@
                 window.console.log(that.app[that.openOWebName]);
             },
             initVideo(snapDir = "D:\\SnapDir", videoDir = "D:\\VideoDir", layoutm = "1x1"){
+                var timer = new Date().getFullYear() +''+ (new Date().getMonth()+1) + new Date().getDate()
+                console.log(timer)
                 if(!this.checkWebC())
                     return;
                 let that = this;
@@ -101,8 +103,8 @@
                         ip: that.ip,
                         playMode: 1, // 回放
                         port: port,
-                        snapDir: snapDir,
-                        videoDir: videoDir,
+                        snapDir: snapDir+'\\'+timer,
+                        videoDir: videoDir+'\\'+timer,
                         layout: layoutm,
                         enableHTTPS: enableHttps,
                         encryptedFields: encryptedFields
