@@ -1,6 +1,7 @@
 import {getMenuByRouter, getRouterByOrder} from "../../libs/common";
 import createPersistedState from "vuex-persistedstate";
 import { asyncRouterMap, constantRouterMap } from '../../router/modules/route';
+import store from '@/store'
 
 function hasPermission(roles, route) {
     if (route.meta && route.meta.role) {
@@ -12,27 +13,15 @@ function hasPermission(roles, route) {
 export default {
     state:{
         routeInfo:[],
-        uid:'',
-        jurisdiction:'',
-        dbc:""
     },
     mutations: {
         setRouteInfo: function (state, routeInfo) {
             state.routeInfo = routeInfo;
         },
-        getUid: function (state, data) {//获取用户id
-            state.uid = data;
-        },
-        getJurisdiction: function (state, data) {//获取用户权限
-            state.jurisdiction = data;
-        },
-        getdbc: function (state, data) {//获取用户权限
-            state.jurisdiction = data;
-        }
     },
     getters:{
-        menuList: (state) => getMenuByRouter(state.routeInfo, state.jurisdiction),
-        routerList: (state) => getRouterByOrder(state.routeInfo, state.jurisdiction),
+        menuList: (state) => getMenuByRouter(state.routeInfo, store.state.user.jurisdiction),
+        routerList: (state) => getRouterByOrder(state.routeInfo, store.state.user.jurisdiction),
         addRouters: (state)=> state.routeInfo,
     },
     actions:{
