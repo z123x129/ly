@@ -187,6 +187,7 @@
                 this.$refs.side1.toggleCollapse();
             },
             turnToPage:function(route){
+                window.console.log(route);
                 let { name, params, query } = {}
                 if (typeof route === 'string') name = route
                 else {
@@ -198,7 +199,8 @@
                     window.open(name.split('_')[1])
                     return
                 }
-
+                if(this.$route.name == name)
+                    return;
                 this.$router.push({
                     name,
                     params,
@@ -270,7 +272,7 @@
             };
             setInterval(()=>{
                 that.ws.send('')
-            }, 3000)
+            }, 30000)
 
         },
         watch:{

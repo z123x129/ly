@@ -63,39 +63,13 @@ export const asyncRouterMap = [
         },
         children:[
             {
-                path: '/',
+                path: '/home',
                 name: 'home',
                 meta: {
                     icon: 'md-arrow-dropdown-circle',
                     title: '首页',
                     role: [1],
                 },
-                component: showVideo
-            },
-            {
-                path: '/Linhai_index5',
-                name: 'Linhai_index5',
-                meta: {
-                    icon: 'md-arrow-dropdown-circle',
-                    title: '首页1',
-                    role: [1],
-                },
-                // route level code-splitting
-                // this generates a separate chunk (about.[hash].js) for this route
-                // which is lazy-loaded when the route is visited.
-                component: Linhai_index5
-            },
-            {
-                path: '/Linhai_index',
-                name: 'Linhai_index',
-                meta: {
-                    icon: 'md-arrow-dropdown-circle',
-                    title: '数据大屏',
-                    role: [1],
-                },
-                // route level code-splitting
-                // this generates a separate chunk (about.[hash].js) for this route
-                // which is lazy-loaded when the route is visited.
                 component: Linhai_index
             },
         ]
@@ -361,12 +335,14 @@ export const asyncRouterMap = [
             },
         ]
     }, //学校后台通用
-    //404页面
-    // {
-    //     path: "*", // 此处需特别注意置于最底部
-    //     meta: {
-    //         role: [1,2,3],
-    //     },
-    //     component: notfount
-    // }
+    // 404页面
+    {
+        path: "*", // 此处需特别注意置于最底部
+        name:"error_401",
+        meta: {
+            hideInMenu: true,
+            role: [1,2,3],
+        },
+        component: notfount
+    }
 ];
