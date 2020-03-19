@@ -149,7 +149,7 @@
 <style scoped lang="less">
     .box{
         width: 100%;
-        height: 100%;
+        height: 100vh;
         background: url("./images/u10.png") no-repeat;
         background-size: 100% 100%;
     }
