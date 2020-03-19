@@ -31,9 +31,11 @@ import Alert_monitor from '@/components/pc/Linhai/School/Alert_monitor.vue'
 import showVideo from '@/components/pc/Linhai/showVideo.vue'
 import Main from '@/components/main'
 
+import Setting from '@/components/pc/Linhai/Setting.vue'//设置
 
 
-//所有权限通用路由表
+
+//所有权限通用路由表sho
 export const constantRouterMap = [
     {
         path:'/login',
@@ -51,6 +53,7 @@ export const constantRouterMap = [
 //异步挂载的路由
 //动态需要根据权限加载的路由表
 export const asyncRouterMap = [
+
     //管理员路由
     {
         path: '/',
@@ -74,6 +77,31 @@ export const asyncRouterMap = [
             },
         ]
     },
+    {
+        path: '/Setting',
+        name: 'Setting',
+        component: Main,
+        meta: {
+            icon: 'logo-buffer',
+            title: '设置',
+            role: [1,2,3],
+            hideInMenu: true,
+        },
+        children:[
+            {
+                path: '/Setting',
+                name: 'Setting',
+                meta: {
+                    icon: 'md-arrow-dropdown-circle',
+                    title: '设置',
+                    role: [1,2,3],
+                    hideInMenu: true,
+                },
+                component: Setting
+            },
+        ]
+    },
+
     {
         path: '/command',
         name: 'command',
