@@ -32,6 +32,7 @@
                 window.console.log(params);
                 that.init(city)
             });
+            that.init("LinHai");
             // 浏览器自适应
             window.addEventListener('resize', ()=> {
                 this.chart.resize();

@@ -331,9 +331,9 @@
             },
             goViolation(id){
                 this.$router.push({
-                    path:'/school/Violation_list',
-                    query:{
-                        id : id
+                    name:'Violation_list',
+                    params:{
+                        id:id
                     }
                 })
             },

@@ -166,11 +166,13 @@
                 return this.$store.getters.menuList
             },
             tagsNav () {
+                window.console.log(this.$store.state.app.tagNavList);
                 return this.$store.state.app.tagNavList
             },
             cacheList () {
-                const list = ['ParentView', ...this.tagNavList.length ? this.tagNavList.filter(item => !(item.meta && item.meta.notCache)).map(item => item.name) : []]
+                const list = ['home', ...this.tagNavList.length ? this.tagNavList.filter(item => !(item.meta && item.meta.notCache)).map(item => item.name) : []]
                 // const x1 = (this.tagNavList.length);
+                window.console.log(list);
                 return list
             },
         },

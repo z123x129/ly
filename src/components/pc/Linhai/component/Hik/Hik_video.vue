@@ -8,6 +8,7 @@
     // import "_pl/js/Hik/jsWebControl-1.0.0.min.js";
     import Global from '../../js/Global'
     import {JSEncrypt} from 'encryptlong'
+    import {Message} from "element-ui"
 
     export default {
         inject:["app"],
@@ -51,7 +52,8 @@
                 dHeight:this.height,
                 dWidth:this.width,
                 videoPath:Global.path2,
-                imgPath:Global.path1
+                imgPath:Global.path1,
+                initCount :1
             }
         },
         mounted() {
@@ -83,13 +85,26 @@
 
                         });
                     },
+                    cbConnectError: function () {
+                        that.app[that.openOWebName] = "";
+                        WebControl.JS_WakeUp("VideoWebPlugin://");
+                        that.initCount ++;
+                        if (that.initCount < 3) {
+                            setTimeout(function () {
+                                that.init();
+                            }, 3000)
+                        } else {
+
+                            Message.error("插件启动失败，请检查插件是否安装！")
+                        }
+                    },
                 });
                 window.console.log(that.app[that.openOWebName]);
             },
             initVideo(layoutm = "2x2"){//snapDir = "SnapDir", videoDir = "VideoDir",
                 if(!this.checkWebC())
                     return;
-                var timer = new Date().getFullYear() +''+ (new Date().getMonth()+1) + new Date().getDate()   
+                var timer = new Date().getFullYear() +''+ (new Date().getMonth()+1) + new Date().getDate()
                 let that = this;
                 this.getPubKey(function () {
                     const secret = that.setEncrypt(that.secret);

@@ -77,7 +77,7 @@
 </template>
 <script>
     export default {
-        name:'Linhai_index',
+        name:'home',
         components:{
             Mixed:()=>import('./Linhai_mixed'),
             Editor:()=>import('./Linhai_editor'),
@@ -133,9 +133,6 @@
                 let that = this;
                 this.$https.fetchGet("/plugin/statistics/api_index/getAbbrArea", []).then(function(data){
                    that.address_info = data;
-                   that.$nextTick(()=>{
-                       that.$refs.map.init("LinHai");
-                   })
                 })
             },
             back(){

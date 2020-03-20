@@ -15,7 +15,10 @@ import notfount from '@/components/error-page/404.vue'
 import Key_personnel from '@/components/pc/Linhai/Admin/Key_personnel.vue'
 import Strange_people from '@/components/pc/Linhai/Admin/Strange_people.vue'
 import Contrast from '@/components/pc/Linhai/Admin/Contrast.vue'
+import videoDialog from '@/components/pc/Linhai/Admin/videoDialog.vue'
 import School_show from '@/components/pc/Linhai/Admin/School_show.vue'
+import showVideo from '@/components/pc/Linhai/Admin/showVideo.vue'
+import Map_conmand from '@/components/pc/Linhai/Admin/Map_conmand.vue'
 
 //学校路由
 import Maintain_list from '@/components/pc/Linhai/School2/Maintain_list.vue'
@@ -28,7 +31,6 @@ import School_list from '@/components/pc/Linhai/School/School_list.vue'
 import Violation_list from '@/components/pc/Linhai/School/Violation_list.vue'
 import Alert_monitor from '@/components/pc/Linhai/School/Alert_monitor.vue'
 
-import showVideo from '@/components/pc/Linhai/showVideo.vue'
 import Main from '@/components/main'
 
 import Setting from '@/components/pc/Linhai/Setting.vue'//设置
@@ -113,14 +115,14 @@ export const asyncRouterMap = [
         },
         children:[
             {
-                path: 'Linhai_index4',
-                name: 'Linhai_index4',
+                path: 'Map_conmand',
+                name: 'Map_conmand',
                 meta: {
                     icon: 'md-arrow-dropdown-circle',
                     title: '指挥中心',
                     role: [1],
                 },
-                component: Linhai_index4
+                component: Map_conmand
             },
         ]
     },
@@ -135,34 +137,24 @@ export const asyncRouterMap = [
         },
         children:[
             {
-                path: 'Linhai_index3',
-                name: 'Linhai_index3',
+                path: 'showVideo',
+                name: 'showVideo',
                 meta: {
                     icon: 'md-arrow-dropdown-circle',
-                    title: '单兵监控',
+                    title: '视频监控',
                     role: [1],
                 },
-                component: Linhai_index3
+                component: showVideo
             },
             {
-                path: 'Linhai_index5',
-                name: 'Linhai_index5',
-                meta: {
-                    icon: 'md-arrow-dropdown-circle',
-                    title: '车载监控',
-                    role: [1],
-                },
-                component: Linhai_index5
-            },
-            {
-                path: 'Contrast',
-                name: 'Contrast',
+                path: 'videoDialog',
+                name: 'videoDialog',
                 meta: {
                     icon: 'md-arrow-dropdown-circle',
                     title: '录像检索',
                     role: [1],
                 },
-                component: Contrast
+                component: videoDialog
             },
         ]
     },
@@ -220,7 +212,7 @@ export const asyncRouterMap = [
     },
     //学校后台路由
     {
-        path: '/',
+        path: '/', //网格员通用
         name: 'wgy',
         component: Main,
         meta: {
@@ -230,8 +222,8 @@ export const asyncRouterMap = [
         },
         children:[
             {
-                path: '/',
-                name: 'Wgy_home',
+                path: '/home',
+                name: 'home',
                 meta: {
                     icon: 'md-arrow-dropdown-circle',
                     title: '首页',
@@ -240,7 +232,7 @@ export const asyncRouterMap = [
                 component: Wgy_home
             }
         ]
-    }, //网格员通用
+    },
     {
         path: '/maintain',
         name: 'maintain',
@@ -335,7 +327,8 @@ export const asyncRouterMap = [
                     icon: 'md-arrow-dropdown-circle',
                     title: '违规列表',
                     hideInMenu: true,
-                    role: [3]
+                    role: [3],
+
                 },
                 component: Violation_list
             },
