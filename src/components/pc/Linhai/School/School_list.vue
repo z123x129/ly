@@ -238,7 +238,6 @@
                     this.$refs['my-upload'].clearFiles();
                 }
                 this.dialogFormVisible = true;
-
             },
             handleClose(){
                 this.$refs.form.resetFields();

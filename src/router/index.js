@@ -8,7 +8,7 @@ import {getRouterByOrder} from '@/libs/common'
 import { asyncRouterMap, constantRouterMap } from './modules/route'
 
 
-import { MessageBox } from 'element-ui';
+import { Message } from 'element-ui';
 
 // async function getRouteList(){//获取路由表 https://gl.300c.cn
 //     var routeList = "";
@@ -41,12 +41,8 @@ routerd.beforeEach((to,from,next)=>{
     }
     next();
   }else if(store.state.user.uid==''){
-    MessageBox.alert('您还没有登录，请先登录', '提示', {
-      confirmButtonText: '确定',
-      callback: action => {
-        next('/login');
-      }
-    });
+    Message.error('您还没有登录，请先登录')
+      next('/login');
   }else{
     next();
   }
