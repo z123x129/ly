@@ -23,7 +23,7 @@
                 <div id="xy" style="color: red;height: 80px;width: 160px;"></div>
             </div>
         </div>
-        <videoDialog class="dialog" :visible.sync="videoVisible" @resize="resize" @videoinit ="videoinit">
+        <videoDialog class="dialog" :visible.sync="videoVisible" @resize="resize" @videoinit ="videoinit" @cancel="hideVideo" >
             <div class="videobox">
                 <div class="demo">
                     <p>摄像点选择:</p>
@@ -87,6 +87,7 @@
                 ],
                 videoVisible:false,
                 ddd:'aWebControl',
+                initType:false,//判断视频插件是否初始化
             }
         },
         watch: {
@@ -114,6 +115,7 @@
         },
         methods:{
             videoinit(){//初始化视频插件
+                this.initType = true
                 this.$refs.H1.init(()=>{
                     this.$refs.H1.initVideo()
                     this.$refs.H1.resizeWindow(this.$refs.H1.$el.offsetHeight,this.$refs.H1.$el.offsetWidth);//初始化大小
@@ -126,6 +128,8 @@
                 this.$refs.H1.resizeWindow(this.$refs.H1.$el.offsetHeight,this.$refs.H1.$el.offsetWidth);
             },
             winresize(){
+                if(!this.initType) return//如果插件未初始化
+
                 const that = this
                 window.onresize = () => {
                     var target = this;
@@ -137,6 +141,7 @@
                         target.resizeFlag = null;
                     }, 200);
                 }
+                
             },
             getList(){ //获取地区列表
                 let params ={};
@@ -229,9 +234,14 @@
             opvideo:function(data){
                 this.videoVisible = true
                 this.data2 = this.data2.concat(data)
-                setTimeout(() => {
-                    this.videoinit()
-                }, 100);
+                if(this.initType){
+                    this.app[this.ddd].JS_ShowWnd();
+                }else{
+                    setTimeout(() => {
+                        this.videoinit()
+                    }, 100);
+                }
+
             },
             //显示热点
             redian:function(x,y,name,data){//x,y,name
