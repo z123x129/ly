@@ -22,7 +22,7 @@
 
 <script>
     import { Input,Tree } from 'element-ui'
-    import Hik from "./component/Hik";
+    import Hik from "../component/Hik";
 
     export default {
         name: "showVideo",

@@ -3,7 +3,6 @@ import store from '../../store'
 import Linhai_index from '@/components/pc/Linhai/Linhai_index.vue'
 import Linhai_index2 from '@/components/pc/Linhai/Linhai_index2.vue'
 import Linhai_index3 from '@/components/pc/Linhai/Linhai_index3.vue'
-import Linhai_index4 from '@/components/pc/Linhai/Linhai_index4.vue'
 import Linhai_index5 from '@/components/pc/Linhai/Linhai_index5.vue'
 
 //公共路由
