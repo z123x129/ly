@@ -23,7 +23,7 @@
                 <div id="xy" style="color: red;height: 80px;width: 160px;"></div>
             </div>
         </div>
-        <videoDialog class="dialog" :visible.sync="videoVisible" @resize="resize" @videoinit ="videoinit" @cancel="hideVideo" >
+        <videoDialog class="dialog" :visible.sync="videoVisible" @resize="resize" @cancel="hideVideo" >
             <div class="videobox">
                 <div class="demo">
                     <p>摄像点选择:</p>
