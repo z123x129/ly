@@ -28,10 +28,9 @@
             var that = this;
             this.chart.on('click', function (params) {
                 var city = params.data.value;
-                window.console.log(params.data);
-                window.console.log(params);
                 that.init(city)
             });
+            that.init("LinHai");
             // 浏览器自适应
             window.addEventListener('resize', ()=> {
                 this.chart.resize();
@@ -39,7 +38,6 @@
         },
         methods:{
             init(initData){
-                window.console.log(this.address_info)
                 // 指定图表的配置项和数据
                 var mapData = [
 
@@ -80,7 +78,6 @@
                     {'latitude':28.960066, 'longitude':120.959857, 'name':'括苍镇中心幼儿园', 'value':100, 'color':'#ff6521'},
                 ];
                 this.chart.showLoading();
-                window.console.log(initData);
                 var result = this.mapInfo[initData]["mapInfo"];
 
                 echarts.registerMap(initData, result); //加载地图数据
