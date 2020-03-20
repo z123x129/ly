@@ -134,7 +134,7 @@
                                     label:{
                                         normal: {
                                             show: true,
-                                            color:'#333'
+                                            color:'#f2f2f2'
                                         },
                                         emphasis: {
                                             textStyle: {
@@ -144,11 +144,11 @@
                                     },
                                     itemStyle: {
                                         normal: {
-                                            borderColor: '#4a86fd', //区域边框颜色
-                                            areaColor: '#bfdfe0', //区域填充颜色
+                                            borderColor: '#ffffff', //区域边框颜色
+                                            areaColor: '#253752', //区域填充颜色
                                         },
                                         emphasis: {
-                                            areaColor: '#4380fd',
+                                            areaColor: '#1890ff',
                                             borderWidth: 0
                                         }
                                     }
