@@ -7,6 +7,7 @@
 <script>
     // import "_pl/js/Hik/jsWebControl-1.0.0.min.js";
     import {JSEncrypt} from 'encryptlong'
+    import Global from '../../js/Global'
 
     export default {
         inject:["app"],
@@ -50,7 +51,9 @@
                 pubKey:"",
                 show:true,
                 dHeight:this.height,
-                dWidth:this.width
+                dWidth:this.width,
+                videoPath:Global.path3,
+                imgPath:Global.path4
             }
         },
         mounted() {
@@ -85,7 +88,7 @@
                 });
                 window.console.log(that.app[that.openOWebName]);
             },
-            initVideo(snapDir = "D:\\SnapDir", videoDir = "D:\\VideoDir", layoutm = "2x2"){
+            initVideo(layoutm = "2x2"){//snapDir = "SnapDir", videoDir = "VideoDir",
                 if(!this.checkWebC())
                     return;
                 var timer = new Date().getFullYear() +''+ (new Date().getMonth()+1) + new Date().getDate()
@@ -102,8 +105,8 @@
                         ip: that.ip,
                         playMode: 1, // 回放
                         port: port,
-                        snapDir: snapDir+'\\'+timer,
-                        videoDir: videoDir+'\\'+timer,
+                        snapDir: that.imgPath+'\\'+'SnapDir'+'\\'+timer,
+                        videoDir: that.videoPath+'\\'+'VideoDir'+'\\'+timer,
                         layout: layoutm,
                         enableHTTPS: enableHttps,
                         encryptedFields: encryptedFields
