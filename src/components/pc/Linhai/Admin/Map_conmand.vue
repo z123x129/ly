@@ -53,6 +53,7 @@
     import Hikr from "../component/Hik/Hik_video"
     import videoDialog from './videoDialog'
     export default {
+        name:"Map_conmand",
         inject:["app"],
         components:{
             [Input.name]:Input,
@@ -240,18 +241,16 @@
                     }, 100);
                 }
                 // console.log(data.label)
-                if(this.data2 == 0){
+                if(this.data2.length == 0){
                     this.data2 = this.data2.concat(data)
                 }else{
-                    this.data2.forEach( v=>{
-                        if(v.label == data.label)return
-                        this.data2 = this.data2.concat(data)
-                    })
+                    for(let i in this.data2)
+                    {
+                        if(this.data2[i].label == data.label)
+                            return;
+                    }
+                    this.data2 = this.data2.concat(data)
                 }
-
-
-
-
             },
             //显示热点
             redian:function(x,y,name,data){//x,y,name
@@ -288,6 +287,13 @@
             //绘制轨迹
             addpath: function () {
                 marker.moveAlong(lineArr, 1000);
+            }
+        },
+        activated(){
+            if(this.videoVisible)
+            {
+                if(this.$refs.H1.checkWebC())
+                    this.app[this.ddd].JS_ShowWnd();
             }
         }
     }

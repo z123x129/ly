@@ -42,7 +42,7 @@
                 type:String,
                 default:"oWebControl",
                 validator:function(value){
-                    return  ["oWebControl", "aWebControl"].indexOf(value) == "-1" ?false:true;
+                    return  ["oWebControl", "aWebControl","bWebControl"].indexOf(value) == "-1" ?false:true;
                 }
             }
         },
@@ -174,7 +174,7 @@
                     callback();
                 })
 
-        
+
             },
             //获取公钥  callback去初始化
             getPubKey (callback) {
@@ -208,26 +208,19 @@
                     return false;
                 }
                 return true;
+            },
+            destroy(){
+                if(!this.checkWebC())
+                    return;
+                this.app[this.openOWebName].JS_Disconnect();
             }
         },
-        beforeDestroy() {
-            let that = this;
-            // if(this.app[this.openOWebName] != '')
-            // {
-            //     this.app[this.openOWebName].JS_RequestInterface({
-            //         funcName: "uninit"
-            //     }).then(function(data){
-            //         if(data.code == 0)
-            //         {
-            //             window.console.log(data);
-            //             that.app[that.openOWebName].JS_Disconnect();
-            //         }
-
-            //     })
-            // }
-            this.app[this.openOWebName].JS_HideWnd();
-
-
+        beforeDestroy(){
+            if(this.checkWebC())
+            {
+                this.destroy();
+                this.app[this.openOWebName] = "";
+            }
         }
 
     }
