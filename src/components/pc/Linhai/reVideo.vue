@@ -14,7 +14,7 @@
                     :filter-node-method="filterNode"
                     @node-click="getvideo"
                     ref="tree">
-           </el-tree>
+           </el-tree> <!-- @node-click="gotoMap" -->
         </div>
         <Hik class="videobox" ref="H1" :openOWebName="ddd"></Hik>
     </div>
@@ -22,7 +22,7 @@
 
 <script>
     import { Input,Tree } from 'element-ui'
-    import Hik from "./component/Hik";
+    import Hikr from "./component/Hik/Hik_revideo"
 
     export default {
         name: "showVideo",
@@ -66,7 +66,7 @@
             getvideo(data){//选择摄像头
                let _this=this
                 if(!data.children){
-                    this.$refs.H1.videoPlay(data.cameraIndexCode);//传入摄像头编码
+                    this.$refs.H1.videoPlay(data.cameraIndexCode,null,null,null,null,null,1579104000,1584374399);//传入摄像头编码
                     // console.log(data.cameraIndexCode)
                 }
             },
@@ -94,12 +94,8 @@
                         that.$refs.H1.resizeWindow(that.$refs.H1.$el.offsetHeight,that.$refs.H1.$el.offsetWidth);
                         target.resizeFlag = null;
                     }, 200);
-                    // that.$refs.H1.resizeWindow(that.$refs.H1.$el.offsetHeight,that.$refs.H1.$el.offsetWidth);
-                    // console.log('高度',that.$refs.H1.$el.offsetHeight)
-                    // console.log('宽度',that.$refs.H1.$el.offsetWidth)
                 }
             },
-
         }
     }
 </script>
