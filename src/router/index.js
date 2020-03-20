@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import store from '@/store'
-
+import { Base64 } from 'js-base64';
 import VueRouter from 'vue-router'
 Vue.use(VueRouter);
 
@@ -8,7 +8,7 @@ import {getRouterByOrder} from '@/libs/common'
 import { asyncRouterMap, constantRouterMap } from './modules/route'
 
 
-import { MessageBox } from 'element-ui';
+import { Message } from 'element-ui';
 
 // async function getRouteList(){//获取路由表 https://gl.300c.cn
 //     var routeList = "";
@@ -21,9 +21,8 @@ import { MessageBox } from 'element-ui';
 let routes = constantRouterMap;
 if(store.state.user.jurisdiction)
 {
-
-    let dc = getRouterByOrder(asyncRouterMap, store.state.user.jurisdiction);
-
+    let dc = getRouterByOrder(asyncRouterMap, Number(Base64.decode(store.state.user.jurisdiction)));
+    store.commit("setJurisdiction", store.state.user.jurisdiction);
     routes = routes.concat(dc);
 }
 let routerd =  new VueRouter({
@@ -37,18 +36,19 @@ routerd.beforeEach((to,from,next)=>{
   let toPath = ['/login'];//无需登录判断的页面
   if(toPath.indexOf(to.path)>=0){
     if(to.path == '/login'&&store.state.user.uid!=''){
-      next('/');
+      next('/home');
     }
+
     next();
   }else if(store.state.user.uid==''){
-    MessageBox.alert('您还没有登录，请先登录', '提示', {
-      confirmButtonText: '确定',
-      callback: action => {
-        next('/login');
-      }
-    });
+    Message.error('您还没有登录，请先登录')
+      next('/login');
   }else{
-    next();
+      if(to.path == '/')
+          next('/home');
+      if(to.path == '/command/')
+          next('/command/Map_connmand');
+        next();
   }
 });
 

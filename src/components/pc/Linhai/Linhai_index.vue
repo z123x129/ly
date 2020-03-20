@@ -9,28 +9,28 @@
                     <dv-border-box-12 style="padding: 30px;height: 42%" class="box1">
                         <h2>数据概览</h2>
                         <ul style="font-size: 12px">
-                            <li>辖区名称: 临海市</li>
-                            <li>行政区类别: 县级市</li>
-                            <li>乡镇: 14</li>
-                            <li>学校个数: 142</li>
-                            <li>后厨: 323</li>
-                            <li>超市: 23</li>
-                            <li>食品安全管理员: 472</li>
-                            <li>超市人员: 244</li>
+                            <li>辖区名称: {{list.general.hq_name}}</li>
+                            <li>行政区类别: {{list.general.rank}}</li>
+                            <li>乡镇: {{list.general.regions}}</li>
+                            <li>学校个数: {{list.general.school}}</li>
+                            <li>后厨: {{list.general.kitchen}}</li>
+                            <li>超市: {{list.general.damp}}</li>
+                            <li>食品安全管理员: {{list.general.food_admin}}</li>
+                            <li>超市人员: {{list.general.damp_admin}}</li>
                         </ul>
                     </dv-border-box-12>
                     <dv-border-box-12 style="height: 58%;padding: 15px 10px 20px 5px" class="box1">
                         <h2 style="text-indent: 15px">健康证情况</h2>
-                        <Mixed style="width: 100%;height: 100%"></Mixed>
+                        <Mixed :data="list.area_health" ref="Mixed" style="width: 100%;height: 100%"></Mixed>
                     </dv-border-box-12>
                 </div>
                 <div class="cont2">
                     <Button @click="back">back</Button>
                     <Map style="width: 100%;height: 100%" :address_info="address_info" ref="map"></Map>
                     <ul>
-                        <li>学校个数: <span>142</span></li>
-                        <li>没有异常的学校: <span>122</span></li>
-                        <li>有异常的学校: <span>20</span></li>
+                        <li>学校个数: <span>{{list.general.school}}</span></li>
+                        <li>没有异常的学校: <span>{{list.general.yes_school}}</span></li>
+                        <li>有异常的学校: <span>{{list.general.no_school}}</span></li>
                     </ul>
                 </div>
                 <div class="cont1">
@@ -38,19 +38,19 @@
                         <h2>健康证图表</h2>
                         <div style="display: flex;justify-content: space-around">
                             <ol>
-                                <li>1000</li>
+                                <li>{{list.area_chart.all}}</li>
                                 <li>健康证总数</li>
                             </ol>
                             <ol>
-                                <li>900</li>
+                                <li>{{list.area_chart.normal}}</li>
                                 <li>正常常健康证数</li>
                             </ol>
                             <ol>
-                                <li>100</li>
+                                <li>{{list.area_chart.anomaly}}</li>
                                 <li>异常健康证数</li>
                             </ol>
                         </div>
-                        <Editor style="width: 100%;height: 50%"></Editor>
+                        <Editor :normal="normal" :anomaly="anomaly" ref="Editor" style="width: 100%;height: 50%"></Editor>
                     </dv-border-box-12>
                     <dv-border-box-12 class="box1">
                         <h2>学校超市情况</h2>
@@ -61,8 +61,13 @@
             <div class="cont_flex2">
                 <div class="cont3">
                     <dv-border-box-12 class="box2">
-                        <h2>各学校视频情况</h2>
-                        <Mixed style="width: 100%;height: 100%"></Mixed>
+                        <div style="display: flex;justify-content:flex-start">
+                            <h2>当月重点人员陌生人员情况</h2>
+                            <select @change="getList" style="background: transparent;color: #fff;border-radius: 5px;margin-left: 20px" v-model="indexCode">
+                                <option style="color: #333" v-for="(item,index) in options" :label="item.name" :value="item.indexCode" :key="index"></option>
+                            </select>
+                        </div>
+                        <Dataset :data="list.regions_chart" :type="1" ref="Dataset" style="width: 100%;height: 100%"></Dataset>
                     </dv-border-box-12>
                 </div>
                 <div class="cont1">
@@ -76,15 +81,42 @@
     </div>
 </template>
 <script>
+    import {Select,Option} from 'element-ui'
     export default {
-        name:'Linhai_index',
+        name:'home',
         components:{
             Mixed:()=>import('./Linhai_mixed'),
             Editor:()=>import('./Linhai_editor'),
             Map:()=>import('./component/Map'),
+            Dataset:()=>import('./Linhai_dataset'),
+            [Select.name]:Select,
+            [Option.name]:Option,
         },
         data(){
                 return{
+                    list:{
+                        general:{
+                            hq_name:'',
+                            rank:'',
+                            regions:'',
+                            school:'',
+                            kitchen:'',
+                            damp:'',
+                            food_admin:'',
+                            damp_admin:'',
+                        },
+                        area_chart:{
+                            all:'',
+                            normal:'',
+                            anomaly:'',
+                        },
+                        area_health:[],
+                        regions_chart:[],
+                    },
+                    indexCode:'',
+                    options:'',
+                    normal:[''],
+                    anomaly:[''],
                 address_info:[],
                 config:{
                     header: ['列1', '列2', '列3'],
@@ -122,9 +154,7 @@
                     columnWidth: [50],
                     align: ['center'],
                     carousel: 'page',
-
                 },
-
             }
         },
         methods:{
@@ -132,17 +162,37 @@
                 let that = this;
                 this.$https.fetchGet("/plugin/statistics/api_index/getAbbrArea", []).then(function(data){
                    that.address_info = data;
-                   that.$nextTick(()=>{
-                       that.$refs.map.init("LinHai");
-                   })
                 })
             },
             back(){
                 this.$refs.map.init("LinHai");
+            },
+            getAdd(){
+                let params ={};
+                this.$https.fetchPost('/plugin/statistics/api_index/getmapselectdir',params).then((res) => {
+                    this.options = res.regions;
+                    this.indexCode = res.regions[0].indexCode;
+                })
+            },
+            getList(){
+                let params ={};
+                this.$https.fetchPost('/plugin/statistics/api_index/indexStat',params).then((res) => {
+                    this.list = res;
+                    this.normal[0] = Math.round(res.area_chart.normal/res.area_chart.all*100);
+                    this.anomaly[0] = Math.round(res.area_chart.anomaly/res.area_chart.all*100);
+
+                    this.$nextTick(function () {
+                        this.$refs.Editor.init();
+                        this.$refs.Mixed.init();
+                        this.$refs.Dataset.init();
+                    })
+                })
             }
         },
-        created() {
+        mounted() {
             this.getAddress();
+            this.getList();
+            this.getAdd();
         }
     }
 </script>

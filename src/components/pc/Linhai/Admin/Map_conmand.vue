@@ -23,14 +23,14 @@
                 <div id="xy" style="color: red;height: 80px;width: 160px;"></div>
             </div>
         </div>
-        <videoDialog class="dialog" :visible.sync="videoVisible" @resize="resize" @videoinit ="videoinit" @cancel="hideVideo" >
+        <videoDialog class="dialog" :visible.sync="videoVisible" @resize="resize" @cancel="hideVideo" >
             <div class="videobox">
                 <div class="demo">
                     <p>摄像点选择:</p>
                     <el-input style="padding: 10px"
-                            size="small"
-                            placeholder="输入关键字搜索"
-                            v-model="filterText2">
+                              size="small"
+                              placeholder="输入关键字搜索"
+                              v-model="filterText2">
                     </el-input>
                     <el-tree
                             class="filter-tree"
@@ -50,7 +50,7 @@
     import { Input,Tree} from 'element-ui'//,DatePicker
     import 'element-ui/lib/theme-chalk/index.css'
     import 'iview/dist/styles/iview.css'
-    import Hikr from "./component/Hik/Hik_video"
+    import Hikr from "../component/Hik/Hik_video"
     import videoDialog from './videoDialog'
     export default {
         inject:["app"],
@@ -139,7 +139,7 @@
                         target.resizeFlag = null;
                     }, 200);
                 }
-                
+
             },
             getList(){ //获取地区列表
                 let params ={};
@@ -248,7 +248,7 @@
                         this.data2 = this.data2.concat(data)
                     })
                 }
-                
+
 
 
 
@@ -282,7 +282,7 @@
                 // });
             },
             createContent:function(e,data){
-               var data = JSON.stringify(data)
+                var data = JSON.stringify(data)
                 return '<div style="width: 200px">是否查看【' + e + '】视频？</div><a class=\'btn btn-info\' onclick=\'opvideo(' + data + ')\' style="margin-left: 12px;margin-top: 10px">查看视频</a>';
             },
             //绘制轨迹

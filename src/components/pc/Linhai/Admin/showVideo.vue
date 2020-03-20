@@ -3,9 +3,9 @@
         <div class="demo">
             <p>摄像点选择:</p>
             <el-input style="padding: 10px"
-                    size="small"
-                    placeholder="输入关键字进行过滤"
-                    v-model="filterText">
+                      size="small"
+                      placeholder="输入关键字进行过滤"
+                      v-model="filterText">
             </el-input>
             <el-tree
                     class="filter-tree"
@@ -14,7 +14,7 @@
                     :filter-node-method="filterNode"
                     @node-click="getvideo"
                     ref="tree">
-           </el-tree> <!-- @node-click="gotoMap" -->
+            </el-tree>
         </div>
         <Hik class="videobox" ref="H1" :openOWebName="ddd"></Hik>
     </div>
@@ -22,7 +22,7 @@
 
 <script>
     import { Input,Tree } from 'element-ui'
-    import Hikr from "./component/Hik/Hik_revideo"
+    import Hik from "../component/Hik";
 
     export default {
         name: "showVideo",
@@ -32,17 +32,17 @@
             Hik
         },
         data(){
-          return{
+            return{
 
-            filterText: '',
-            data: [],
-            defaultProps: {
-                children: 'children',
-                label: 'label'
-            },
-            ddd:'oWebControl',
+                filterText: '',
+                data: [],
+                defaultProps: {
+                    children: 'children',
+                    label: 'label'
+                },
+                ddd:'oWebControl',
 
-          }
+            }
         },
         watch: {
             filterText(val) {
@@ -64,9 +64,9 @@
                 })
             },
             getvideo(data){//选择摄像头
-               let _this=this
+                let _this=this
                 if(!data.children){
-                    this.$refs.H1.videoPlay(data.cameraIndexCode,null,null,null,null,null,1579104000,1584374399);//传入摄像头编码
+                    this.$refs.H1.videoPlay(data.cameraIndexCode);//传入摄像头编码
                     // console.log(data.cameraIndexCode)
                 }
             },
@@ -94,8 +94,12 @@
                         that.$refs.H1.resizeWindow(that.$refs.H1.$el.offsetHeight,that.$refs.H1.$el.offsetWidth);
                         target.resizeFlag = null;
                     }, 200);
+                    // that.$refs.H1.resizeWindow(that.$refs.H1.$el.offsetHeight,that.$refs.H1.$el.offsetWidth);
+                    // console.log('高度',that.$refs.H1.$el.offsetHeight)
+                    // console.log('宽度',that.$refs.H1.$el.offsetWidth)
                 }
             },
+
         }
     }
 </script>

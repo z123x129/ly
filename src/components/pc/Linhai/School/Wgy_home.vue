@@ -9,7 +9,7 @@
 </template>
 <script>
     export default {
-        name:'Wgy_home',
+        name:'home',
         components:{
             chartcard:()=>import('../Linhai_chartcard'),
             Doughnut:()=>import('../Linhai_doughnut'),
@@ -34,7 +34,6 @@
                 this.$nextTick(function () {
                     this.$refs.Doughnut.init();
                 })
-
             })
         }
     }
