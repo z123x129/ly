@@ -14,21 +14,9 @@
                     :filter-node-method="filterNode"
                     @node-click="getvideo"
                     ref="tree">
-           </el-tree> <!-- @node-click="gotoMap" -->
+           </el-tree>
         </div>
         <Hik class="videobox" ref="H1" :openOWebName="ddd"></Hik>
-        <!-- <div style="float: right">
-            <Button @click="init_1">初始化框</Button>
-            <Button @click="initVideo">连接</Button>
-            <Button @click="connent">打开页面</Button>
-            <Button @click="show">显示</Button>
-            <Button @click="hide">隐藏</Button>
-            <input v-model="height"/>
-            <input v-model="width"/>
-            <Button @click="resizeWindow">修改大小</Button>
-
-            </div> -->
-
     </div>
 </template>
 
@@ -112,25 +100,7 @@
                     // console.log('宽度',that.$refs.H1.$el.offsetWidth)
                 }
             },
-            // connent(){
-            //     this.$refs.H1.videoPlay();
-            // },
-            // show(){
-            //     this.$refs.H1.showVideo();
-            // },
-            // hide(){
-            //     this.$refs.H1.hideVideo();
-            // },
-            // resizeWindow(){
-            //     this.$refs.H1.resizeWindow(this.height,this.width);
-            // }
-            // hideVideo(){
-            //     this.checkWebC();
-            //     if(!this.show)
-            //         return;
-            //     this.show = false;
-            //     this.app[this.openOWebName].JS_HideWnd();
-            // },
+
         }
     }
 </script>
