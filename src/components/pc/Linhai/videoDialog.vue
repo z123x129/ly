@@ -87,7 +87,7 @@ export default{
       }
     },
     methods: {
-      cancel: function () {
+      cancel() {
         // .sync 实现弹窗显示 or 隐藏
         this.$emit("update:visible", false)
         this.$emit("cancel")
