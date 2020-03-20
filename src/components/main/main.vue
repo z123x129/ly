@@ -73,7 +73,7 @@
             <Sider  ref="side1" hide-trigger collapsible :collapsed-width="78" v-model="isCollapsed" style="height: 100vh">
                 <side-menu accordion ref="sideMenu" :active-name="$route.name" :collapsed="collapsed" :menu-list="menuList" @on-select="turnToPage">
                     <div class="logo-con">
-                        <img  :src="minLogo"  />
+                        <img :src="minLogo"/>
                     </div>
                 </side-menu>
             </Sider>
@@ -87,7 +87,7 @@
 
                     <div class="user-logo">
                         <fullscreen v-model="isFullscreen" style="margin-right: 10px;"/>
-                        <user  :message-unread-count="0" :user-avatar="img"/>
+                        <user  :message-unread-count="1000" :user-avatar="img"/>
 
                     </div>
                 </Header>
@@ -133,7 +133,7 @@
                 collapsed:false,
                 img:headImg,
                 isFullscreen:false,
-                ws:new WebSocket("ws://"+"192.168.0.3"+":7272")
+                ws:new WebSocket("ws://"+"192.168.0.2"+":7272")
             }
         },
         components:{
@@ -237,7 +237,7 @@
                                 that.$router.push('/Intelligence/Strange_people');
                                 break;
                         }
-                    }
+                    },
                 });
             },
         },
@@ -255,22 +255,24 @@
                 let type = data.type || '';
                 switch(type){
                     case 'init':
-                        let params_1 ={'uid':2,'client_id':data.client_id};
+                        var params_1 ={'uid':2,'client_id':data.client_id};
                         that.$https.fetchPost('/plugin/statistics/api_index/bindUser',params_1).then((res) => {
-                            console.log('连接成功');
+                            window.console.log('连接成功');
                         });
                         break;
                     case 'Emphasis':
                         that.open(data.content.msg,data.content.faceInfoName,type);
+                        that.$store.commit("getMessage", data.content);
                         break;
                     case 'stranger':
                         that.open(data.content.msg,data.content.ageGroup,type);
+                        that.$store.commit("getMessage", data.content);
                         break;
                 }
             };
             setInterval(()=>{
                 that.ws.send('')
-            }, 3000)
+            }, 40000)
 
         },
         watch:{

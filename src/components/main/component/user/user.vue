@@ -30,22 +30,20 @@ export default {
     }
   },
   methods: {
-    message () {
-      this.$router.push({
-        name: 'message_page'
-      })
-    },
     handleClick (name) {
       switch (name) {
-        case 'logout': this.logout()
-          break
-        case 'message': //this.message()
-          break
+        case 'logout': this.logout();
+          break;
+        case 'message': this.message();
+          break;
       }
     },
     logout(){
       this.$store.commit('getUid','');
       this.$router.push('/login');
+    },
+    message(){
+      this.$router.push('/Linhai_message')
     }
   }
 }

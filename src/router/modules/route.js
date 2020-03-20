@@ -6,16 +6,16 @@ import Linhai_index3 from '@/components/pc/Linhai/Linhai_index3.vue'
 import Linhai_index4 from '@/components/pc/Linhai/Linhai_index4.vue'
 import Linhai_index5 from '@/components/pc/Linhai/Linhai_index5.vue'
 
-import Linhai_index8 from '@/components/pc/Linhai/Linhai_index8.vue'
-import Linhai_index9 from '@/components/pc/Linhai/Linhai_index9.vue'
-
 //公共路由
 import Linhai_login from '@/components/pc/Linhai/Linhai_login.vue'
+import Linhai_message from '@/components/pc/Linhai/Linhai_message.vue'
 import notfount from '@/components/error-page/404.vue'
 
 //管理员路由
 import Key_personnel from '@/components/pc/Linhai/Admin/Key_personnel.vue'
 import Strange_people from '@/components/pc/Linhai/Admin/Strange_people.vue'
+import Contrast from '@/components/pc/Linhai/Admin/Contrast.vue'
+import School_show from '@/components/pc/Linhai/Admin/School_show.vue'
 
 //学校路由
 import Maintain_list from '@/components/pc/Linhai/School2/Maintain_list.vue'
@@ -152,14 +152,14 @@ export const asyncRouterMap = [
                 component: Linhai_index5
             },
             {
-                path: 'Linhai_index8',
-                name: 'Linhai_index8',
+                path: 'Contrast',
+                name: 'Contrast',
                 meta: {
                     icon: 'md-arrow-dropdown-circle',
                     title: '录像检索',
                     role: [1],
                 },
-                component: Linhai_index8
+                component: Contrast
             },
         ]
     },
@@ -194,24 +194,24 @@ export const asyncRouterMap = [
                 component: Strange_people
             },
             {
-                path: 'Linhai_index9',
-                name: 'Linhai_index9',
+                path: 'Contrast',
+                name: 'Contrast',
                 meta: {
                     icon: 'md-arrow-dropdown-circle',
                     title: '数据对比',
                     role: [1],
                 },
-                component: Linhai_index9
+                component: Contrast
             },
             {
-                path: 'Linhai_index10',
-                name: 'Linhai_index10',
+                path: 'School_show',
+                name: 'School_show',
                 meta: {
                     icon: 'md-arrow-dropdown-circle',
                     title: '学校列表展示',
                     role: [1],
                 },
-                component: Linhai_index9
+                component: School_show
             },
         ]
     },
@@ -360,6 +360,32 @@ export const asyncRouterMap = [
             },
         ]
     }, //学校后台通用
+
+    //通用路由
+    {
+        path: '/message',
+        name: 'message',
+        component: Main,
+        meta: {
+            icon: 'logo-buffer',
+            title: '消息中心',
+            role: [1,2,3],
+            hideInMenu: true,
+        },
+        children:[
+            {
+                path: '/Linhai_message',
+                name: 'Linhai_message',
+                meta: {
+                    icon: 'md-arrow-dropdown-circle',
+                    title: '消息中心',
+                    role: [1,2,3],
+                    hideInMenu: true,
+                },
+                component: Linhai_message
+            },
+        ]
+    },
     //404页面
     // {
     //     path: "*", // 此处需特别注意置于最底部

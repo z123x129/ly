@@ -131,7 +131,7 @@
                         :total="total">
                 </el-pagination>
             </div>
-        <el-dialog title="添加人员" :visible.sync="dialogFormVisible" @closed="handleClose">
+        <el-dialog :title="type==1?'添加人员' : '编辑人员' " :visible.sync="dialogFormVisible" @closed="handleClose">
             <el-form :model="form" :rules="rules" ref="form">
                 <el-form-item label="姓名:" prop="nickname" :label-width="formLabelWidth">
                     <el-input style="width: 80%" size="small" v-model="form.nickname" placeholder="请输入姓名" autocomplete="off"></el-input>
@@ -332,12 +332,45 @@
             },
             showDialog(res){
                 this.type = 2;
-                this.form = res;
+                this.form = this.deepClone(res);
                 this.form.face = res.faceThumbPath;
                 this.form.face_thumb = res.face_thumb;
                 this.form.health = res.healthCardPath;
                 this.form.health_card = res.health_card;
                 this.dialogFormVisible = true;
+            },
+            deepClone(target) {
+                //深拷贝
+                // 定义一个变量
+                var result;
+                // 如果当前需要深拷贝的是一个对象的话
+                if (typeof target === 'object') {
+                    // 如果是一个数组的话
+                    if (Array.isArray(target)) {
+                        result = []; // 将result赋值为一个数组，并且执行遍历
+                        for (let i in target) {
+                            // 递归克隆数组中的每一项
+                            result.push(this.deepClone(target[i]))
+                        }
+                        // 判断如果当前的值是null的话；直接赋值为null
+                    } else if(target===null) {
+                        result = null;
+                        // 判断如果当前的值是一个RegExp对象的话，直接赋值
+                    } else if(target.constructor===RegExp){
+                        result = target;
+                    }else {
+                        // 否则是普通对象，直接for in循环，递归赋值对象的所有值
+                        result = {};
+                        for (let i in target) {
+                            result[i] = this.deepClone(target[i]);
+                        }
+                    }
+                    // 如果不是对象的话，就是基本数据类型，那么直接赋值
+                } else {
+                    result = target;
+                }
+                // 返回最终结果
+                return result;
             },
             showAdd(){
                 this.type = 1;

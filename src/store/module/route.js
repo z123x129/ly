@@ -13,11 +13,15 @@ function hasPermission(roles, route) {
 export default {
     state:{
         routeInfo:[],
+        messageList:[],
     },
     mutations: {
         setRouteInfo: function (state, routeInfo) {
             state.routeInfo = routeInfo;
         },
+        getMessage:function (state, data) {
+            state.messageList.push(data);
+        }
     },
     getters:{
         menuList: (state) => getMenuByRouter(state.routeInfo, store.state.user.jurisdiction),

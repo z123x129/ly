@@ -9,14 +9,14 @@
                     <dv-border-box-12 style="padding: 30px;height: 42%" class="box1">
                         <h2>数据概览</h2>
                         <ul style="font-size: 12px">
-                            <li>辖区名称: 临海市</li>
-                            <li>行政区类别: 县级市</li>
-                            <li>乡镇: 14</li>
-                            <li>学校个数: 142</li>
-                            <li>后厨: 323</li>
-                            <li>超市: 23</li>
-                            <li>食品安全管理员: 472</li>
-                            <li>超市人员: 244</li>
+                            <li>辖区名称: {{list.general.hq_name}}</li>
+                            <li>行政区类别: {{list.general.rank}}</li>
+                            <li>乡镇: {{list.general.regions}}</li>
+                            <li>学校个数: {{list.general.regions}}</li>
+                            <li>后厨: {{list.general.kitchen}}</li>
+                            <li>超市: {{list.general.damp}}</li>
+                            <li>食品安全管理员: {{list.general.food_admin}}</li>
+                            <li>超市人员: {{list.general.damp_admin}}</li>
                         </ul>
                     </dv-border-box-12>
                     <dv-border-box-12 style="height: 58%;padding: 15px 10px 20px 5px" class="box1">
@@ -28,9 +28,9 @@
                     <Button @click="back">back</Button>
                     <Map style="width: 100%;height: 100%" :address_info="address_info" ref="map"></Map>
                     <ul>
-                        <li>学校个数: <span>142</span></li>
-                        <li>没有异常的学校: <span>122</span></li>
-                        <li>有异常的学校: <span>20</span></li>
+                        <li>学校个数: <span>{{list.general.school}}</span></li>
+                        <li>没有异常的学校: <span>{{list.general.yes_school}}</span></li>
+                        <li>有异常的学校: <span>{{list.general.no_school}}</span></li>
                     </ul>
                 </div>
                 <div class="cont1">
@@ -38,15 +38,15 @@
                         <h2>健康证图表</h2>
                         <div style="display: flex;justify-content: space-around">
                             <ol>
-                                <li>1000</li>
+                                <li>{{list.area_chart.all}}</li>
                                 <li>健康证总数</li>
                             </ol>
                             <ol>
-                                <li>900</li>
+                                <li>{{list.area_chart.normal}}</li>
                                 <li>正常常健康证数</li>
                             </ol>
                             <ol>
-                                <li>100</li>
+                                <li>{{list.area_chart.anomaly}}</li>
                                 <li>异常健康证数</li>
                             </ol>
                         </div>
@@ -85,6 +85,7 @@
         },
         data(){
                 return{
+                    list:'',
                 address_info:[],
                 config:{
                     header: ['列1', '列2', '列3'],
@@ -139,10 +140,18 @@
             },
             back(){
                 this.$refs.map.init("LinHai");
+            },
+            getList(){
+                let params ={};
+                this.$https.fetchPost('/plugin/statistics/api_index/indexStat',params).then((res) => {
+                    console.log(res)
+                    this.list = res;
+                })
             }
         },
-        created() {
+        mounted() {
             this.getAddress();
+            this.getList();
         }
     }
 </script>
