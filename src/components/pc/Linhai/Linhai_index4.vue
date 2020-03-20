@@ -87,7 +87,6 @@
                 ],
                 videoVisible:false,
                 ddd:'aWebControl',
-                initType:false,//判断视频插件是否初始化
             }
         },
         watch: {
@@ -115,7 +114,6 @@
         },
         methods:{
             videoinit(){//初始化视频插件
-                this.initType = true
                 this.$refs.H1.init(()=>{
                     this.$refs.H1.initVideo()
                     this.$refs.H1.resizeWindow(this.$refs.H1.$el.offsetHeight,this.$refs.H1.$el.offsetWidth);//初始化大小
@@ -128,7 +126,7 @@
                 this.$refs.H1.resizeWindow(this.$refs.H1.$el.offsetHeight,this.$refs.H1.$el.offsetWidth);
             },
             winresize(){
-                if(!this.initType) return//如果插件未初始化
+                if(this.$refs.H1.checkWebC()) return//如果插件未初始化
 
                 const that = this
                 window.onresize = () => {
@@ -233,14 +231,26 @@
             //查看监控
             opvideo:function(data){
                 this.videoVisible = true
-                this.data2 = this.data2.concat(data)
-                if(this.initType){
+
+                if(this.$refs.H1.checkWebC()){
                     this.app[this.ddd].JS_ShowWnd();
                 }else{
                     setTimeout(() => {
                         this.videoinit()
                     }, 100);
                 }
+                // console.log(data.label)
+                if(this.data2 == 0){
+                    this.data2 = this.data2.concat(data)
+                }else{
+                    this.data2.forEach( v=>{
+                        if(v.label == data.label)return
+                        this.data2 = this.data2.concat(data)
+                    })
+                }
+                
+
+
 
             },
             //显示热点
@@ -298,7 +308,8 @@
         // width: 18%;
         // float: left;
         // min-width: 200px;
-        max-width:20vw;
+        // max-width:20vw;
+        // min-width:20vw;
         padding: 10px;
         box-sizing: border-box;
         height: 100%;
