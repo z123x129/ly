@@ -83,7 +83,7 @@
 <script>
     import {Select,Option} from 'element-ui'
     export default {
-        name:'Linhai_index',
+        name:'home',
         components:{
             Mixed:()=>import('./Linhai_mixed'),
             Editor:()=>import('./Linhai_editor'),

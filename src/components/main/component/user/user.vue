@@ -33,11 +33,6 @@ export default {
     }
   },
   methods: {
-    message () {
-      this.$router.push({
-        name: 'message_page'
-      })
-    },
     setting(){
       this.$router.push({
         name: 'Setting'
@@ -47,7 +42,7 @@ export default {
       switch (name) {
         case 'logout': this.logout()
           break
-        case 'message': //this.message()
+        case 'message': this.message()
           break
         case 'setting': //this.message()
           this.setting();break
