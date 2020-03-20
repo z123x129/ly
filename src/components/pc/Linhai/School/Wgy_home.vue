@@ -34,7 +34,6 @@
                 this.$nextTick(function () {
                     this.$refs.Doughnut.init();
                 })
-
             })
         }
     }
