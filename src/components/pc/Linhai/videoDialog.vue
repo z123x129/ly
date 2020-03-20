@@ -28,11 +28,14 @@ export default{
     directives: {
       drag: {
         inserted: function (el, binding, vnode) {
+          const that = vnode.context
           vnode = vnode.elm
           el.onmousedown = ((event) => {
             if (event.target.className !== "my_dialog_title") {
               return
             }
+            // console.log('点击拖动框')
+            
             // (clientX, clientY)点击位置距离当前可视区域的坐标(x，y)
             // offsetLeft, offsetTop 距离上层或父级的左边距和上边距 
             // 获取鼠标在弹窗中的位置
@@ -64,10 +67,15 @@ export default{
                 top = maxY
               }
               // 赋值移动
+
               vnode.style.left = left + 'px'
               vnode.style.top = top + 'px'
+              that.resize()
+              
             })
             document.onmouseup = (() => {
+              // console.log('离开拖动框')
+              
               document.onmousemove = document.onmouseup = null
             })
           })
@@ -80,11 +88,13 @@ export default{
     },
     methods: {
       cancel: function () {
-        console.log('111')
         // .sync 实现弹窗显示 or 隐藏
         this.$emit("update:visible", false)
         this.$emit("cancel")
       },
+      resize(){
+        this.$emit("resize")
+      }
     }
 }
 

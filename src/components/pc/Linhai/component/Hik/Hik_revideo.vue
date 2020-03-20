@@ -35,6 +35,8 @@
                 type:Number,
                 default:750
             },
+            startTimeStamp:Number,
+            endTimeStamp:Number,
             openOWebName:{
                 type:String,
                 default:"oWebControl",
@@ -86,7 +88,7 @@
             initVideo(snapDir = "D:\\SnapDir", videoDir = "D:\\VideoDir", layoutm = "2x2"){
                 if(!this.checkWebC())
                     return;
-                var timer = new Date().getFullYear() +''+ (new Date().getMonth()+1) + new Date().getDate()   
+                var timer = new Date().getFullYear() +''+ (new Date().getMonth()+1) + new Date().getDate()
                 let that = this;
                 this.getPubKey(function () {
                     const secret = that.setEncrypt(that.secret);
@@ -98,7 +100,7 @@
                         appkey: that.appkey,
                         secret: secret,
                         ip: that.ip,
-                        playMode: 0, // 预览
+                        playMode: 1, // 回放
                         port: port,
                         snapDir: snapDir+'\\'+timer,
                         videoDir: videoDir+'\\'+timer,
@@ -144,22 +146,32 @@
                 // this.dHeight = height;
                 this.app[this.openOWebName].JS_Resize(width, height);
             },
-            videoPlay(cameraIndexCode, callback = ()=>{}, wndId = 0, streamMode = 0, transMode = 1, gpuMode= 0){
+            videoPlay(cameraIndexCode, callback = ()=>{}, wndId = 0, streamMode = 0, transMode = 1, gpuMode= 0,startTime,endTime){
                 if(!this.checkWebC())
                     return;
+                console.log(startTime)
+                // if(arguments.length == 3){
+                //     cameraIndexCode = arguments[0]
+                //     startTime = arguments[1]
+                //     endTime = arguments[2]
+                // }
                 this.app[this.openOWebName].JS_RequestInterface({
-                    funcName: "startPreview",
+                    funcName: "startPlayback",
                     argument: JSON.stringify({
                         cameraIndexCode : cameraIndexCode , //摄像头编号
                         streamMode: streamMode, //主子码流标识， 默认0
                         transMode: transMode, //传输协议 0：UDP 1：TCP
                         gpuMode: gpuMode, //是否启用GPU硬解 0不启用，1启用
-                        wndId: wndId    //窗口编号
+                        wndId: wndId,    //窗口编号
+                        startTimeStamp: startTime,//开始时间
+                        endTimeStamp: endTime,//结束时间
                     })
                 }).then(function(oData){
                     window.console.log(oData);
                     callback();
                 })
+
+        
             },
             //获取公钥  callback去初始化
             getPubKey (callback) {
