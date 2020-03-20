@@ -1,6 +1,6 @@
 <template>
     <transition name="dialog-up">
-    <div v-if="visible"  class="my_dialog_box" id="my_dialog_box" v-drag>
+    <div v-show="visible"  class="my_dialog_box" id="my_dialog_box" v-drag>
       <!-- 标题 -->
       <div class="my_dialog_title">
         录像查看
@@ -88,7 +88,7 @@ export default{
       }
     },
     methods: {
-      cancel: function () {
+      cancel() {
         // .sync 实现弹窗显示 or 隐藏
         this.$emit("update:visible", false)
         this.$emit("cancel")
