@@ -10,7 +10,7 @@ module.exports = {
         proxy: {
             '/public': {
                 // target: 'http://192.168.1.88:19999',
-                target: 'http://192.168.0.3/lhyd',
+                target: 'http://192.168.0.2/lhyd',
                 // target: 'http://tp.300c.cn/zy_137/subsystem20190906',
                 ws: true, //是否代理websockets
                 changeOrigin: true // 设置同源  默认false，是否需要改变原始主机头为目标URL

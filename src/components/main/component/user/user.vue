@@ -56,6 +56,9 @@ export default {
     logout(){
       this.$store.commit('getUid','');
       this.$router.push('/login');
+    },
+    message(){
+      this.$router.push('/Linhai_message')
     }
   }
 }

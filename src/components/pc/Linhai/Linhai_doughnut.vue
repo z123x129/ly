@@ -17,8 +17,6 @@
             // 基于准备好的dom，初始化echarts实例
             this.chart = echarts.init(this.$refs.chart);
 
-
-
             this.chart.on('legendselectchanged', function(params) {
                 let option = this.getOption();
                 let select_key = Object.keys(params.selected);
@@ -49,10 +47,6 @@
                 option.title[0].text = text;
                 this.setOption(option);
             })
-
-
-
-
 
             // 浏览器自适应
             window.addEventListener('resize', ()=> {
