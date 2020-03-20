@@ -15,9 +15,9 @@ import notfount from '@/components/error-page/404.vue'
 import Key_personnel from '@/components/pc/Linhai/Admin/Key_personnel.vue'
 import Strange_people from '@/components/pc/Linhai/Admin/Strange_people.vue'
 import Contrast from '@/components/pc/Linhai/Admin/Contrast.vue'
-import videoDialog from '@/components/pc/Linhai/Admin/videoDialog.vue'
 import School_show from '@/components/pc/Linhai/Admin/School_show.vue'
 import showVideo from '@/components/pc/Linhai/Admin/showVideo.vue'
+import reVideo from '@/components/pc/Linhai/Admin/reVideo.vue'
 import Map_conmand from '@/components/pc/Linhai/Admin/Map_conmand.vue'
 
 //学校路由
@@ -147,14 +147,14 @@ export const asyncRouterMap = [
                 component: showVideo
             },
             {
-                path: 'videoDialog',
-                name: 'videoDialog',
+                path: 'reVideo',
+                name: 'reVideo',
                 meta: {
                     icon: 'md-arrow-dropdown-circle',
                     title: '录像检索',
                     role: [1],
                 },
-                component: videoDialog
+                component: reVideo
             },
         ]
     },

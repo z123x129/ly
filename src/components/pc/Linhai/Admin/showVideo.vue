@@ -3,9 +3,9 @@
         <div class="demo">
             <p>摄像点选择:</p>
             <el-input style="padding: 10px"
-                    size="small"
-                    placeholder="输入关键字进行过滤"
-                    v-model="filterText">
+                      size="small"
+                      placeholder="输入关键字进行过滤"
+                      v-model="filterText">
             </el-input>
             <el-tree
                     class="filter-tree"
@@ -14,27 +14,15 @@
                     :filter-node-method="filterNode"
                     @node-click="getvideo"
                     ref="tree">
-           </el-tree> <!-- @node-click="gotoMap" -->
+            </el-tree>
         </div>
         <Hik class="videobox" ref="H1" :openOWebName="ddd"></Hik>
-        <!-- <div style="float: right">
-            <Button @click="init_1">初始化框</Button>
-            <Button @click="initVideo">连接</Button>
-            <Button @click="connent">打开页面</Button>
-            <Button @click="show">显示</Button>
-            <Button @click="hide">隐藏</Button>
-            <input v-model="height"/>
-            <input v-model="width"/>
-            <Button @click="resizeWindow">修改大小</Button>
-
-            </div> -->
-
     </div>
 </template>
 
 <script>
     import { Input,Tree } from 'element-ui'
-    import Hik from "../component/Hik";
+    import Hik from "./component/Hik";
 
     export default {
         name: "showVideo",
@@ -44,19 +32,17 @@
             Hik
         },
         data(){
-          return{
+            return{
 
-            filterText: '',
-            data: [],
-            defaultProps: {
-                children: 'children',
-                label: 'label'
-            },
-            // height:650,
-            // width:800,
-            ddd:'oWebControl',
+                filterText: '',
+                data: [],
+                defaultProps: {
+                    children: 'children',
+                    label: 'label'
+                },
+                ddd:'oWebControl',
 
-          }
+            }
         },
         watch: {
             filterText(val) {
@@ -78,7 +64,7 @@
                 })
             },
             getvideo(data){//选择摄像头
-               let _this=this
+                let _this=this
                 if(!data.children){
                     this.$refs.H1.videoPlay(data.cameraIndexCode);//传入摄像头编码
                     // console.log(data.cameraIndexCode)
@@ -96,6 +82,7 @@
                 return data.label.indexOf(value) !== -1;
             },
             resize(){
+                if(this.$refs.H1.checkWebC()) return//如果插件未初始化
                 const that = this
                 window.onresize = () => {
                     var target = this;
@@ -112,25 +99,7 @@
                     // console.log('宽度',that.$refs.H1.$el.offsetWidth)
                 }
             },
-            // connent(){
-            //     this.$refs.H1.videoPlay();
-            // },
-            // show(){
-            //     this.$refs.H1.showVideo();
-            // },
-            // hide(){
-            //     this.$refs.H1.hideVideo();
-            // },
-            // resizeWindow(){
-            //     this.$refs.H1.resizeWindow(this.height,this.width);
-            // }
-            // hideVideo(){
-            //     this.checkWebC();
-            //     if(!this.show)
-            //         return;
-            //     this.show = false;
-            //     this.app[this.openOWebName].JS_HideWnd();
-            // },
+
         }
     }
 </script>

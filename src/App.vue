@@ -16,8 +16,9 @@
     },
     data(){
         return {
-          oWebControl:"",
-          aWebControl:"",
+          oWebControl:"",//视频预览
+          aWebControl:"",//指挥中心
+          bWebControl:"",//录像回放
         }
       },
   }
