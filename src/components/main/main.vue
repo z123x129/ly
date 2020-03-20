@@ -97,7 +97,7 @@
                             <tags-nav :value="$route" @input="handleClick" :list="tagsNav" @on-close="closeClick"/>
                         </div>
                         <Content class="content-wrapper" >
-                            <div style="background-color:#fff;height:100vh" id='i2'>
+                            <div style="background-color:#fff;height:100%" id='i2'>
                            <keep-alive :include="cacheList">
                                     <router-view></router-view>
                            </keep-alive>
