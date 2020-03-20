@@ -202,7 +202,7 @@
                     timeStart = this.formInline.timeStr[0];
                     timeEnd = this.formInline.timeStr[1];
                 }
-                let params ={'id':this.$route.query.id,
+                let params ={'id':this.$route.params.id,
                     'page':this.page,'paginate':this.paginate,
                     'timeStart':timeStart,
                     'timeEnd':timeEnd,

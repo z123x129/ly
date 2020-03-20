@@ -16,7 +16,7 @@
 
 <script>
 export default{
-    name:"Contrast",
+    name:"videoDialog",
     props: {
         visible: {
             type: Boolean,
