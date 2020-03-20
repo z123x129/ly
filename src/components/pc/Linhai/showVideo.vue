@@ -41,7 +41,6 @@
                 label: 'label'
             },
             ddd:'oWebControl',
-            initType:false,//判断视频插件是否初始化
 
           }
         },
@@ -83,7 +82,7 @@
                 return data.label.indexOf(value) !== -1;
             },
             resize(){
-                if(!this.initType) return//如果插件未初始化
+                if(this.$refs.H1.checkWebC()) return//如果插件未初始化
                 const that = this
                 window.onresize = () => {
                     var target = this;
