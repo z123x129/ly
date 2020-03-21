@@ -272,6 +272,10 @@
                         that.open(data.content.msg,data.content.ageGroup,type);
                         that.$store.commit("getMessage", data.content);
                         break;
+                    case "school_violation":
+                        that.open(data.content.msg,data.content.name,type);
+                        that.$store.commit("getMessage", data.content);
+                        break;
                 }
             };
             setInterval(()=>{
