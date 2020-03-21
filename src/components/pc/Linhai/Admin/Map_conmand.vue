@@ -275,7 +275,7 @@
                 //                 infoWindow.setContent(_this.createContent(poiArr[0]));
                 //                 infoWindow.open(_this.map, location);
                 //             }
-
+                //
                 //         }
                 //     });
                 // });
