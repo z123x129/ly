@@ -211,28 +211,17 @@
                     return false;
                 }
                 return true;
+            },
+            destroy(){
+                if(!this.checkWebC())
+                    return;
+                this.app[this.openOWebName].JS_Disconnect();
             }
         },
-        beforeDestroy() {
-            let that = this;
-            // if(this.app[this.openOWebName] != '')
-            // {
-            //     this.app[this.openOWebName].JS_RequestInterface({
-            //         funcName: "uninit"
-            //     }).then(function(data){
-            //         if(data.code == 0)
-            //         {
-            //             window.console.log(data);
-            //             that.app[that.openOWebName].JS_Disconnect();
-            //         }
-
-            //     })
-            // }
-            this.app[this.openOWebName].JS_HideWnd();
-
-
+        beforeDestroy(){
+                this.destroy();
+                this.app[this.openOWebName] = "";
         }
-
     }
 </script>
 

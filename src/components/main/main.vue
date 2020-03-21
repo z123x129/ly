@@ -282,15 +282,27 @@
         },
         watch:{
             "$route"(newRoute){
-                if(this.app.oWebControl != "" )
+                if(this.app.oWebControl != "")
                 {
                     if(newRoute.name != "showVideo")
                         this.app.oWebControl.JS_HideWnd();
                     else
-                    {
                         this.app.oWebControl.JS_ShowWnd();
-                    }
+
                 }
+                if(this.app.aWebControl != "")
+                {
+                    if(newRoute.name != "Map_conmand")
+                        this.app.aWebControl.JS_HideWnd();
+                }
+                if(this.app.bWebControl != "")
+                {
+                    if(newRoute.name != "reVideo")
+                        this.app.bWebControl.JS_HideWnd();
+                    else
+                        this.app.bWebControl.JS_ShowWnd();
+                }
+
                 let route = newRoute;
 
                 this.setBreadCrumb(newRoute)
