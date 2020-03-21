@@ -10,7 +10,7 @@
           消息中心<Badge style="margin-left: 10px" :count="messageUnreadCount"></Badge>
         </DropdownItem>
         <DropdownItem name="setting">
-          设置<Badge style="margin-left: 10px" :count="messageUnreadCount"></Badge>
+          设置<Badge style="margin-left: 10px"></Badge>
         </DropdownItem>
         <DropdownItem name="logout">退出登录</DropdownItem>
       </DropdownMenu>

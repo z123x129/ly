@@ -31,12 +31,12 @@
                     <el-option label="选择学校" value="beijing"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item style="padding-left: 3vw">
+            <el-form-item style="padding-left: 40px">
                 <el-button size="small" type="primary" @click="onSubmit">查询</el-button>
                 <el-button size="small" type="primary" @click="onSubmit">重置</el-button>
                 <el-button size="small" type="primary" @click="onSubmit">导出</el-button>
             </el-form-item>
-            <el-form-item style="padding-left: 14vw">
+            <el-form-item style="float: right;padding-right: 50px">
                 <el-radio-group @change="show = !show" v-model="radio" size="small">
                     <el-radio-button label="图标"></el-radio-button>
                     <el-radio-button label="列表"></el-radio-button>
@@ -250,11 +250,12 @@
         background: #fff;
     }
     #form .el-form-item{
-        width: 25vw;
+        /*width: 25vw;*/
         margin: 10px 0;
     }
     .big_box{
-        width: 100vw;
+        clear: both;
+        width: 100%;
         padding: 20px 50px;
         background: #fff;
     }
