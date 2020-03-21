@@ -105,8 +105,8 @@
                         ip: that.ip,
                         playMode: 1, // 回放
                         port: port,
-                        snapDir: that.imgPath+'\\'+'SnapDir'+'\\'+timer,
-                        videoDir: that.videoPath+'\\'+'VideoDir'+'\\'+timer,
+                        snapDir: that.imgPath+'\\'+'playbackImg'+'\\'+timer,
+                        videoDir: that.videoPath+'\\'+'playbackVideo'+'\\'+timer,
                         layout: layoutm,
                         enableHTTPS: enableHttps,
                         encryptedFields: encryptedFields
