@@ -24,9 +24,11 @@
                         <Mixed :data="list.area_health" ref="Mixed" style="width: 100%;height: 100%"></Mixed>
                     </dv-border-box-12>
                 </div>
-                <div class="cont2">
-                    <Button @click="back">back</Button>
-                    <Map style="width: 100%;height: 100%" :address_info="address_info" ref="map"></Map>
+                <div style="position: relative" class="cont2">
+                    <div @click="back" v-if="showBack">
+                        <dv-decoration-9 style="z-index:999;cursor: pointer;width:50px;height:50px;position: absolute;top: 20px;left: 20px;color: #7ec699;text-shadow: 0 0 3px #7acaec;">返回</dv-decoration-9>
+                    </div>
+                    <Map style="width: 100%;height: 100%" :address_info="address_info" ref="map" @showButton="showButton"></Map>
                     <ul>
                         <li>学校个数: <span>{{list.general.school}}</span></li>
                         <li>没有异常的学校: <span>{{list.general.yes_school}}</span></li>
@@ -63,11 +65,11 @@
                     <dv-border-box-12 class="box2">
                         <div style="display: flex;justify-content:flex-start">
                             <h2>当月重点人员陌生人员情况</h2>
-                            <select @change="getList" style="background: transparent;color: #fff;border-radius: 5px;margin-left: 20px" v-model="indexCode">
+                            <select @change="getMen" style="background: transparent;color: #fff;border-radius: 5px;margin-left: 20px" v-model="indexCode">
                                 <option style="color: #333" v-for="(item,index) in options" :label="item.name" :value="item.indexCode" :key="index"></option>
                             </select>
                         </div>
-                        <Dataset :data="list.regions_chart" :type="1" ref="Dataset" style="width: 100%;height: 100%"></Dataset>
+                        <Dataset :data="regions_chart" :type="1" ref="Dataset" style="width: 100%;height: 100%"></Dataset>
                     </dv-border-box-12>
                 </div>
                 <div class="cont1">
@@ -111,12 +113,13 @@
                             anomaly:'',
                         },
                         area_health:[],
-                        regions_chart:[],
                     },
+                    regions_chart:[],
                     indexCode:'',
                     options:'',
                     normal:[''],
                     anomaly:[''],
+                    showBack:false,
                 address_info:[],
                 config:{
                     header: ['列1', '列2', '列3'],
@@ -134,7 +137,7 @@
                     ],
                     index: true,
                     columnWidth: [50],
-                    align: ['center']
+                    align: ['center'],
                 },
                 config2:{
                     header: ['列1', '列2', '列3'],
@@ -153,7 +156,7 @@
                     index: true,
                     columnWidth: [50],
                     align: ['center'],
-                    carousel: 'page',
+                    // carousel: 'page',
                 },
             }
         },
@@ -166,12 +169,18 @@
             },
             back(){
                 this.$refs.map.init("LinHai");
+                this.showBack = false;
             },
             getAdd(){
                 let params ={};
                 this.$https.fetchPost('/plugin/statistics/api_index/getmapselectdir',params).then((res) => {
-                    this.options = res.regions;
-                    this.indexCode = res.regions[0].indexCode;
+                    this.getMen();
+                    this.$nextTick(function () {
+                        let that = this;
+                            that.options = res.regions;
+                            that.indexCode = res.regions[0].indexCode;
+                            that.$refs.map.init("LinHai");
+                    })
                 })
             },
             getList(){
@@ -182,11 +191,26 @@
                     this.anomaly[0] = Math.round(res.area_chart.anomaly/res.area_chart.all*100);
 
                     this.$nextTick(function () {
-                        this.$refs.Editor.init();
-                        this.$refs.Mixed.init();
+                        let that = this;
+                        setTimeout(()=>{
+                            that.$refs.Editor.init();
+                            that.$refs.Mixed.init();
+                            that.$refs.Dataset.init();
+                        }, 500)
+                    })
+                })
+            },
+            getMen(){
+                let params ={'indexCode':this.indexCode};
+                this.$https.fetchPost('/plugin/statistics/api_index/indexStatSchool',params).then((res) => {
+                    this.regions_chart = res;
+                    this.$nextTick(function () {
                         this.$refs.Dataset.init();
                     })
                 })
+            },
+            showButton(data){
+                this.showBack = data;
             }
         },
         mounted() {

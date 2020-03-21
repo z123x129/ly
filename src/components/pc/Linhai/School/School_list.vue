@@ -127,11 +127,22 @@
                 <el-button type="primary" @click="submitForm('form')">确 定</el-button>
             </div>
         </el-dialog>
+        <el-dialog
+                title="查看违规"
+                width="80%"
+                :visible.sync="dialogVisible">
+            <Violation_list :id="id"></Violation_list>
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="dialogVisible = false">取 消</el-button>
+              <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 <script>
     import { Form,FormItem,Select,Option,Button,Table,TableColumn,DatePicker,Pagination,Input,Dialog,Upload,Message,Cascader } from 'element-ui'
     import 'element-ui/lib/theme-chalk/index.css'
+    import Violation_list from './Violation_list'
     var layedit,index;
     export default {
         name:'School_list',
@@ -150,6 +161,7 @@
             [Upload.name]:Upload,
             [Message.name]:Message,
             [Cascader.name]:Cascader,
+            Violation_list
         },
         data(){
             return{
@@ -165,6 +177,7 @@
                 paginate:10,
                 paginates:5,
                 dialogFormVisible: false,
+                dialogVisible: false,
                 type: 1,
                 form: {
                     file:[]
@@ -195,7 +208,8 @@
                     content: [
                         {required: true, message: '上报内容不能为空', trigger: 'blur'},
                     ],
-                }
+                },
+                id:'',
             }
         },
         mounted(){
@@ -330,12 +344,14 @@
                 });
             },
             goViolation(id){
-                this.$router.push({
-                    name:'Violation_list',
-                    params:{
-                        id:id
-                    }
-                })
+                this.id = id;
+                this.dialogVisible = true;
+                // this.$router.replace({
+                //     name:'Violation_list',
+                //     params:{
+                //         id:id
+                //     }
+                // })
             },
         },
     }
