@@ -87,7 +87,7 @@
 
                     <div class="user-logo">
                         <fullscreen v-model="isFullscreen" style="margin-right: 10px;"/>
-                        <user  :message-unread-count="1000" :user-avatar="img"/>
+                        <user :message-unread-count="this.$store.state.route.messageList.length" :user-avatar="img"/>
 
                     </div>
                 </Header>
@@ -270,6 +270,10 @@
                         break;
                     case 'stranger':
                         that.open(data.content.msg,data.content.ageGroup,type);
+                        that.$store.commit("getMessage", data.content);
+                        break;
+                    case "school_violation":
+                        that.open(data.content.msg,data.content.name,type);
                         that.$store.commit("getMessage", data.content);
                         break;
                 }

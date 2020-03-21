@@ -31,8 +31,11 @@
                 var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
                 this.config1 = res_data.chart_Count;
                 this.list = res_data.allCount;
-                this.$nextTick(function () {
-                    this.$refs.Doughnut.init();
+                    this.$nextTick(function () {
+                        let that = this;
+                        setTimeout(() => {
+                            that.$refs.Doughnut.init();
+                        }, 500);
                 })
             })
         }

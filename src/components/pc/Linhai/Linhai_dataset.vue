@@ -31,7 +31,7 @@
             init(){
                 // 指定图表的配置项和数据
                 var option = {};
-                if(this.type){
+                if(this.type===1){
                     option = {
                         legend: {
                             textStyle: {
@@ -117,13 +117,208 @@
                             }
                         ],
                     };
+                }else if(this.type===2){
+                    option = {
+                        legend: {},
+                        tooltip: {},
+                        dataset: {
+                            source: [
+                                ['product','健康证过期比例','人脸抓拍告警次数','事件处理及时率'],
+                            ],
+                        },
+                        xAxis: {type: 'category'},
+                        yAxis:{},
+                        // Declare several bar series, each will be mapped
+                        // to a column of dataset.source by default.
+                        series: [
+                            {type: 'bar',
+                                itemStyle: {
+                                    normal: {
+                                        color: "#2AA956"
+                                    }
+                                },
+                            },
+                            {type: 'bar',
+                                itemStyle: {
+                                    normal: {
+                                        color: "#167FE1"
+                                    }
+                                },
+                            },
+                            {type: 'bar',
+                                itemStyle: {
+                                    normal: {
+                                        color: "#F9D337"
+                                    }
+                                },
+                            },
+                        ],
+                        dataZoom: [
+                            {
+                                show: false,
+                                realtime: false,
+                                start: 0,
+                                end: 100
+                            },
+                            {
+                                type: 'inside',
+                                realtime: false,
+                                start: 0,
+                                end: 100,
+                                textStyle:{
+                                    color:"#fff",
+                                }
+                            }
+                        ],
+                    };
+                }else if(this.type===3){
+                    option = {
+                        legend: {},
+                        tooltip: {},
+                        dataset: {
+                            source: [
+                                ['product','当月健康证未过期比例','上月健康证未过期比例'],
+                            ],
+                        },
+                        xAxis: {type: 'category'},
+                        yAxis:{name:'比例(%)'},
+                        // Declare several bar series, each will be mapped
+                        // to a column of dataset.source by default.
+                        series: [
+                            {type: 'bar',
+                                itemStyle: {
+                                    normal: {
+                                        color: "#2AA956"
+                                    }
+                                },
+                            },
+                            {type: 'bar',
+                                itemStyle: {
+                                    normal: {
+                                        color: "#167FE1"
+                                    }
+                                },
+                            },
+                        ],
+                        dataZoom: [
+                            {
+                                show: false,
+                                realtime: false,
+                                start: 0,
+                                end: 100
+                            },
+                            {
+                                type: 'inside',
+                                realtime: false,
+                                start: 0,
+                                end: 100,
+                                textStyle:{
+                                    color:"#fff",
+                                }
+                            }
+                        ],
+                    };
+                }else if(this.type===4){
+                    option = {
+                        legend: {},
+                        tooltip: {},
+                        dataset: {
+                            source: [
+                                ['product','当月人脸抓拍告警次数','上月人脸抓拍告警次数'],
+                            ],
+                        },
+                        xAxis: {type: 'category'},
+                        yAxis:{name:'次数(次)'},
+                        // Declare several bar series, each will be mapped
+                        // to a column of dataset.source by default.
+                        series: [
+                            {type: 'bar',
+                                itemStyle: {
+                                    normal: {
+                                        color: "#2AA956"
+                                    }
+                                },
+                            },
+                            {type: 'bar',
+                                itemStyle: {
+                                    normal: {
+                                        color: "#167FE1"
+                                    }
+                                },
+                            },
+                        ],
+                        dataZoom: [
+                            {
+                                show: false,
+                                realtime: false,
+                                start: 0,
+                                end: 100
+                            },
+                            {
+                                type: 'inside',
+                                realtime: false,
+                                start: 0,
+                                end: 100,
+                                textStyle:{
+                                    color:"#fff",
+                                }
+                            }
+                        ],
+                    };
+                }else if(this.type===5){
+                    option = {
+                        legend: {},
+                        tooltip: {},
+                        dataset: {
+                            source: [
+                                ['product','当月时间处理及时率','上月时间处理及时率'],
+                            ],
+                        },
+                        xAxis: {type: 'category'},
+                        yAxis:{name:'比例(%)'},
+                        // Declare several bar series, each will be mapped
+                        // to a column of dataset.source by default.
+                        series: [
+                            {type: 'bar',
+                                itemStyle: {
+                                    normal: {
+                                        color: "#2AA956"
+                                    }
+                                },
+                            },
+                            {type: 'bar',
+                                itemStyle: {
+                                    normal: {
+                                        color: "#167FE1"
+                                    }
+                                },
+                            },
+                        ],
+                        dataZoom: [
+                            {
+                                show: false,
+                                realtime: false,
+                                start: 0,
+                                end: 100
+                            },
+                            {
+                                type: 'inside',
+                                realtime: false,
+                                start: 0,
+                                end: 100,
+                                textStyle:{
+                                    color:"#fff",
+                                }
+                            }
+                        ],
+                    };
                 }else{
                     option = {
                         legend: {},
                         tooltip: {},
                         dataset: {
                             source: [
-                                ['product', '今天', '一周'],
+                                ['product', '今天', '一周','当月'],
                             ],
                         },
                         xAxis: {type: 'category',name:'学校'},
@@ -131,13 +326,48 @@
                         // Declare several bar series, each will be mapped
                         // to a column of dataset.source by default.
                         series: [
-                            {type: 'bar'},
-                            {type: 'bar'},
-                        ]
+                            {type: 'bar',
+                                itemStyle: {
+                                    normal: {
+                                        color: "#2AA956"
+                                    }
+                                },
+                            },
+                            {type: 'bar',
+                                itemStyle: {
+                                    normal: {
+                                        color: "#167FE1"
+                                    }
+                                },
+                            },
+                            {type: 'bar',
+                                itemStyle: {
+                                    normal: {
+                                        color: "#F9D337"
+                                    }
+                                },
+                            },
+                        ],
+                        dataZoom: [
+                            {
+                                show: false,
+                                realtime: false,
+                                start: 0,
+                                end: 100
+                            },
+                            {
+                                type: 'inside',
+                                realtime: false,
+                                start: 0,
+                                end: 100,
+                                textStyle:{
+                                    color:"#fff",
+                                }
+                            }
+                        ],
                     };
                 }
                 option.dataset.source = option.dataset.source.concat(this.data);
-                console.log(option.dataset.source)
                 // 使用刚指定的配置项和数据显示图表。
                 this.chart.setOption(option);
             }
