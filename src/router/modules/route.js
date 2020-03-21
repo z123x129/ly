@@ -61,7 +61,7 @@ export const asyncRouterMap = [
         name: '_home',
         component: Main,
         meta: {
-            icon: 'logo-buffer',
+            icon: 'ios-home',
             title: '首页',
             role: [1],//页面需要的权限
         },
@@ -70,7 +70,7 @@ export const asyncRouterMap = [
                 path: '/home',
                 name: 'home',
                 meta: {
-                    icon: 'md-arrow-dropdown-circle',
+                    icon: 'ios-home',
                     title: '首页',
                     role: [1],
                 },
@@ -108,7 +108,7 @@ export const asyncRouterMap = [
         name: 'command',
         component: Main,
         meta: {
-            icon: 'logo-buffer',
+            icon: 'md-map',
             title: '指挥中心',
             role: [1],
         },
@@ -117,7 +117,7 @@ export const asyncRouterMap = [
                 path: 'Map_conmand',
                 name: 'Map_conmand',
                 meta: {
-                    icon: 'md-arrow-dropdown-circle',
+                    icon: 'md-map',
                     title: '指挥中心',
                     role: [1],
                 },
@@ -130,7 +130,7 @@ export const asyncRouterMap = [
         name: 'monitor',
         component: Main,
         meta: {
-            icon: 'logo-buffer',
+            icon: 'ios-videocam',
             title: '查看监控',
             role: [1],
         },
@@ -139,7 +139,7 @@ export const asyncRouterMap = [
                 path: 'showVideo',
                 name: 'showVideo',
                 meta: {
-                    icon: 'md-arrow-dropdown-circle',
+                    icon: 'logo-youtube',
                     title: '视频监控',
                     role: [1],
                 },
@@ -149,7 +149,7 @@ export const asyncRouterMap = [
                 path: 'reVideo',
                 name: 'reVideo',
                 meta: {
-                    icon: 'md-arrow-dropdown-circle',
+                    icon: 'logo-vimeo',
                     title: '录像检索',
                     role: [1],
                 },
@@ -171,7 +171,7 @@ export const asyncRouterMap = [
                 path: 'Key_personnel',
                 name: 'Key_personnel',
                 meta: {
-                    icon: 'md-arrow-dropdown-circle',
+                    icon: 'ios-people',
                     title: '重点人员监控',
                     role: [1],
                 },
@@ -181,7 +181,7 @@ export const asyncRouterMap = [
                 path: 'Strange_people',
                 name: 'Strange_people',
                 meta: {
-                    icon: 'md-arrow-dropdown-circle',
+                    icon: 'ios-contact',
                     title: '陌生人员监控',
                     role: [1],
                 },
@@ -191,7 +191,7 @@ export const asyncRouterMap = [
                 path: 'Contrast',
                 name: 'Contrast',
                 meta: {
-                    icon: 'md-arrow-dropdown-circle',
+                    icon: 'md-stats',
                     title: '数据对比',
                     role: [1],
                 },
@@ -201,7 +201,7 @@ export const asyncRouterMap = [
                 path: 'School_show',
                 name: 'School_show',
                 meta: {
-                    icon: 'md-arrow-dropdown-circle',
+                    icon: 'md-school',
                     title: '学校列表展示',
                     role: [1],
                 },
@@ -215,7 +215,7 @@ export const asyncRouterMap = [
         name: 'wgy',
         component: Main,
         meta: {
-            icon: 'logo-buffer',
+            icon: 'ios-home',
             title: '首页',
             role: [2,3]
         },
@@ -224,7 +224,7 @@ export const asyncRouterMap = [
                 path: '/home',
                 name: 'home',
                 meta: {
-                    icon: 'md-arrow-dropdown-circle',
+                    icon: 'ios-home',
                     title: '首页',
                     role: [2,3]
                 },
@@ -237,7 +237,7 @@ export const asyncRouterMap = [
         name: 'maintain',
         component: Main,
         meta: {
-            icon: 'logo-buffer',
+            icon: 'ios-contact',
             title: '人员信息维护',
             role: [2]
         },
@@ -246,7 +246,7 @@ export const asyncRouterMap = [
                 path: '/Maintain_list',
                 name: 'Maintain_list',
                 meta: {
-                    icon: 'md-arrow-dropdown-circle',
+                    icon: 'ios-contact',
                     title: '人员信息维护',
                     role: [2]
                 },
@@ -259,7 +259,7 @@ export const asyncRouterMap = [
         name: 'message',
         component: Main,
         meta: {
-            icon: 'logo-buffer',
+            icon: 'md-school',
             title: '学校信息维护',
             role: [2]
         },
@@ -268,7 +268,7 @@ export const asyncRouterMap = [
                 path: '/Message_edit',
                 name: 'Message_edit',
                 meta: {
-                    icon: 'md-arrow-dropdown-circle',
+                    icon: 'md-school',
                     title: '学校信息维护',
                     role: [2]
                 },
@@ -304,7 +304,7 @@ export const asyncRouterMap = [
         name: 'school',
         component: Main,
         meta: {
-            icon: 'logo-buffer',
+            icon: 'md-school',
             title: '学校列表',
             role: [3]
         },
@@ -313,7 +313,7 @@ export const asyncRouterMap = [
                 path: 'School_list',
                 name: 'School_list',
                 meta: {
-                    icon: 'md-arrow-dropdown-circle',
+                    icon: 'ios-clipboard-outline',
                     title: '学校列表',
                     role: [3]
                 },
@@ -323,7 +323,7 @@ export const asyncRouterMap = [
                 path: 'Violation_list',
                 name: 'Violation_list',
                 meta: {
-                    icon: 'md-arrow-dropdown-circle',
+                    icon: 'ios-flash-outline',
                     title: '违规列表',
                     hideInMenu: true,
                     role: [3],
@@ -338,7 +338,7 @@ export const asyncRouterMap = [
         name: 'alert',
         component: Main,
         meta: {
-            icon: 'logo-buffer',
+            icon: 'md-information-circle',
             title: '警报监测',
             role: [2,3]
         },
@@ -347,7 +347,7 @@ export const asyncRouterMap = [
                 path: '/Alert_monitor',
                 name: 'Alert_monitor',
                 meta: {
-                    icon: 'md-arrow-dropdown-circle',
+                    icon: 'md-information-circle',
                     title: '警报监测',
                     role: [2,3]
                 },
