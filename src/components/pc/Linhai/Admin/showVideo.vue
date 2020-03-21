@@ -85,6 +85,7 @@
                 if(!this.$refs.H1.checkWebC()) return//如果插件未初始化
                 const that = this
                 window.onresize = () => {
+                    console.log('改变大小')
                     var target = this;
                     if (target.resizeFlag) {
                         clearTimeout(target.resizeFlag);
@@ -94,12 +95,12 @@
                         that.$refs.H1.resizeWindow(that.$refs.H1.$el.offsetHeight,that.$refs.H1.$el.offsetWidth);
                         target.resizeFlag = null;
                     }, 200);
-                    // that.$refs.H1.resizeWindow(that.$refs.H1.$el.offsetHeight,that.$refs.H1.$el.offsetWidth);
-                    // console.log('高度',that.$refs.H1.$el.offsetHeight)
-                    // console.log('宽度',that.$refs.H1.$el.offsetWidth)
                 }
             },
 
+        },
+        activated(){
+            this.resize();
         }
 
     }
