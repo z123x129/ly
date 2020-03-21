@@ -56,7 +56,7 @@
                     </dv-border-box-12>
                     <dv-border-box-12 class="box1">
                         <h2>学校超市情况</h2>
-                        <dv-scroll-board :config="config2" style="width:94%;height:82%;margin: 3%" />
+                        <dv-scroll-board @click="getWeigui" :config="config2" style="width:94%;height:82%;margin: 3%" />
                     </dv-border-box-12>
                 </div>
             </div>
@@ -139,25 +139,7 @@
                     columnWidth: [50],
                     align: ['center'],
                 },
-                config2:{
-                    header: ['列1', '列2', '列3'],
-                    data: [
-                        ['行1列1', '行1列2', '行1列3'],
-                        ['行2列1', '行2列2', '行2列3'],
-                        ['行3列1', '行3列2', '行3列3'],
-                        ['行4列1', '行4列2', '行4列3'],
-                        ['行5列1', '行5列2', '行5列3'],
-                        ['行6列1', '行6列2', '行6列3'],
-                        ['行7列1', '行7列2', '行7列3'],
-                        ['行8列1', '行8列2', '行8列3'],
-                        ['行9列1', '行9列2', '行9列3'],
-                        ['行10列1', '行10列2', '行10列3']
-                    ],
-                    index: true,
-                    columnWidth: [50],
-                    align: ['center'],
-                    // carousel: 'page',
-                },
+                config2:{},
             }
         },
         methods:{
@@ -177,9 +159,11 @@
                     this.getMen();
                     this.$nextTick(function () {
                         let that = this;
+                        setTimeout(()=>{
                             that.options = res.regions;
                             that.indexCode = res.regions[0].indexCode;
                             that.$refs.map.init("LinHai");
+                        },500)
                     })
                 })
             },
@@ -205,18 +189,50 @@
                 this.$https.fetchPost('/plugin/statistics/api_index/indexStatSchool',params).then((res) => {
                     this.regions_chart = res;
                     this.$nextTick(function () {
-                        this.$refs.Dataset.init();
+                        let that = this;
+                        setTimeout(()=>{
+                            that.$refs.Dataset.init();
+                        },500)
                     })
                 })
             },
             showButton(data){
                 this.showBack = data;
+            },
+            getSchool(){
+                let params ={};
+                this.$https.fetchPost('/plugin/statistics/api_index/schoolViolation',params).then((res) => {
+                    var arr = [];
+                    var data = [];
+                    for (let i = 0; i < res.length ; i++) {
+                        arr.push(res[i].name);
+                        arr.push(res[i].violation);
+                        arr.push(res[i].num);
+                        arr.push(res[i].code);
+                        arr.push(res[i].id);
+                        data.push(arr);
+                        data.push(arr);
+                        arr = []
+                    }
+                    this.config2 = {
+                        header: ['学校','违规选项','违规次数','严重级别'],
+                        data: data,
+                        index: true,
+                        columnWidth: [40,120,100,90,90],
+                        align: ['center','center','center','center','center'],
+                    };
+
+                })
+            },
+            getWeigui(row){
+                console.log(row)
             }
         },
         mounted() {
             this.getAddress();
             this.getList();
             this.getAdd();
+            this.getSchool();
         }
     }
 </script>
@@ -354,5 +370,11 @@
     }
     .cont_long {
         overflow: -moz-scrollbars-none;
+    }
+    .dv-scroll-board /deep/ .header{
+        font-size: 14px;
+    }
+    .dv-scroll-board /deep/ .rows .row-item{
+        font-size: 12px;
     }
 </style>

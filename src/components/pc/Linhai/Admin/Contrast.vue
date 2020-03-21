@@ -128,24 +128,18 @@
                     }
                 })
             },
-            changeValue1(){
-
-            },
-            onSubmit() {
-                console.log('submit!');
-            },
             getData(){
                 if(this.value1 === true){
                     let params ={'indexCode':this.formInline.indexCode};
                     this.$https.fetchPost('/plugin/statistics/api_index/dataContrast',params).then((res) => {
-                        console.log(res)
                         this.data = res.top_chart;
                         this.tableData = res.dir;
-                        this.$nextTick(function () {
-                            this.$refs.Dataset.init();
-                            this.getDataset(res.top_chart[0][4])
-                        })
-
+                        if(this.value2 === true){
+                            this.$nextTick(function () {
+                                this.$refs.Dataset.init();
+                                this.getDataset(res.top_chart[0][4])
+                            })
+                        }
                     })
                 }else{
                     let params ={};
@@ -153,7 +147,7 @@
                         this.data = res;
                         this.$nextTick(function () {
                             this.$refs.Dataset.init();
-                            this.getDataset(res[0][4])
+                            this.getDataset(res[0][4]);
                         })
                     })
                 }
@@ -175,20 +169,27 @@
                         })
                     })
                 }else{
-                    let params ={'indexCode':id};
-                    this.$https.fetchPost('/plugin/statistics/api_index/getRegionsHealth',params).then((res) => {
-                        this.data1[0] = res[0];
-                        this.data2[0] = res[1];
-                        this.data3[0] = res[2];
-                        this.$nextTick(function () {
-                            let that = this;
-                            setTimeout(()=>{
-                                that.$refs.Dataset1.init();
-                                that.$refs.Dataset2.init();
-                                that.$refs.Dataset3.init();
-                            },500)
+                    if(this.value2 === true){
+                        let params ={'indexCode':id};
+                        this.$https.fetchPost('/plugin/statistics/api_index/getRegionsHealth',params).then((res) => {
+                            this.data1[0] = res[0];
+                            this.data2[0] = res[1];
+                            this.data3[0] = res[2];
+                            this.$nextTick(function () {
+                                let that = this;
+                                setTimeout(()=>{
+                                    that.$refs.Dataset1.init();
+                                    that.$refs.Dataset2.init();
+                                    that.$refs.Dataset3.init();
+                                },500)
+                            })
+                        });
+                    }else{
+                        let paramss ={'indexCode':id};
+                        this.$https.fetchPost('/plugin/statistics/api_index/dataContrast',paramss).then((res) => {
+                            this.tableData = res.dir;
                         })
-                    })
+                    }
                 }
             }
         },
