@@ -66,7 +66,9 @@
             getvideo(data){//选择摄像头
                let _this=this
                 if(!data.children){
-                    this.$refs.H1.videoPlay(data.cameraIndexCode,null,null,null,null,null,1579104000,1584374399);//传入摄像头编码
+                    var endTime = Math.floor((new Date(new Date().toLocaleDateString()).getTime()) / 1000)//当天零点
+                    // var startTime = new Date(new Date().toLocaleDateString()).getTime()
+                    this.$refs.H1.videoPlay(data.cameraIndexCode,null,null,null,null,null,1579104000,endTime);//传入摄像头编码
                     // console.log(data.cameraIndexCode)
                 }
             },
@@ -84,6 +86,7 @@
             resize(){
                 if(!this.$refs.H1.checkWebC()) return//如果插件未初始化
                 const that = this
+                console.log('改变大小1')
                 window.onresize = () => {
                     var target = this;
                     if (target.resizeFlag) {
@@ -96,6 +99,9 @@
                     }, 200);
                 }
             },
+        },
+        activated(){
+            this.resize();
         }
     }
 </script>
