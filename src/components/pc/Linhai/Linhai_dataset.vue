@@ -137,7 +137,6 @@
                     };
                 }
                 option.dataset.source = option.dataset.source.concat(this.data);
-                console.log(option.dataset.source)
                 // 使用刚指定的配置项和数据显示图表。
                 this.chart.setOption(option);
             }

@@ -63,11 +63,11 @@
                     <dv-border-box-12 class="box2">
                         <div style="display: flex;justify-content:flex-start">
                             <h2>当月重点人员陌生人员情况</h2>
-                            <select @change="getList" style="background: transparent;color: #fff;border-radius: 5px;margin-left: 20px" v-model="indexCode">
+                            <select @change="getMen" style="background: transparent;color: #fff;border-radius: 5px;margin-left: 20px" v-model="indexCode">
                                 <option style="color: #333" v-for="(item,index) in options" :label="item.name" :value="item.indexCode" :key="index"></option>
                             </select>
                         </div>
-                        <Dataset :data="list.regions_chart" :type="1" ref="Dataset" style="width: 100%;height: 100%"></Dataset>
+                        <Dataset :data="regions_chart" :type="1" ref="Dataset" style="width: 100%;height: 100%"></Dataset>
                     </dv-border-box-12>
                 </div>
                 <div class="cont1">
@@ -111,8 +111,8 @@
                             anomaly:'',
                         },
                         area_health:[],
-                        regions_chart:[],
                     },
+                    regions_chart:[],
                     indexCode:'',
                     options:'',
                     normal:[''],
@@ -172,6 +172,7 @@
                 this.$https.fetchPost('/plugin/statistics/api_index/getmapselectdir',params).then((res) => {
                     this.options = res.regions;
                     this.indexCode = res.regions[0].indexCode;
+                    this.getMen();
                 })
             },
             getList(){
@@ -184,10 +185,18 @@
                     this.$nextTick(function () {
                         this.$refs.Editor.init();
                         this.$refs.Mixed.init();
+                    })
+                })
+            },
+            getMen(){
+                let params ={'indexCode':this.indexCode};
+                this.$https.fetchPost('/plugin/statistics/api_index/indexStatSchool',params).then((res) => {
+                    this.regions_chart = res;
+                    this.$nextTick(function () {
                         this.$refs.Dataset.init();
                     })
                 })
-            }
+            },
         },
         mounted() {
             this.getAddress();
