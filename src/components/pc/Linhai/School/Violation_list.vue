@@ -123,7 +123,8 @@
         </div>
         <el-dialog
                 :title=title
-                :visible.sync="dialogFormVisible">
+                :visible.sync="dialogFormVisible"
+                append-to-body>
             <span v-html="content"></span>
         </el-dialog>
     </div>
@@ -147,6 +148,7 @@
             [Badge.name]:Badge,
             [Dialog.name]:Dialog,
         },
+        props:['id'],
         data(){
             return{
                 formInline: {
@@ -196,13 +198,13 @@
             this.getList();
         },
         methods: {
-            getList(){ //获取学校列表
+            getList(id){
                 var timeStart = '',timeEnd = '';
                 if(this.formInline.timeStr !== null){
                     timeStart = this.formInline.timeStr[0];
                     timeEnd = this.formInline.timeStr[1];
                 }
-                let params ={'id':this.$route.params.id,
+                let params ={'id':this.id,
                     'page':this.page,'paginate':this.paginate,
                     'timeStart':timeStart,
                     'timeEnd':timeEnd,

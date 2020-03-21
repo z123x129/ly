@@ -87,7 +87,7 @@
 
                     <div class="user-logo">
                         <fullscreen v-model="isFullscreen" style="margin-right: 10px;"/>
-                        <user  :message-unread-count="1000" :user-avatar="img"/>
+                        <user :message-unread-count="this.$store.state.route.messageList.length" :user-avatar="img"/>
 
                     </div>
                 </Header>
