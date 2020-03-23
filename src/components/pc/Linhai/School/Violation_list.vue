@@ -194,11 +194,13 @@
                 dialogFormVisible: false,
             }
         },
-        mounted(){
-            this.getList();
+        watch:{
+            'id'(){
+                this.getList();
+            }
         },
         methods: {
-            getList(id){
+            getList(){
                 var timeStart = '',timeEnd = '';
                 if(this.formInline.timeStr !== null){
                     timeStart = this.formInline.timeStr[0];

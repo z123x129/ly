@@ -131,7 +131,7 @@
                 title="查看违规"
                 width="80%"
                 :visible.sync="dialogVisible">
-            <Violation_list :id="id"></Violation_list>
+            <Violation_list :id="id" ref="child"></Violation_list>
             <span slot="footer" class="dialog-footer">
               <el-button @click="dialogVisible = false">取 消</el-button>
               <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
@@ -346,12 +346,6 @@
             goViolation(id){
                 this.id = id;
                 this.dialogVisible = true;
-                // this.$router.replace({
-                //     name:'Violation_list',
-                //     params:{
-                //         id:id
-                //     }
-                // })
             },
         },
     }

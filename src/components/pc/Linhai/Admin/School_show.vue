@@ -29,7 +29,7 @@
                     </el-form-item>
                     <el-form-item style="margin-top: -2px">
                         <el-button size="small" type="primary" @click="getList">搜索</el-button>
-                        <el-button size="small" type="primary" @click="onSubmit">导出excel</el-button>
+                        <el-button size="small" type="primary" @click="exports">导出excel</el-button>
                     </el-form-item>
                 </el-form>
                 <el-table
@@ -360,8 +360,29 @@
                     })
                 }
             },
-            onSubmit() {
-                window.console.log('submit!');
+            exports(){
+                console.log(this.tableData)
+                let xlsCell = [["MIID","ID"],["nickname","姓名"],["name","所属地区"],["dirName","所属学校"],["mobile","手机号"],
+                    ["face_thumb","人脸照片"],["health_card","健康证照片"],["health_endtime","健康证到期时间"],["member_type","人员类别"]];
+                let xlsData = [];
+                for (let i = 0; i <this.tableData.length ; i++) {
+                    xlsData.push({
+                        'MIID': this.tableData[i].MIID,
+                        'nickname': this.tableData[i].nickname,
+                        'name': this.tableData[i].name,
+                        'dirName': this.tableData[i].dirName,
+                        'mobile': this.tableData[i].mobile,
+                        'face_thumb': String(this.tableData[i].face_thumb),
+                        'health_card': String(this.tableData[i].health_card),
+                        'health_endtime': this.tableData[i].health_endtime,
+                        'member_type': this.tableData[i].member_type,
+                    })
+                }
+                let params ={'xlsName':'健康证人员列表','isImg':'6,7','xlsCell':xlsCell,'xlsData':xlsData,};
+                params = this.$secret_key.func(this.$store.state.on_off, params);
+                this.$https.fetchPost('/plugin/school/api_index/out_excel',params).then((res) => {
+                    window.location.href=res;
+                })
             },
             handleSizeChange(val) {//分页器
                 this.paginate = val;
