@@ -177,9 +177,11 @@
                     this.getMen();
                     this.$nextTick(function () {
                         let that = this;
+                        setTimeout(()=>{
                             that.options = res.regions;
                             that.indexCode = res.regions[0].indexCode;
                             that.$refs.map.init("LinHai");
+                        }, 500)
                     })
                 })
             },
@@ -205,7 +207,10 @@
                 this.$https.fetchPost('/plugin/statistics/api_index/indexStatSchool',params).then((res) => {
                     this.regions_chart = res;
                     this.$nextTick(function () {
-                        this.$refs.Dataset.init();
+                        let that = this;
+                        setTimeout(()=>{
+                            that.$refs.Dataset.init();
+                        }, 500)
                     })
                 })
             },
