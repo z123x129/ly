@@ -2,11 +2,19 @@
     <div id="i1" style="width: 100%">
         <div class="demo">
             <p>摄像点选择:</p>
-            <el-input style="padding: 10px"
-                    size="small"
+            <el-input size="small"
                     placeholder="输入关键字进行过滤"
                     v-model="filterText">
             </el-input>
+            <DatePicker type="datetimerange" 
+                        format="yyyy-MM-dd HH:mm" 
+                        placement="bottom-end"
+                        placeholder="选择需要查看的时段"
+                        separator=" ~ "
+                        :value="videotime"
+                        @on-change = "changeData"
+            >
+            </DatePicker>
             <el-tree
                     class="filter-tree"
                     :data="data"
@@ -41,6 +49,7 @@
                 label: 'label'
             },
             ddd:'bWebControl',
+            videotime:[new Date(),new Date()]
 
           }
         },
@@ -64,11 +73,12 @@
                 })
             },
             getvideo(data){//选择摄像头
-               let _this=this
+                let _this=this
+                var startTime =Math.floor((this.videotime[0].getTime()) / 1000)
+                var endTime =Math.floor((this.videotime[1].getTime()) / 1000)
                 if(!data.children){
-                    var endTime = Math.floor((new Date(new Date().toLocaleDateString()).getTime()) / 1000)//当天零点
-                    // var startTime = new Date(new Date().toLocaleDateString()).getTime()
-                    this.$refs.H1.videoPlay(data.cameraIndexCode,null,null,null,null,null,1579104000,endTime);//传入摄像头编码
+                    // var endTime = Math.floor((new Date(new Date().toLocaleDateString()).getTime()) / 1000)//当天零点
+                    this.$refs.H1.videoPlay(data.cameraIndexCode,null,null,null,null,null,startTime,endTime);//传入摄像头编码
                     // console.log(data.cameraIndexCode)
                 }
             },
@@ -79,6 +89,10 @@
                 });//初始化
 
             },
+            changeData(data){
+                this.videotime[0] = new Date(data[0].replace('-', '/').replace('-', '/'))
+                this.videotime[1] = new Date(data[1].replace('-', '/').replace('-', '/'))
+            },
             filterNode(value, data) {
                 if (!value) return true;
                 return data.label.indexOf(value) !== -1;
@@ -86,7 +100,6 @@
             resize(){
                 if(!this.$refs.H1.checkWebC()) return//如果插件未初始化
                 const that = this
-                console.log('改变大小1')
                 window.onresize = () => {
                     var target = this;
                     if (target.resizeFlag) {
@@ -116,12 +129,20 @@
     .demo{
         // width: 18%;
         // float: left;
-        // min-width: 200px;
+        max-width: 300px;
         padding: 10px;
         box-sizing: border-box;
         height: 100%;
         background: #fff;
         overflow: auto;
+        .el-input{
+            width:100%;
+            padding: 10px 0;
+        }
+        .ivu-date-picker{
+            width:100%;
+            margin-bottom:5px;
+        }
     }
     .videobox{
         // float: left;
