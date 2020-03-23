@@ -1,34 +1,5 @@
 <template>
     <div class="cont">
-        <!-- <div class="header">
-            <p>
-                <img width="40px" height="40px" :src="logo" />
-                卓远商城后台管理</p>
-        </div> -->
-        <!-- <div class="container">
-            <Row style="width: 360px;margin-right: 150px">
-                <Col style="width: 100%" span="11">
-                    <Card style="border: 1px solid #cfe4ea;">
-                        <p style="color: #666" slot="title">用户登录</p>
-                        <Form ref="formInline" :model="formInline" inline>
-                            <FormItem prop="user">
-                                <Input type="text" v-model="formInline.user" placeholder="用户名">
-                                    <Icon type="ios-person-outline" slot="prepend"></Icon>
-                                </Input>
-                            </FormItem>
-                            <FormItem prop="password">
-                                <Input type="password" v-model="formInline.password" placeholder="密码">
-                                    <Icon type="ios-lock-outline" slot="prepend"></Icon>
-                                </Input>
-                            </FormItem>
-                            <FormItem>
-                                <Button type="primary" @click="handleSubmit('formInline')">登录</Button>
-                            </FormItem>
-                        </Form>
-                    </Card>
-                </Col>
-            </Row>
-        </div> -->
         <div class="loginBox">
             <div class="title">
                 <h3>用户登录</h3>
