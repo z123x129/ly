@@ -164,6 +164,7 @@
                             that.indexCode = res.regions[0].indexCode;
                             that.$refs.map.init("LinHai");
                         },500)
+
                     })
                 })
             },
@@ -193,6 +194,7 @@
                         setTimeout(()=>{
                             that.$refs.Dataset.init();
                         },500)
+
                     })
                 })
             },

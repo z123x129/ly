@@ -85,7 +85,7 @@ export const asyncRouterMap = [
         meta: {
             icon: 'logo-buffer',
             title: '设置',
-            role: [1,2,3],
+            role: [1],
             hideInMenu: true,
         },
         children:[
@@ -95,7 +95,7 @@ export const asyncRouterMap = [
                 meta: {
                     icon: 'md-arrow-dropdown-circle',
                     title: '设置',
-                    role: [1,2,3],
+                    role: [1],
                     hideInMenu: true,
                 },
                 component: Setting
