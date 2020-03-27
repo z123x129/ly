@@ -109,7 +109,7 @@
                     <el-upload ref="my-upload"
                                class="upload-demo"
                                drag
-                               action="/public/plugin/file_manage/api_index/upload_img"
+                               :action='url+"/public/plugin/file_manage/api_index/upload_img"'
                                :on-success="handleAvatarSuccess"
                                :before-upload="beforeAvatarUpload"
                                :on-remove="removeFile"
@@ -156,6 +156,7 @@
         },
         data(){
             return{
+                url:this.$store.state.route.http,
                 formInline: {
                     user_login: '',
                     personCharge: '',

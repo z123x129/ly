@@ -132,7 +132,7 @@
                             type: 'bar',
                             itemStyle: {
                                 normal: {
-                                    color: "#167FE1"
+                                    color: "#2AA956"
                                 }
                             },
                             data: this.data[1],
@@ -142,7 +142,7 @@
                             type: 'bar',
                             itemStyle: {
                                 normal: {
-                                    color: "#2AA956"
+                                    color: "#f44336"
                                 }
                             },
                             data: this.data[2],

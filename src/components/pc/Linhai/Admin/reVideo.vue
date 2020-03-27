@@ -6,8 +6,8 @@
                     placeholder="输入关键字进行过滤"
                     v-model="filterText">
             </el-input>
-            <DatePicker type="datetimerange" 
-                        format="yyyy-MM-dd HH:mm" 
+            <DatePicker type="datetimerange"
+                        format="yyyy-MM-dd HH:mm"
                         placement="bottom-end"
                         placeholder="选择需要查看的时段"
                         separator=" ~ "
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-    import { Input,Tree } from 'element-ui'
+    import { Input,Tree ,Message} from 'element-ui'
     import Hikr from "../component/Hik/Hik_revideo"
 
     export default {
@@ -37,7 +37,9 @@
         components:{
             [Input.name]:Input,
             [Tree.name]:Tree,
-            Hikr
+            [ Message.name]: Message,
+            Hikr,
+
         },
         data(){
           return{
@@ -74,11 +76,16 @@
             },
             getvideo(data){//选择摄像头
                 let _this=this
-                var startTime =Math.floor((this.videotime[0].getTime()) / 1000)
-                var endTime =Math.floor((this.videotime[1].getTime()) / 1000)
                 if(!data.children){
+                    let startTime =Math.floor((this.videotime[0].getTime()) / 1000)
+                    let endTime =Math.floor((this.videotime[1].getTime()) / 1000)
+                    if(isNaN(startTime) || isNaN(endTime))
+                    {
+                        Message.error("请选择查看录像的时段");
+                        return ;
+                    }
                     // var endTime = Math.floor((new Date(new Date().toLocaleDateString()).getTime()) / 1000)//当天零点
-                    this.$refs.H1.videoPlay(data.cameraIndexCode,null,null,null,null,null,startTime,endTime);//传入摄像头编码
+                    this.$refs.H1.videoPlay(data.cameraIndexCode,function(){},null,null,null,null,startTime,endTime);//传入摄像头编码
                     // console.log(data.cameraIndexCode)
                 }
             },

@@ -27,15 +27,20 @@
             this.chart = echarts.init(this.$refs.chart);
             var that = this;
             this.chart.on('click', function (params) {
-                var city = params.data.value;
-                that.init(city)
-                that.showButton();
+
+                var city = params.data.py;
+                if(that.mapInfo.hasOwnProperty(city))
+                {
+                    // that.init(city)
+
+                    that.getAreaInfo(city, params.data.indexCode, params.name)
+
+                }
             });
             //that.init("LinHai");
             // 浏览器自适应
             window.addEventListener('resize', ()=> {
                 this.chart.resize();
-
             })
         },
         methods:{
@@ -86,21 +91,24 @@
                 this.chart.hideLoading();
                 let option = null;
                 this.chart.setOption(option = {
-                    // tooltip: {
-                    //     trigger: 'item',
-                    //     formatter: function (params) {
-                    //         // console.log(params);
-                    //         return params.name+"的摄像头个数："+params.value[2];
-                    //     }
-                    // },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: function (params) {
+                             if(typeof(params.data.value)== "object")
+                                 return '存在异常学校'+params.data.value[2]+"个";
+                            // return params.name+"的摄像头个数："+params.value[2];
+                        }
+                    },
                     legend: {
                         orient: 'vertical',
                         left: 'left',
-                        data:['正常','异常'],
-                        bottom:"20",
+                        data:["正常","异常"],
                         textStyle:{//图例文字的样式
                             color:'#ffffff',
-                        }
+                        },
+                        icon:"pin",
+                        bottom:"20",
+
                     },
                     toolbox: {
                         show: false, //此字段表示是否显示或启用
@@ -117,8 +125,8 @@
                     },
                     geo: {
                         map:initData,
-                        //zoom: 1.2,   //地图初始大小，这里是关键，一定要放在 series中  因为geo在series中会加载，所以zoom放在此处
-                        //roam: true,
+                        zoom: 1,   //地图初始大小，这里是关键，一定要放在 series中  因为geo在series中会加载，所以zoom放在此处
+                        // roam: true,
 
                     },
                     series: [
@@ -126,20 +134,28 @@
                             name: initData,
                             type: 'map',
                             map: initData,
+                            zoom: 1,
                             data:this.address_info.map((item)=>{
                                 return{
                                     name:item.name,
                                     value:item.abbr,
+                                    py:item.abbr,
+                                    indexCode:item.indexCode,
                                     label:{
                                         normal: {
                                             show: true,
-                                            color:'#f2f2f2'
+                                            color:'#f2f2f2',
+                                            textStyle:{
+                                                fontSize:11
+                                            }
                                         },
                                         emphasis: {
+                                            show:true,
                                             textStyle: {
-                                                color: '#fff'
+                                                color: '#fff',
+                                                fontSize:11
                                             }
-                                        }
+                                        },
                                     },
                                     itemStyle: {
                                         normal: {
@@ -153,75 +169,227 @@
                                     }
                                 }
                             })
-
-
-
                         },
-                        // {
-                        //     name:"正常",
-                        //     type: 'scatter',
-                        //     coordinateSystem: 'geo',
-                        //     showEffectOn: 'render',
-                        //     data: mapData.map(function (itemOpt) { //散点生成
-                        //         return {
-                        //             name: itemOpt.name,
-                        //             value: [
-                        //                 itemOpt.longitude,
-                        //                 itemOpt.latitude,
-                        //                 itemOpt.value
-                        //             ],
-                        //             label: {
-                        //                 formatter: '{b}',
-                        //                 position: 'right',
-                        //                 show: false,
-                        //                 color:'#000'
-                        //
-                        //             },
-                        //             itemStyle: {
-                        //                 normal: {
-                        //                     color: '#ff6521'
-                        //                 }
-                        //             }
-                        //         };
-                        //     })
-                        // },
-                        // {
-                        //     name:"异常",
-                        //     type: 'scatter',
-                        //     coordinateSystem: 'geo',
-                        //     showEffectOn: 'render',
-                        //     data: disAline.map(function (itemOpt) { //散点生成
-                        //         return {
-                        //             name: itemOpt.name,
-                        //             value: [
-                        //                 itemOpt.longitude,
-                        //                 itemOpt.latitude,
-                        //                 itemOpt.value
-                        //             ],
-                        //
-                        //
-                        //             label: {
-                        //                 formatter: '{b}',
-                        //                 position: 'right',
-                        //                 show: false,
-                        //                 color:'#000'
-                        //
-                        //             },
-                        //             itemStyle: {
-                        //                 normal: {
-                        //                     color: '#000'
-                        //                 }
-                        //             }
-                        //         };
-                        //     })
-                        // },
+                        {
+                            name:"正常",
+                            type: 'scatter',
+                            coordinateSystem: 'geo',
+                            showEffectOn: 'render',
+                            showSymbol: true,
+                            symbolSize:20,
+                            symbol:"pin",
+                            color:"#4caf50",
+                            data: this.address_info.map(function (itemOpt) { //散点生成
+                                if(itemOpt.abbr == 'lhs' || itemOpt.abbr == 'tmg')
+                                    return;
+                                if(itemOpt.is_normal != 1)
+                                    return;
+                                return {
+                                    name: itemOpt.name,
+                                    value: [
+                                        itemOpt.longitude,
+                                        itemOpt.latitude,
+                                        itemOpt.stranger_num,
+                                    ],
+                                    py:itemOpt.abbr,
+                                    indexCode:itemOpt.indexCode,
+                                    itemStyle: {
+                                        normal: {
+                                            color: '#4caf50'
+                                        }
+                                    }
+                                };
+                            })
+                        },
+                        {
+                            name:"异常",
+                            type: 'scatter',
+                            coordinateSystem: 'geo',
+                            showEffectOn: 'render',
+                            showSymbol: true,
+                            symbolSize:20,
+                            symbol:"pin",
+                            color:"#d9001b",
+                            data: this.address_info.map(function (itemOpt) { //散点生成
+                                if(itemOpt.abbr == 'lhs' || itemOpt.abbr == 'tmg')
+                                    return;
+                                if(itemOpt.is_normal == 1)
+                                    return;
+                                return {
+                                    name: itemOpt.name,
+                                    value: [
+                                        itemOpt.longitude,
+                                        itemOpt.latitude,
+                                        itemOpt.stranger_num
+                                    ],
+                                    py:itemOpt.abbr,
+                                    indexCode:itemOpt.indexCode,
+                                    itemStyle: {
+                                        normal: {
+                                            color: '#d9001b'
+                                        }
+                                    }
+                                };
+                            })
+                        }
+                    ]
+                },true);
+            },
+            changeCityMap(city, data)
+            {
+                this.chart.showLoading();
+                var result = this.mapInfo[city]["mapInfo"];
 
+                echarts.registerMap(city, result); //加载地图数据
+                this.chart.hideLoading();
+                let option = null;
+                this.chart.setOption(option = {
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: function (params) {
+                            console.log(params);
+                            if(typeof(params.data.value)== "object")
+                                return params.data.name+'检测到异常数:'+params.data.value[2]+"个";
+                            // return params.name+"的摄像头个数："+params.value[2];
+                        }
+                    },
+                    legend: {
+                        orient: 'vertical',
+                        left: 'left',
+                        data:["正常","异常"],
+                        textStyle:{//图例文字的样式
+                            color:'#ffffff',
+                        },
+                        icon:"pin",
+                        bottom:"20",
+
+                    },
+                    toolbox: {
+                        show: false, //此字段表示是否显示或启用
+                        //orient: 'vertical', //工具栏
+                        left: 'left',
+                        top: 'top',
+                        feature: {
+                            dataView: {
+                                readOnly: false
+                            },
+                            restore: {},
+                            saveAsImage: {}
+                        }
+                    },
+                    geo: {
+                        map:city,
+                        //zoom: 1.2,   //地图初始大小，这里是关键，一定要放在 series中  因为geo在series中会加载，所以zoom放在此处
+                        //roam: true,
+                    },
+                    series: [
+                        {
+                            name: city,
+                            type: 'map',
+                            map: city,
+                            data:this.address_info.map((item)=>{
+                                return{
+                                    name:item.name,
+                                    value:item.abbr,
+                                    label:{
+                                        normal: {
+                                            show: true,
+                                            color:'#f2f2f2',
+                                            textStyle:{
+                                                fontSize:11
+                                            }
+                                        },
+                                        emphasis: {
+                                            show:true,
+                                            textStyle: {
+                                                color: '#fff',
+                                                fontSize:11
+                                            }
+                                        },
+                                    },
+                                    itemStyle: {
+                                        normal: {
+                                            borderColor: '#ffffff', //区域边框颜色
+                                            areaColor: '#253752', //区域填充颜色
+                                        },
+                                        emphasis: {
+                                            borderColor: '#ffffff', //区域边框颜色
+                                            areaColor: '#253752',
+                                        }
+                                    }
+                                }
+                            })
+                        },
+                        {
+                            name:"正常",
+                            type: 'scatter',
+                            coordinateSystem: 'geo',
+                            showEffectOn: 'render',
+                            showSymbol: true,
+                            symbolSize:20,
+                            symbol:"pin",
+                            color:"#4caf50",
+                            data: data.map(function (itemOpt) { //散点生成
+                                if(itemOpt.abbr == 'lhs' || itemOpt.abbr == 'tmg')
+                                    return;
+                                if(itemOpt.is_normal != 1)
+                                    return;
+                                return {
+                                    name: itemOpt.dirName,
+                                    value: [
+                                        itemOpt.longitude,
+                                        itemOpt.latitude,
+                                        itemOpt.stranger_num,
+                                    ],
+                                    itemStyle: {
+                                        normal: {
+                                            color: '#4caf50'
+                                        }
+                                    }
+                                };
+                            })
+                        },
+                        {
+                            name:"异常",
+                            type: 'scatter',
+                            coordinateSystem: 'geo',
+                            showEffectOn: 'render',
+                            showSymbol: true,
+                            symbolSize:20,
+                            symbol:"pin",
+                            color:"#d9001b",
+                            data: data.map(function (itemOpt) { //散点生成
+                                if(itemOpt.abbr == 'lhs' || itemOpt.abbr == 'tmg')
+                                    return;
+                                if(itemOpt.is_normal == 1)
+                                    return;
+                                return {
+                                    name: itemOpt.dirName,
+                                    value: [
+                                        itemOpt.longitude,
+                                        itemOpt.latitude,
+                                        itemOpt.stranger_num
+                                    ],
+                                    py:itemOpt.abbr,
+                                    itemStyle: {
+                                        normal: {
+                                            color: '#d9001b'
+                                        }
+                                    }
+                                };
+                            })
+                        }
                     ]
                 },true);
             },
             showButton(){
+
                 this.$emit("showButton", true);
-            }
+            },
+            getAreaInfo(city, indexCode, city_name){
+                this.$emit("getAreaInfo", city, indexCode, city_name );
+                this.showButton();
+            },
         }
     }
 </script>
