@@ -25,10 +25,10 @@
                     </dv-border-box-12>
                 </div>
                 <div style="position: relative" class="cont2">
-                    <div @click="back" v-if="showBack">
+                    <div @click="back" v-if="showBack   ">
                         <dv-decoration-9 style="z-index:999;cursor: pointer;width:50px;height:50px;position: absolute;top: 20px;left: 20px;color: #7ec699;text-shadow: 0 0 3px #7acaec;">返回</dv-decoration-9>
                     </div>
-                    <Map style="width: 100%;height: 100%" :address_info="address_info" ref="map" @showButton="showButton"></Map>
+                    <Map style="width: 100%;height: 100%" :address_info="address_info" ref="map" @showButton="showButton"  @getAreaInfo="getAreaInfo"></Map>
                     <ul>
                         <li>学校个数: <span>{{list.general.school}}</span></li>
                         <li>没有异常的学校: <span>{{list.general.yes_school}}</span></li>
@@ -56,7 +56,7 @@
                     </dv-border-box-12>
                     <dv-border-box-12 class="box1">
                         <h2>学校超市情况</h2>
-                        <dv-scroll-board :config="config2" style="width:94%;height:82%;margin: 3%" />
+                        <dv-scroll-board @click="getWeigui" :config="config2" style="width:94%;height:82%;margin: 3%" />
                     </dv-border-box-12>
                 </div>
             </div>
@@ -65,9 +65,7 @@
                     <dv-border-box-12 class="box2">
                         <div style="display: flex;justify-content:flex-start">
                             <h2>当月重点人员陌生人员情况</h2>
-                            <select @change="getMen" style="background: transparent;color: #fff;border-radius: 5px;margin-left: 20px" v-model="indexCode">
-                                <option style="color: #333" v-for="(item,index) in options" :label="item.name" :value="item.indexCode" :key="index"></option>
-                            </select>
+                            <span style="margin-left: 20px;color: #7ec699;text-shadow: 0 0 3px #7acaec;">{{city_name}}</span>
                         </div>
                         <Dataset :data="regions_chart" :type="1" ref="Dataset" style="width: 100%;height: 100%"></Dataset>
                     </dv-border-box-12>
@@ -114,6 +112,7 @@
                         },
                         area_health:[],
                     },
+                    city_name:"杜桥镇",
                     regions_chart:[],
                     indexCode:'',
                     options:'',
@@ -139,25 +138,7 @@
                     columnWidth: [50],
                     align: ['center'],
                 },
-                config2:{
-                    header: ['列1', '列2', '列3'],
-                    data: [
-                        ['行1列1', '行1列2', '行1列3'],
-                        ['行2列1', '行2列2', '行2列3'],
-                        ['行3列1', '行3列2', '行3列3'],
-                        ['行4列1', '行4列2', '行4列3'],
-                        ['行5列1', '行5列2', '行5列3'],
-                        ['行6列1', '行6列2', '行6列3'],
-                        ['行7列1', '行7列2', '行7列3'],
-                        ['行8列1', '行8列2', '行8列3'],
-                        ['行9列1', '行9列2', '行9列3'],
-                        ['行10列1', '行10列2', '行10列3']
-                    ],
-                    index: true,
-                    columnWidth: [50],
-                    align: ['center'],
-                    // carousel: 'page',
-                },
+                config2:{},
             }
         },
         methods:{
@@ -165,6 +146,11 @@
                 let that = this;
                 this.$https.fetchGet("/plugin/statistics/api_index/getAbbrArea", []).then(function(data){
                    that.address_info = data;
+                   that.$nextTick(()=>{
+                       setTimeout(()=> {
+                           that.$refs.map.init("LinHai");
+                       },500);
+                   })
                 })
             },
             back(){
@@ -177,9 +163,11 @@
                     this.getMen();
                     this.$nextTick(function () {
                         let that = this;
+                        setTimeout(()=>{
                             that.options = res.regions;
                             that.indexCode = res.regions[0].indexCode;
-                            that.$refs.map.init("LinHai");
+                        },500)
+
                     })
                 })
             },
@@ -200,23 +188,66 @@
                     })
                 })
             },
-            getMen(){
-                let params ={'indexCode':this.indexCode};
+            getMen(indexCode){
+                let params ={'indexCode':indexCode};
                 this.$https.fetchPost('/plugin/statistics/api_index/indexStatSchool',params).then((res) => {
                     this.regions_chart = res;
                     this.$nextTick(function () {
-                        this.$refs.Dataset.init();
+                        let that = this;
+                        setTimeout(()=>{
+                            that.$refs.Dataset.init();
+                        },500)
+
                     })
                 })
             },
             showButton(data){
                 this.showBack = data;
+            },
+            getSchool(){
+                let params ={};
+                this.$https.fetchPost('/plugin/statistics/api_index/schoolViolation',params).then((res) => {
+                    var arr = [];
+                    var data = [];
+                    for (let i = 0; i < res.length ; i++) {
+                        arr.push(res[i].name);
+                        arr.push(res[i].violation);
+                        arr.push(String(res[i].num));
+                        arr.push(String(res[i].code));
+                        // arr.push(String(res[i].id));
+                        data.push(arr);
+                        data.push(arr);
+                        arr = []
+                    }
+
+                    this.config2 = {
+                        header: ['学校','违规选项','违规次数','严重级别'],
+                        data: data,
+                        index: true,
+                        columnWidth: [40,120,100,90,90],
+                        align: ['center','center','center','center','center'],
+                    };
+
+                })
+            },
+            getAreaInfo(city, indexCode, city_name){
+                let that = this;
+                let params = {indexCode:indexCode};
+                this.$https.fetchPost('/plugin/statistics/api_index/getMapSchool',params).then((res) => {
+                    that.$refs.map.changeCityMap(city, res);
+                });
+                this.city_name = city_name;
+                this.getMen(indexCode);
+            },
+            getWeigui(row){
+                console.log(row)
             }
         },
         mounted() {
             this.getAddress();
             this.getList();
             this.getAdd();
+            this.getSchool();
         }
     }
 </script>
@@ -354,5 +385,11 @@
     }
     .cont_long {
         overflow: -moz-scrollbars-none;
+    }
+    .dv-scroll-board /deep/ .header{
+        font-size: 14px;
+    }
+    .dv-scroll-board /deep/ .rows .row-item{
+        font-size: 12px;
     }
 </style>
