@@ -64,6 +64,7 @@ export const asyncRouterMap = [
             icon: 'ios-home',
             title: '首页',
             role: [1],//页面需要的权限
+            notCache: true
         },
         children:[
             {
@@ -73,6 +74,7 @@ export const asyncRouterMap = [
                     icon: 'ios-home',
                     title: '首页',
                     role: [1],
+                    notCache: true
                 },
                 component: Linhai_index
             },

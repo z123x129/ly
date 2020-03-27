@@ -155,7 +155,7 @@
                 <el-form-item label="人脸照片:" prop="face" :label-width="formLabelWidth">
                     <el-upload
                             class="avatar-uploader"
-                            action="/public/plugin/file_manage/api_index/upload_img"
+                            :action='url+"/public/plugin/file_manage/api_index/upload_img"'
                             :show-file-list="false"
                             :on-success="handleAvatarSuccess"
                             :before-upload="beforeAvatarUpload">
@@ -166,7 +166,7 @@
                 <el-form-item label="健康证照片:" prop="health" :label-width="formLabelWidth">
                     <el-upload
                             class="avatar-uploader"
-                            action="/public/plugin/file_manage/api_index/upload_img"
+                            :action='url+"/public/plugin/file_manage/api_index/upload_img"'
                             :show-file-list="false"
                             :on-success="handleAvatarSuccess2"
                             :before-upload="beforeAvatarUpload">
@@ -215,6 +215,7 @@
         },
         data(){
             return{
+                url:this.$store.state.route.http,
                 formInline: {
                     nickname: '',
                     id_card: '',

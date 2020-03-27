@@ -15,7 +15,8 @@ export default {
     state:{
         routeInfo:[],
         messageList:[],
-        jurisdiction:""
+        jurisdiction:"",
+        http:"http://js2.300c.cn/lhyd/"
     },
     mutations: {
         setRouteInfo: function (state, routeInfo) {

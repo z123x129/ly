@@ -25,10 +25,10 @@
                     </dv-border-box-12>
                 </div>
                 <div style="position: relative" class="cont2">
-                    <div @click="back" v-if="showBack">
+                    <div @click="back" v-if="showBack   ">
                         <dv-decoration-9 style="z-index:999;cursor: pointer;width:50px;height:50px;position: absolute;top: 20px;left: 20px;color: #7ec699;text-shadow: 0 0 3px #7acaec;">返回</dv-decoration-9>
                     </div>
-                    <Map style="width: 100%;height: 100%" :address_info="address_info" ref="map" @showButton="showButton"></Map>
+                    <Map style="width: 100%;height: 100%" :address_info="address_info" ref="map" @showButton="showButton"  @getAreaInfo="getAreaInfo"></Map>
                     <ul>
                         <li>学校个数: <span>{{list.general.school}}</span></li>
                         <li>没有异常的学校: <span>{{list.general.yes_school}}</span></li>
@@ -65,9 +65,7 @@
                     <dv-border-box-12 class="box2">
                         <div style="display: flex;justify-content:flex-start">
                             <h2>当月重点人员陌生人员情况</h2>
-                            <select @change="getMen" style="background: transparent;color: #fff;border-radius: 5px;margin-left: 20px" v-model="indexCode">
-                                <option style="color: #333" v-for="(item,index) in options" :label="item.name" :value="item.indexCode" :key="index"></option>
-                            </select>
+                            <span style="margin-left: 20px;color: #7ec699;text-shadow: 0 0 3px #7acaec;">{{city_name}}</span>
                         </div>
                         <Dataset :data="regions_chart" :type="1" ref="Dataset" style="width: 100%;height: 100%"></Dataset>
                     </dv-border-box-12>
@@ -114,6 +112,7 @@
                         },
                         area_health:[],
                     },
+                    city_name:"杜桥镇",
                     regions_chart:[],
                     indexCode:'',
                     options:'',
@@ -147,6 +146,11 @@
                 let that = this;
                 this.$https.fetchGet("/plugin/statistics/api_index/getAbbrArea", []).then(function(data){
                    that.address_info = data;
+                   that.$nextTick(()=>{
+                       setTimeout(()=> {
+                           that.$refs.map.init("LinHai");
+                       },500);
+                   })
                 })
             },
             back(){
@@ -162,7 +166,6 @@
                         setTimeout(()=>{
                             that.options = res.regions;
                             that.indexCode = res.regions[0].indexCode;
-                            that.$refs.map.init("LinHai");
                         },500)
 
                     })
@@ -185,8 +188,8 @@
                     })
                 })
             },
-            getMen(){
-                let params ={'indexCode':this.indexCode};
+            getMen(indexCode){
+                let params ={'indexCode':indexCode};
                 this.$https.fetchPost('/plugin/statistics/api_index/indexStatSchool',params).then((res) => {
                     this.regions_chart = res;
                     this.$nextTick(function () {
@@ -209,13 +212,14 @@
                     for (let i = 0; i < res.length ; i++) {
                         arr.push(res[i].name);
                         arr.push(res[i].violation);
-                        arr.push(res[i].num);
-                        arr.push(res[i].code);
-                        arr.push(res[i].id);
+                        arr.push(String(res[i].num));
+                        arr.push(String(res[i].code));
+                        // arr.push(String(res[i].id));
                         data.push(arr);
                         data.push(arr);
                         arr = []
                     }
+
                     this.config2 = {
                         header: ['学校','违规选项','违规次数','严重级别'],
                         data: data,
@@ -225,6 +229,15 @@
                     };
 
                 })
+            },
+            getAreaInfo(city, indexCode, city_name){
+                let that = this;
+                let params = {indexCode:indexCode};
+                this.$https.fetchPost('/plugin/statistics/api_index/getMapSchool',params).then((res) => {
+                    that.$refs.map.changeCityMap(city, res);
+                });
+                this.city_name = city_name;
+                this.getMen(indexCode);
             },
             getWeigui(row){
                 console.log(row)
