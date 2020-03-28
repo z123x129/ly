@@ -14,6 +14,9 @@ Vue.prototype.$secret_key = secret_key;
 Vue.prototype.$https = https;
 Vue.config.productionTip = false;
 
+var bus = new Vue()
+export default bus
+
 import infiniteScroll from 'vue-infinite-scroll'
 Vue.use(infiniteScroll);
 

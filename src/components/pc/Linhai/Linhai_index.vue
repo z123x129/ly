@@ -55,8 +55,9 @@
                         <Editor :normal="normal" :anomaly="anomaly" ref="Editor" style="width: 100%;height: 50%"></Editor>
                     </dv-border-box-12>
                     <dv-border-box-12 class="box1" ref="box4">
-                        <h2>学校超市情况</h2>
+                        <h2>学校异常情况</h2>
                         <dv-scroll-board ref="srroll_1" @click="getWeigui" :config="config2" style="width:94%;height:82%;margin: 3%" />
+
                     </dv-border-box-12>
                 </div>
             </div>
@@ -82,6 +83,7 @@
 </template>
 <script>
     import {Select,Option} from 'element-ui'
+    import bus from '../../../main.js'
     export default {
         name:'home',
         components:{
@@ -120,23 +122,10 @@
                     anomaly:[''],
                     showBack:false,
                 address_info:[],
-                config:{
-                    header: ['列1', '列2', '列3'],
-                    data: [
-                        ['行1列1', '行1列2', '行1列3'],
-                        ['行2列1', '行2列2', '行2列3'],
-                        ['行3列1', '行3列2', '行3列3'],
-                        ['行4列1', '行4列2', '行4列3'],
-                        ['行5列1', '行5列2', '行5列3'],
-                        ['行5列1', '行5列2', '行5列3'],
-                        ['行5列1', '行5列2', '行5列3'],
+                config:{},
 
-                    ],
-                    index: true,
-                    columnWidth: [50],
-                    align: ['center'],
-                },
                 config2:{},
+                data:[[1,1,1,1]]
             }
         },
         methods:{
@@ -239,13 +228,33 @@
             },
             getWeigui(row){
                 console.log(row)
-            }
+            },
+            getTime(mes){
+                if(mes){
+                    this.data.unshift(mes);
+                }
+                this.config = {
+                    header: ['学校','类型','时间'],
+                    data: this.data,
+                    index: true,
+                    columnWidth: [40,120,100,90,90],
+                    align: ['center','center','center','center','center'],
+                };
+            },
         },
         mounted() {
             this.getAddress();
             this.getList();
             this.getAdd();
             this.getSchool();
+            this.getTime();
+            var that = this;
+            bus.$on("outmes", function(mes) {
+                console.log(mes)
+                let data = [];
+                data.push(mes)
+                // that.getTime(mes)
+            });
         },
         activated() {
             this.$refs.srroll_1.autoResizeMixinInit();
@@ -258,7 +267,6 @@
             {
                 this.$refs["box"+i].initWH();
             }
-
         }
     }
 </script>

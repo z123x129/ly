@@ -74,6 +74,17 @@
             </el-table-column>
             <el-table-column
                     align="center"
+                    label="背景图">
+                <template slot-scope="scope">
+                    <el-image
+                            style="width: 100px; height: 100px"
+                            :src="scope.row.bkgUrl[0]"
+                            :preview-src-list="scope.row.bkgUrl">
+                    </el-image>
+                </template>
+            </el-table-column>
+            <el-table-column
+                    align="center"
                     label="抓拍图片">
                 <template slot-scope="scope">
                     <el-image
