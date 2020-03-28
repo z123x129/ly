@@ -108,12 +108,28 @@
         mounted: function () {
             this.startMap();//地图
             this.getxy();//经纬度
-            this.redian();//热点
             this.addsite();//标点
             this.getList()//获取地区列表
             this.winresize()//监听窗口大小变化
         },
         methods:{
+            filterdata(name) {
+                let x = {};
+                for(let key in this.data)
+                {
+                    for(let child in this.data[key]["children"])
+                    {
+                        if(this.data[key]["children"][child]["dirName"] == name)
+                            {
+                                console.log(this.data[key]["children"][child]);
+                                x =  this.data[key]["children"][child];
+                                break;
+                            }
+                    }
+                }
+                debugger;
+                return x;
+            },
             videoinit(){//初始化视频插件
                 this.$refs.H1.init(()=>{
                     this.$refs.H1.initVideo()
@@ -140,7 +156,6 @@
                         target.resizeFlag = null;
                     }, 200);
                 }
-
             },
             getList(){ //获取地区列表
                 let params ={};
@@ -156,8 +171,7 @@
                     _this.map.setZoomAndCenter(12, [data.longitude,data.latitude]);
                 }else if(!data.children){
                     _this.map.setZoomAndCenter(17, [data.longitude,data.latitude]);
-                    // console.log(data.longitude,data.latitude)
-                    _this.redian(data.longitude,data.latitude,data.dirName,data)
+                    _this.redian(data)
 
                 }
             },
@@ -202,7 +216,7 @@
                         map: _this.map,
                         offset: new AMap.Pixel(-13, -30)
                     });
-                    _this.marker.content = '<div style="width: 200px">选择操作</div><a class=\'btn btn-info\' onclick=\'opvideo()\' style="margin-left: 12px;margin-top: 10px">查看监控</a><a class=\'btn btn-info\' onclick=\'polyline('+key+')\' style="margin-left: 12px;margin-top: 10px">查看轨迹</a></div>';
+                    _this.marker.content = '<div class="mapBox2"><div style="width: 200px">选择操作</div><a class=\'btn btn-info\' onclick=\'opvideo()\' style="margin-left: 12px;margin-top: 10px">查看监控</a><a class=\'btn btn-info\' onclick=\'polyline('+key+')\' style="margin-left: 12px;margin-top: 10px">查看轨迹</a></div>';
                     _this.marker.on('click', markerClick);
                     _this.marker.emit('click', {target: _this.marker});
                     _this.marker.setMap(_this.map);
@@ -232,7 +246,6 @@
             //查看监控
             opvideo:function(data){
                 this.videoVisible = true
-
                 if(this.$refs.H1.checkWebC()){
                     this.app[this.ddd].JS_ShowWnd();
                 }else{
@@ -240,10 +253,12 @@
                         this.videoinit()
                     }, 100);
                 }
-                // console.log(data.label)
                 if(this.data2.length == 0){
+                    debugger;
                     this.data2 = this.data2.concat(data)
                 }else{
+                    
+                    debugger;
                     for(let i in this.data2)
                     {
                         if(this.data2[i].label == data.label)
@@ -253,12 +268,24 @@
                 }
             },
             //显示热点
-            redian:function(x,y,name,data){//x,y,name
+            redian:function(data){//x,y,name
                 let _this=this
-                // let placeSearch = new AMap.PlaceSearch();  //构造地点查询类
-                let infoWindow = new AMap.InfoWindow({});//信息
-                infoWindow.setContent(_this.createContent(name,data));
-                infoWindow.open(_this.map, [x,y]);
+                var info = JSON.stringify(data)
+                var content ='<div class="mapBox">'+
+                            '<h3>'+data.dirName+'</h3>'+
+                            '<div class="flex">'+
+                                '<img src="http://tpc.googlesyndication.com/simgad/5843493769827749134">'+
+                                '<div class="text">'+
+                                    '<p>联系人：'+data.personCharge+'</p>'+
+                                    '<p>联系电话：'+data.personChargePhone+'</p>'+
+                                    '<p>地址：'+data.street+'</p>'+
+                                    '<a onclick=\'opvideo('+info+')\'>查看视频</a>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>'
+                let infoWindow = new AMap.InfoWindow();//信息
+                infoWindow.setContent(content);
+                infoWindow.open(_this.map, [data.longitude,data.latitude]);
                 // _this.map.on('hotspotclick', function (result) {
                 //     placeSearch.getDetails(result.id, function (status, result) {
                 //         if (status === 'complete' && result.info === 'OK') {
@@ -280,10 +307,25 @@
                 //     });
                 // });
             },
-            createContent:function(e,data){
-                var data = JSON.stringify(data)
-                return '<div style="width: 200px">是否查看【' + e + '】视频？</div><a class=\'btn btn-info\' onclick=\'opvideo(' + data + ')\' style="margin-left: 12px;margin-top: 10px">查看视频</a>';
-            },
+            // createContent:function(data){
+            //     var data = JSON.stringify(data)
+            //     data = eval('(' + data + ')');
+            //     console.log(data)
+            //     // return '<div class="mapBox" style="width: 200px">是否查看【' + e + '】视频？</div><a class=\'btn btn-info\' onclick=\'opvideo(' + data + ')\' style="margin-left: 12px;margin-top: 10px">查看视频</a>';
+            //     return '<div class="mapBox">'+
+            //                 '<h3>'+data+'</h3>'+
+            //                 '<div class="flex">'+
+            //                     '<img src="http://tpc.googlesyndication.com/simgad/5843493769827749134">'+
+            //                     '<div class="text">'+
+            //                         '<p>联系人：张三</p>'+
+            //                         '<p>联系电话：18012341234</p>'+
+            //                         '<p>地址：临海市嵩山路65号往北200米</p>'+
+            //                         '<a onclick=\'opvideo()\'>查看视频</a>'+
+            //                     '</div>'+
+            //                 '</div>'+
+            //             '</div>'
+
+            // },
             //绘制轨迹
             addpath: function () {
                 marker.moveAlong(lineArr, 1000);
@@ -295,10 +337,59 @@
                 if(this.$refs.H1.checkWebC())
                     this.app[this.ddd].JS_ShowWnd();
             }
+           if(this.$route.params.name){
+               var data = this.filterdata(this.$route.params.name)
+               this.redian(data)
+               this.map.setZoomAndCenter(17, [data.longitude,data.latitude]);
+           }
         }
     }
 </script>
 <style scoped lang="less">
+    #content /deep/ .mapBox{
+        h3{
+            padding: 0 80px 0 20px;
+            height: 42px;
+            line-height: 42px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+            color: #333;
+            overflow: hidden;
+            background-color: #F8F8F8;
+            border-radius: 2px 2px 0 0;
+            font-weight: 700;
+        }
+        .flex{
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            img{
+                width: 100px;
+                height: 100px;
+                object-fit: cover;
+            }
+            .text{
+                padding-left: 10px;
+                p{
+                    color: #666;
+                    padding-bottom: 5px;
+                }
+                button{
+
+                }
+            }
+        }
+        // background: #000;
+    }
+    #content /deep/ .mapBox2{
+        padding: 10px 18px 10px 10px;
+    }
+    #content /deep/ .amap-info{
+        .amap-info-content{
+            padding: 0;
+            .amap-info-close{top:14px}
+        }
+    }
     #i1{
         height: 100%;
         overflow: hidden;
