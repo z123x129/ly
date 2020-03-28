@@ -168,7 +168,20 @@
                                     itemStyle: {
                                         normal: {
                                             borderColor: '#ffffff', //区域边框颜色
-                                            areaColor: '#253752', //区域填充颜色
+                                            areaColor: '#2648aa', //区域填充颜色
+                                            color: {
+                                                type: 'linear',
+                                                x: 0,
+                                                y: 0,
+                                                x2: 0,
+                                                y2: 1,
+                                                colorStops: [{
+                                                    offset: 0, color: '#096dd9' // 0% 处的颜色
+                                                }, {
+                                                    offset: 1, color: '#003a8c' // 100% 处的颜色
+                                                }],
+                                                global: false // 缺省为 false
+                                            },                               
                                         },
                                         emphasis: {
                                             areaColor: '#1890ff',
