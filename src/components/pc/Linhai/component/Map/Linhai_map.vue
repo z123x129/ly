@@ -41,6 +41,7 @@
                         name:"Map_conmand",
                         params:{
                             name:params.data.name
+
                         }
                     })
                 }
@@ -52,6 +53,10 @@
             })
         },
         methods:{
+            map_resize()
+            {
+                this.chart.resize();
+            },
             init(initData){
                 // 指定图表的配置项和数据
                 // var mapData = [

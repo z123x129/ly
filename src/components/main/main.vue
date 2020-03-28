@@ -122,8 +122,8 @@
     import {asyncRouterMap} from '@/router/modules/route'
     import customBreadCrumb from './component/custom-bread-crumb'
     import './main.less'
-
     import { Notification } from 'element-ui';
+    import bus from '../../main'
     export default {
         inject:["app"],
         data () {
@@ -133,7 +133,8 @@
                 collapsed:false,
                 img:headImg,
                 isFullscreen:false,
-                ws:new WebSocket("ws://"+"js2.300c.cn"+":7272")
+                // ws:new WebSocket("ws://"+"js2.300c.cn"+":7272")
+                ws:new WebSocket("ws://"+"192.168.0.2"+":7272")
             }
         },
         components:{
@@ -170,7 +171,7 @@
                 return this.$store.state.app.tagNavList
             },
             cacheList () {
-                const list = [ ...this.tagNavList.length ? this.tagNavList.filter(item => !(item.meta && item.meta.notCache)).map(item => item.name) : []]
+                const list = ["home", ...this.tagNavList.length ? this.tagNavList.filter(item => !(item.meta && item.meta.notCache)).map(item => item.name) : []]
                 // const x1 = (this.tagNavList.length);
                 window.console.log(list);
                 return list
@@ -234,7 +235,7 @@
                     type: 'warning',
                     onClick:function () {
                         switch(type){
-                            case 'Emphasis':
+                            case 'emphasis':
                                 that.$router.push('/Intelligence/Key_personnel');
                                 break;
                             case 'stranger':
@@ -264,17 +265,19 @@
                             window.console.log('连接成功');
                         });
                         break;
-                    case 'Emphasis':
-                        that.open(data.content.msg,data.content.faceInfoName,type);
-                        that.$store.commit("getMessage", data.content);
+                    case 'emphasis':
+                        that.open(data.describe,data.content.faceInfoName,type);
+                        that.$store.commit("getMessage", data);
+                        bus.$emit("outmes",data);
                         break;
                     case 'stranger':
-                        that.open(data.content.msg,data.content.ageGroup,type);
-                        that.$store.commit("getMessage", data.content);
+                        that.open(data.describe,data.content.ageGroup,type);
+                        that.$store.commit("getMessage", data);
+                        bus.$emit("outmes",data);
                         break;
                     case "school_violation":
-                        that.open(data.content.msg,data.content.name,type);
-                        that.$store.commit("getMessage", data.content);
+                        that.open(data.describe,data.content.name,type);
+                        that.$store.commit("getMessage", data);
                         break;
                 }
             };

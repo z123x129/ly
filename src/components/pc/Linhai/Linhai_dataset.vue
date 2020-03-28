@@ -28,6 +28,9 @@
             });
         },
         methods:{
+            Dataset_resize(){
+                this.chart.resize();
+            },
             init(){
                 // 指定图表的配置项和数据
                 var option = {};

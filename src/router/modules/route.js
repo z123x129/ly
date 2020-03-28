@@ -18,6 +18,7 @@ import School_show from '@/components/pc/Linhai/Admin/School_show.vue'
 import showVideo from '@/components/pc/Linhai/Admin/showVideo.vue'
 import reVideo from '@/components/pc/Linhai/Admin/reVideo.vue'
 import Map_conmand from '@/components/pc/Linhai/Admin/Map_conmand.vue'
+import School_message from '@/components/pc/Linhai/Admin/School_message.vue'
 
 //学校路由
 import Maintain_list from '@/components/pc/Linhai/School2/Maintain_list.vue'
@@ -208,6 +209,16 @@ export const asyncRouterMap = [
                     role: [1],
                 },
                 component: School_show
+            },
+            {
+                path: 'School_message',
+                name: 'School_message',
+                meta: {
+                    icon: 'md-filing',
+                    title: '学校信息',
+                    role: [1],
+                },
+                component: School_message
             },
         ]
     },
