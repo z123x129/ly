@@ -248,7 +248,6 @@
             this.getSchool();
         },
         activated() {
-            console.log(this.$refs);
             this.$refs.srroll_1.autoResizeMixinInit();
             this.$refs.srroll_2.autoResizeMixinInit();
             this.$refs.map.map_resize();
