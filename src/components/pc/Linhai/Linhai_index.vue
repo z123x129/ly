@@ -6,7 +6,7 @@
         <div class="content">
             <div class="cont_flex">
                 <div class="cont1">
-                    <dv-border-box-12 style="padding: 30px;height: 42%" class="box1">
+                    <dv-border-box-12 style="padding: 30px;height: 42%" class="box1" ref="box1">
                         <h2>数据概览</h2>
                         <ul style="font-size: 12px">
                             <li>辖区名称: {{list.general.hq_name}}</li>
@@ -19,14 +19,14 @@
                             <li>超市人员: {{list.general.damp_admin}}</li>
                         </ul>
                     </dv-border-box-12>
-                    <dv-border-box-12 style="height: 58%;padding: 15px 10px 20px 5px" class="box1">
+                    <dv-border-box-12 style="height: 58%;padding: 15px 10px 20px 5px" class="box1" ref="box2">
                         <h2 style="text-indent: 15px">健康证情况</h2>
                         <Mixed :data="list.area_health" ref="Mixed" style="width: 100%;height: 100%"></Mixed>
                     </dv-border-box-12>
                 </div>
                 <div style="position: relative" class="cont2">
                     <div @click="back" v-if="showBack   ">
-                        <dv-decoration-9 style="z-index:999;cursor: pointer;width:50px;height:50px;position: absolute;top: 20px;left: 20px;color: #7ec699;text-shadow: 0 0 3px #7acaec;">返回</dv-decoration-9>
+                        <dv-decoration-9 ref="button_1" style="z-index:999;cursor: pointer;width:50px;height:50px;position: absolute;top: 20px;left: 20px;color: #7ec699;text-shadow: 0 0 3px #7acaec;">返回</dv-decoration-9>
                     </div>
                     <Map style="width: 100%;height: 100%" :address_info="address_info" ref="map" @showButton="showButton"  @getAreaInfo="getAreaInfo"></Map>
                     <ul>
@@ -36,7 +36,7 @@
                     </ul>
                 </div>
                 <div class="cont1">
-                    <dv-border-box-12 class="box1">
+                    <dv-border-box-12 class="box1" ref="box3">
                         <h2>健康证图表</h2>
                         <div style="display: flex;justify-content: space-around">
                             <ol>
@@ -54,15 +54,15 @@
                         </div>
                         <Editor :normal="normal" :anomaly="anomaly" ref="Editor" style="width: 100%;height: 50%"></Editor>
                     </dv-border-box-12>
-                    <dv-border-box-12 class="box1">
+                    <dv-border-box-12 class="box1" ref="box4">
                         <h2>学校超市情况</h2>
-                        <dv-scroll-board @click="getWeigui" :config="config2" style="width:94%;height:82%;margin: 3%" />
+                        <dv-scroll-board ref="srroll_1" @click="getWeigui" :config="config2" style="width:94%;height:82%;margin: 3%" />
                     </dv-border-box-12>
                 </div>
             </div>
             <div class="cont_flex2">
                 <div class="cont3">
-                    <dv-border-box-12 class="box2">
+                    <dv-border-box-12 class="box2" ref="box5">
                         <div style="display: flex;justify-content:flex-start">
                             <h2>当月重点人员陌生人员情况</h2>
                             <span style="margin-left: 20px;color: #7ec699;text-shadow: 0 0 3px #7acaec;">{{city_name}}</span>
@@ -71,9 +71,9 @@
                     </dv-border-box-12>
                 </div>
                 <div class="cont1">
-                    <dv-border-box-12 class="box2">
+                    <dv-border-box-12 class="box2" ref="box6">
                         <h2>实时警报数据</h2>
-                        <dv-scroll-board :config="config" style="width:94%;height:82%;margin: 3%" />
+                        <dv-scroll-board ref="srroll_2" :config="config" style="width:94%;height:82%;margin: 3%" />
                     </dv-border-box-12>
                 </div>
             </div>
@@ -128,11 +128,9 @@
                         ['行3列1', '行3列2', '行3列3'],
                         ['行4列1', '行4列2', '行4列3'],
                         ['行5列1', '行5列2', '行5列3'],
-                        ['行6列1', '行6列2', '行6列3'],
-                        ['行7列1', '行7列2', '行7列3'],
-                        ['行8列1', '行8列2', '行8列3'],
-                        ['行9列1', '行9列2', '行9列3'],
-                        ['行10列1', '行10列2', '行10列3']
+                        ['行5列1', '行5列2', '行5列3'],
+                        ['行5列1', '行5列2', '行5列3'],
+
                     ],
                     index: true,
                     columnWidth: [50],
@@ -248,6 +246,20 @@
             this.getList();
             this.getAdd();
             this.getSchool();
+        },
+        activated() {
+            console.log(this.$refs);
+            this.$refs.srroll_1.autoResizeMixinInit();
+            this.$refs.srroll_2.autoResizeMixinInit();
+            this.$refs.map.map_resize();
+            this.$refs.Editor.Editor_resize();
+            this.$refs.Dataset.Dataset_resize();
+            this.$refs.Mixed.Mixed_resize();
+            for(let i = 1; i<=6; i++)
+            {
+                this.$refs["box"+i].initWH();
+            }
+
         }
     }
 </script>
