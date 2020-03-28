@@ -274,7 +274,7 @@
                 var content ='<div class="mapBox">'+
                             '<h3>'+data.dirName+'</h3>'+
                             '<div class="flex">'+
-                                '<img src="http://tpc.googlesyndication.com/simgad/5843493769827749134">'+
+                                '<img src="'+data.schoolImg+'">'+
                                 '<div class="text">'+
                                     '<p>联系人：'+data.personCharge+'</p>'+
                                     '<p>联系电话：'+data.personChargePhone+'</p>'+
