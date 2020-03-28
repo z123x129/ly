@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <div style="background: #fff">
         <el-form style="width: 60%;margin: 0 auto;padding: 30px 0" ref="form" :model="form" label-width="140px">
             <el-form-item label="学校名称：">
-                <el-input disabled="true" size="small" v-model="form.dirName"></el-input>
+                <el-input :readonly="true" size="small" v-model="form.dirName"></el-input>
             </el-form-item>
             <el-form-item label="单位名称：">
                 <el-input size="small" v-model="form.company"></el-input>
@@ -16,8 +16,14 @@
             <el-form-item label="学校地址：">
                 <el-input size="small" v-model="form.street"></el-input>
             </el-form-item>
-            <el-form-item label="用餐人数：">
-                <el-input size="small" v-model="form.meals"></el-input>
+            <el-form-item label="学生就餐人数：">
+                <el-input size="small" v-model="form.student_num"></el-input>
+            </el-form-item>
+            <el-form-item label="教职工就餐人数：">
+                <el-input size="small" v-model="form.teacher_num"></el-input>
+            </el-form-item>
+            <el-form-item label="学校食堂员工数：">
+                <el-input size="small" v-model="form.canteen_num"></el-input>
             </el-form-item>
             <el-button style="display:block;margin: 0 auto" type="primary" @click="onSubmit('form')">保存</el-button>
         </el-form>

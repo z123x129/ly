@@ -23,7 +23,7 @@ export default {
             state.routeInfo = routeInfo;
         },
         getMessage:function (state, data) {
-            state.messageList.push(data);
+            state.messageList.unshift(data);
         },
         setJurisdiction:function(state, data)
         {
