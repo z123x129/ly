@@ -331,10 +331,36 @@
                                         normal: {
                                             borderColor: '#ffffff', //区域边框颜色
                                             areaColor: '#253752', //区域填充颜色
+                                            color: {
+                                                type: 'linear',
+                                                x: 0,
+                                                y: 0,
+                                                x2: 0,
+                                                y2: 1,
+                                                colorStops: [{
+                                                    offset: 0, color: '#096dd9' // 0% 处的颜色
+                                                }, {
+                                                    offset: 1, color: '#002766' // 100% 处的颜色
+                                                }],
+                                                global: false // 缺省为 false
+                                            },
                                         },
                                         emphasis: {
                                             borderColor: '#ffffff', //区域边框颜色
-                                            areaColor: '#253752',
+                                            areaColor: '#002766',
+                                            color: {
+                                                type: 'linear',
+                                                x: 0,
+                                                y: 0,
+                                                x2: 0,
+                                                y2: 1,
+                                                colorStops: [{
+                                                    offset: 0, color: '#096dd9' // 0% 处的颜色
+                                                }, {
+                                                    offset: 1, color: '#002766' // 100% 处的颜色
+                                                }],
+                                                global: false // 缺省为 false
+                                            },
                                         }
                                     }
                                 }
