@@ -352,7 +352,7 @@
                                         },
                                         emphasis: {
                                             borderColor: '#ffffff', //区域边框颜色
-                                            areaColor: '#002766',
+                                            areaColor: '#0050b3',
                                             color: {
                                                 type: 'linear',
                                                 x: 0,
