@@ -61,7 +61,7 @@
                             },
                             itemStyle: {
                                 normal: {
-                                    color: "#95F204"
+                                    color: "#389e0d"
                                 }
                             },
                             data: this.normal
