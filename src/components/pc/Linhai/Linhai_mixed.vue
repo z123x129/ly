@@ -23,6 +23,9 @@
             })
         },
         methods:{
+            Mixed_resize(){
+                this.chart.resize();
+            },
             init(){
                 var arr=[];
                 var that = this;
