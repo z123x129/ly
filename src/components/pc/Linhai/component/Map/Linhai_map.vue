@@ -27,14 +27,22 @@
             this.chart = echarts.init(this.$refs.chart);
             var that = this;
             this.chart.on('click', function (params) {
-
                 var city = params.data.py;
+                console.log(params);
                 if(that.mapInfo.hasOwnProperty(city))
                 {
                     // that.init(city)
-
                     that.getAreaInfo(city, params.data.indexCode, params.name)
-
+                }
+                else if(typeof params.data.value == 'object')
+                {
+                    console.log(params.data.value[0], params.data.value[1]);
+                    that.$router.push({
+                        name:"Map_conmand",
+                        params:{
+                            name:params.data.name
+                        }
+                    })
                 }
             });
             //that.init("LinHai");
@@ -247,7 +255,6 @@
                     tooltip: {
                         trigger: 'item',
                         formatter: function (params) {
-                            console.log(params);
                             if(typeof(params.data.value)== "object")
                                 return params.data.name+'检测到异常数:'+params.data.value[2]+"个";
                             // return params.name+"的摄像头个数："+params.value[2];
