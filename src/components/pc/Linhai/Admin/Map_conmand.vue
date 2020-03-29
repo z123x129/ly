@@ -271,10 +271,14 @@
             redian:function(data){//x,y,name
                 let _this=this
                 var info = JSON.stringify(data)
+                var img = 'https://cdn.pixabay.com/photo/2016/08/18/23/04/yale-university-1604159_960_720.jpg'
+                if(data.school_cover){
+                    var img = data.school_cover
+                }
                 var content ='<div class="mapBox">'+
                             '<h3>'+data.dirName+'</h3>'+
                             '<div class="flex">'+
-                                '<img src="http://tpc.googlesyndication.com/simgad/5843493769827749134">'+
+                                '<img src="'+img+'">'+
                                 '<div class="text">'+
                                     '<p>联系人：'+data.personCharge+'</p>'+
                                     '<p>联系电话：'+data.personChargePhone+'</p>'+
