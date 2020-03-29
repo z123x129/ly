@@ -135,11 +135,6 @@
                         style="width: 100%">
                     <el-table-column
                             align="center"
-                            type="selection"
-                            width="50">
-                    </el-table-column>
-                    <el-table-column
-                            align="center"
                             prop="id"
                             label="ID">
                     </el-table-column>
@@ -181,9 +176,17 @@
                     </el-table-column>
                     <el-table-column
                             align="center"
-                            label="文字描述">
+                            label="上报信息">
                         <template slot-scope="scope">
                             <el-button @click="look(scope.row.title,scope.row.content)" type="text" size="small">查看</el-button>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            align="center"
+                            label="处理结果">
+                        <template slot-scope="scope">
+                            <el-button v-if="scope.row.status==1" @click="look('处理结果',scope.row.describe)" type="text" size="small">已处理</el-button>
+                            <span v-else>未处理</span>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -362,8 +365,8 @@
             },
             exports(){
                 console.log(this.tableData)
-                let xlsCell = [["MIID","ID"],["nickname","姓名"],["name","所属地区"],["dirName","所属学校"],["mobile","手机号"],
-                    ["face_thumb","人脸照片"],["health_card","健康证照片"],["health_endtime","健康证到期时间"],["member_type","人员类别"]];
+                let xlsCell = [["MIID","ID"],["nickname","姓名"],["name","所属地区"],["dirName","所属学校"],["mobile","联系方式"],
+                    ["face_thumb","人脸照片"],["health_card","健康证照片"],["member_type","人员类别"],["health_endtime","健康证到期时间"]];
                 let xlsData = [];
                 for (let i = 0; i <this.tableData.length ; i++) {
                     xlsData.push({
@@ -374,11 +377,11 @@
                         'mobile': this.tableData[i].mobile,
                         'face_thumb': String(this.tableData[i].face_thumb),
                         'health_card': String(this.tableData[i].health_card),
-                        'health_endtime': this.tableData[i].health_endtime,
                         'member_type': this.tableData[i].member_type,
+                        'health_endtime': this.tableData[i].health_endtime,
                     })
                 }
-                let params ={'xlsName':'健康证人员列表','isImg':'6,7','xlsCell':xlsCell,'xlsData':xlsData,};
+                let params ={'xlsName':'学校数据列表','isImg':'5,6','xlsCell':xlsCell,'xlsData':xlsData,};
                 params = this.$secret_key.func(this.$store.state.on_off, params);
                 this.$https.fetchPost('/plugin/school/api_index/out_excel',params).then((res) => {
                     window.location.href=res;

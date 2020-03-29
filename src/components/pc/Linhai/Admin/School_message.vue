@@ -16,6 +16,14 @@
                 stripe
                 style="width: 100%">
             <el-table-column
+                    label="学校Logo"
+                    align="center">
+                <template slot-scope="scope">
+                    <img v-if="scope.row.school_cover" width="80px" height="80px" :src="scope.row.school_cover" />
+                    <span v-else>无</span>
+                </template>
+            </el-table-column>
+            <el-table-column
                     prop="dirName"
                     label="学校名称"
                     align="center">
