@@ -44,19 +44,14 @@
             </el-form-item>
             <el-form-item style="margin-top: 9px">
                 <el-button size="small" type="primary" @click="getList">搜索</el-button>
-                <el-button size="small" type="primary">导出excel</el-button>
-                <el-button size="small" type="primary">生成报表至网格员</el-button>
+                <el-button size="small" type="primary" @click="exports">导出excel</el-button>
+<!--                <el-button size="small" type="primary">生成报表至网格员</el-button>-->
             </el-form-item>
         </el-form>
         <el-table
                 :data="tableData"
                 border
                 style="width: 100%;">
-            <el-table-column
-                    align="center"
-                    type="selection"
-                    width="50">
-            </el-table-column>
             <el-table-column
                     align="center"
                     prop="id"
@@ -275,7 +270,7 @@
             },
             delList(id){
                 let params ={'id':id};
-                this.$https.fetchPost('/plugin/statistics/api_index/overStranger',params).then((res) => {
+                this.$https.fetchPost('/plugin/statistics/api_index/overStranger',params).then(() => {
                     this.getList();
                 })
             },
@@ -287,6 +282,32 @@
             handleCurrentChange(val) {//分页器
                 this.page = val;
                 this.getList();
+            },
+            exports(){
+                console.log(this.tableData)
+                let xlsCell = [["id","ID"],["name","抓拍区域"],["cameraName","抓拍地点"],["bkgUrl","背景图"],
+                    ["faceUrl","抓拍图片"],["faceTime","抓拍时间"],["stranger_status","当前状态"]];
+                let xlsData = [];
+                for (let i = 0; i <this.tableData.length ; i++) {
+                    var text = '已处理';
+                    if(this.tableData[i].stranger_status==0){
+                        text = '未处理';
+                    }
+                    xlsData.push({
+                        'id': this.tableData[i].id,
+                        'name': this.tableData[i].name,
+                        'cameraName': this.tableData[i].cameraName,
+                        'bkgUrl': String(this.tableData[i].bkgUrl),
+                        'faceUrl': String(this.tableData[i].faceUrl),
+                        'faceTime': this.tableData[i].faceTime,
+                        'stranger_status': text,
+                    })
+                }
+                let params ={'xlsName':'陌生人员列表','isImg':'6,7','xlsCell':xlsCell,'xlsData':xlsData,};
+                params = this.$secret_key.func(this.$store.state.on_off, params);
+                this.$https.fetchPost('/plugin/school/api_index/out_excel',params).then((res) => {
+                    window.location.href=res;
+                })
             },
         },
     }
@@ -312,5 +333,8 @@
 }
 .el-radio{
     margin: 0;
+}
+.el-image /deep/ .el-icon-circle-close{
+    color: #fff;
 }
 </style>

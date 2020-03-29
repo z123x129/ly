@@ -133,8 +133,8 @@
                 collapsed:false,
                 img:headImg,
                 isFullscreen:false,
-                // ws:new WebSocket("ws://"+"js2.300c.cn"+":7272")
                 ws:new WebSocket("ws://"+"js2.300c.cn"+":7272")
+                // ws:new WebSocket("ws://"+"192.168.0.2"+":7272")
             }
         },
         components:{
@@ -236,13 +236,36 @@
                     onClick:function () {
                         switch(type){
                             case 'emphasis':
-                                that.$router.push('/Intelligence/Key_personnel');
+                                if(that.$store.state.user.jurisdiction=='MQ=='){
+                                    that.$router.push('/Intelligence/Key_personnel');
+                                }else if(that.$store.state.user.jurisdiction=="Mg=="){
+                                    that.$router.push('/Alert_monitor');
+                                }else if(that.$store.state.user.jurisdiction=="Mw=="){
+                                    that.$router.push('/Alert_monitor');
+                                }
                                 break;
                             case 'stranger':
-                                that.$router.push('/Intelligence/Strange_people');
+                                if(that.$store.state.user.jurisdiction=='MQ=='){
+                                    that.$router.push('/Intelligence/Strange_people');
+                                }else if(that.$store.state.user.jurisdiction=="Mg=="){
+                                    that.$router.push('/Alert_monitor');
+                                }else if(that.$store.state.user.jurisdiction=="Mw=="){
+                                    that.$router.push('/Alert_monitor');
+                                }
                                 break;
                             case 'school_violation':
-                                that.$router.push('/Intelligence/School_show');
+                                if(that.$store.state.user.jurisdiction=='MQ=='){
+                                    that.$router.push('/Intelligence/School_show');
+                                }else if(that.$store.state.user.jurisdiction=="Mg=="){
+                                    that.$router.push('/Report_msg');
+                                }
+                                break;
+                            case 'wgy_upload':
+                                if(that.$store.state.user.jurisdiction=='MQ=='){
+                                    that.$router.push('/Intelligence/School_show');
+                                }else if(that.$store.state.user.jurisdiction=="Mw=="){
+                                    that.$router.push('/school/School_list');
+                                }
                                 break;
                         }
                     },
@@ -282,6 +305,10 @@
                         that.open(data.describe,data.content.name,type);
                         that.$store.commit("getMessage", data);
                         bus.$emit("school",data);
+                        break;
+                    case "wgy_upload":
+                        that.open(data.describe,data.content.name,type);
+                        that.$store.commit("getMessage", data);
                         break;
                 }
             };
