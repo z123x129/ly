@@ -77,7 +77,7 @@
                 },
                 lineArr:[[121.434756, 28.666385], [121.437235, 28.660603], [121.435004, 28.657439], [121.426592, 28.638458], [121.425734, 28.636499], [121.411658, 28.637253], [121.412001, 28.664971], [121.397067, 28.664218], [121.395865, 28.643882]],
                 tzSite:[121.15923,28.861499],//台州的坐标
-                map:{},//地图
+                map:"",//地图
                 marker:{},//点标记
                 isPath:false,
                 pline:{},
@@ -109,7 +109,7 @@
             this.startMap();//地图
             this.getxy();//经纬度
             this.addsite();//标点
-            this.getList()//获取地区列表
+            this.getList();//获取地区列表
             this.winresize()//监听窗口大小变化
         },
         methods:{
@@ -257,7 +257,7 @@
                     debugger;
                     this.data2 = this.data2.concat(data)
                 }else{
-                    
+
                     debugger;
                     for(let i in this.data2)
                     {
@@ -271,10 +271,14 @@
             redian:function(data){//x,y,name
                 let _this=this
                 var info = JSON.stringify(data)
+                var img = 'https://cdn.pixabay.com/photo/2016/08/18/23/04/yale-university-1604159_960_720.jpg'
+                if(data.school_cover){
+                    var img = data.school_cover
+                }
                 var content ='<div class="mapBox">'+
                             '<h3>'+data.dirName+'</h3>'+
                             '<div class="flex">'+
-                                '<img src="http://tpc.googlesyndication.com/simgad/5843493769827749134">'+
+                                '<img src="'+img+'">'+
                                 '<div class="text">'+
                                     '<p>联系人：'+data.personCharge+'</p>'+
                                     '<p>联系电话：'+data.personChargePhone+'</p>'+
@@ -332,6 +336,10 @@
             }
         },
         activated(){
+            if(this.map == "")
+            {
+                this.startMap();
+            }//地图
             if(this.videoVisible)
             {
                 if(this.$refs.H1.checkWebC())
