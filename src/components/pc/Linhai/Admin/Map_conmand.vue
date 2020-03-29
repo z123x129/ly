@@ -77,7 +77,7 @@
                 },
                 lineArr:[[121.434756, 28.666385], [121.437235, 28.660603], [121.435004, 28.657439], [121.426592, 28.638458], [121.425734, 28.636499], [121.411658, 28.637253], [121.412001, 28.664971], [121.397067, 28.664218], [121.395865, 28.643882]],
                 tzSite:[121.15923,28.861499],//台州的坐标
-                map:{},//地图
+                map:"",//地图
                 marker:{},//点标记
                 isPath:false,
                 pline:{},
@@ -109,7 +109,7 @@
             this.startMap();//地图
             this.getxy();//经纬度
             this.addsite();//标点
-            this.getList()//获取地区列表
+            this.getList();//获取地区列表
             this.winresize()//监听窗口大小变化
         },
         methods:{
@@ -257,7 +257,7 @@
                     debugger;
                     this.data2 = this.data2.concat(data)
                 }else{
-                    
+
                     debugger;
                     for(let i in this.data2)
                     {
@@ -332,6 +332,10 @@
             }
         },
         activated(){
+            if(this.map == "")
+            {
+                this.startMap();
+            }//地图
             if(this.videoVisible)
             {
                 if(this.$refs.H1.checkWebC())
