@@ -277,15 +277,18 @@
             });
         },
         activated() {
-            this.$refs.srroll_1.autoResizeMixinInit();
-            this.$refs.srroll_2.autoResizeMixinInit();
-            this.$refs.map.map_resize();
-            this.$refs.Editor.Editor_resize();
-            this.$refs.Dataset.Dataset_resize();
-            this.$refs.Mixed.Mixed_resize();
-            for(let i = 1; i<=6; i++)
+            if(this.$refs.hasOwnProperty("map"))
             {
-                this.$refs["box"+i].initWH();
+                this.$refs.srroll_1.autoResizeMixinInit();
+                this.$refs.srroll_2.autoResizeMixinInit();
+                this.$refs.map.map_resize();
+                this.$refs.Editor.Editor_resize();
+                this.$refs.Dataset.Dataset_resize();
+                this.$refs.Mixed.Mixed_resize();
+                for(let i = 1; i<=6; i++)
+                {
+                    this.$refs["box"+i].initWH();
+                }
             }
         }
     }
