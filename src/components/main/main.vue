@@ -134,7 +134,7 @@
                 img:headImg,
                 isFullscreen:false,
                 // ws:new WebSocket("ws://"+"js2.300c.cn"+":7272")
-                ws:new WebSocket("ws://"+"192.168.0.2"+":7272")
+                ws:new WebSocket("ws://"+"js2.300c.cn"+":7272")
             }
         },
         components:{

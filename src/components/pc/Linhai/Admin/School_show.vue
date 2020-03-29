@@ -10,7 +10,7 @@
                     </el-form-item>
                     <el-form-item label="选择学校:">
                         <el-select size="small" filterable clearable v-model="formInline.dir_id">
-                            <el-option v-for="(item,index) in dir" :label="item.dirName" :value="item.cameraIndexCode" :key="index"></el-option>
+                            <el-option v-for="(item,index) in dir" :label="item.dirName" :value="item.id" :key="index"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="健康证到期时间:">
