@@ -241,6 +241,9 @@
                             case 'stranger':
                                 that.$router.push('/Intelligence/Strange_people');
                                 break;
+                            case 'school_violation':
+                                that.$router.push('/Intelligence/School_show');
+                                break;
                         }
                     },
                 });
@@ -260,7 +263,7 @@
                 let type = data.type || '';
                 switch(type){
                     case 'init':
-                        var params_1 ={'uid':2,'client_id':data.client_id};
+                        var params_1 ={'uid':that.$store.state.user.uid,'client_id':data.client_id};
                         that.$https.fetchPost('/plugin/statistics/api_index/bindUser',params_1).then((res) => {
                             window.console.log('连接成功');
                         });
@@ -278,6 +281,7 @@
                     case "school_violation":
                         that.open(data.describe,data.content.name,type);
                         that.$store.commit("getMessage", data);
+                        bus.$emit("school",data);
                         break;
                 }
             };
