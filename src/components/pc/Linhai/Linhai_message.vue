@@ -10,6 +10,7 @@
                             <p v-if="item.type=='emphasis'" style="font-size: 14px;color: #5e6d82;margin-top: 8px">{{item.content.faceInfoName}} {{item.content.faceGroupName}}</p>
                             <p v-if="item.type=='stranger'" style="font-size: 14px;color: #5e6d82;margin-top: 8px">{{item.content.ageGroup}} {{item.content.cn}}</p>
                             <p v-if="item.type=='school_violation'" style="font-size: 14px;color: #5e6d82;margin-top: 8px">{{item.content.user_login}} {{item.content.title}}</p>
+                            <p v-if="item.type=='wgy_upload'" style="font-size: 14px;color: #5e6d82;margin-top: 8px">{{item.content.name}}</p>
                         </div>
                         <el-button style="float: right;padding: 0" @click="gotocont(item.type)" type="text">查看详情</el-button>
                         <div style="clear: both"></div>
@@ -40,15 +41,39 @@
         },
         methods:{
             gotocont(type){
+                var that = this;
                 switch (type) {
                     case 'emphasis':
-                        this.$router.push('/Intelligence/Key_personnel');
+                        if(that.$store.state.user.jurisdiction=='MQ=='){
+                            that.$router.push('/Intelligence/Key_personnel');
+                        }else if(that.$store.state.user.jurisdiction=="Mg=="){
+                            that.$router.push('/Alert_monitor');
+                        }else if(that.$store.state.user.jurisdiction=="Mw=="){
+                            that.$router.push('/Alert_monitor');
+                        }
                         break;
                     case 'stranger':
-                        this.$router.push('/Intelligence/Strange_people')
+                        if(that.$store.state.user.jurisdiction=='MQ=='){
+                            that.$router.push('/Intelligence/Strange_people');
+                        }else if(that.$store.state.user.jurisdiction=="Mg=="){
+                            that.$router.push('/Alert_monitor');
+                        }else if(that.$store.state.user.jurisdiction=="Mw=="){
+                            that.$router.push('/Alert_monitor');
+                        }
                         break;
                     case 'school_violation':
-                        this.$router.push('/Intelligence/School_show');
+                        if(that.$store.state.user.jurisdiction=='MQ=='){
+                            that.$router.push('/Intelligence/School_show');
+                        }else if(that.$store.state.user.jurisdiction=="Mg=="){
+                            that.$router.push('/Report_msg');
+                        }
+                        break;
+                    case 'wgy_upload':
+                        if(that.$store.state.user.jurisdiction=='MQ=='){
+                            that.$router.push('/Intelligence/School_show');
+                        }else if(that.$store.state.user.jurisdiction=="Mw=="){
+                            that.$router.push('/school/School_list');
+                        }
                         break;
                 }
             }

@@ -84,7 +84,8 @@
                     label="操作"
                     width="100">
                 <template slot-scope="scope">
-                    <el-button @click="showDialog(scope.row.id)" type="text" size="small">处理信息</el-button>
+                    <el-button v-if="scope.row.describe" @click="showDialog(scope.row.id,scope.row.describe)" type="text" size="small">修改</el-button>
+                    <el-button v-else @click="showDialog(scope.row.id)" type="text" size="small">处理信息</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -254,9 +255,12 @@
                 this.content = content;
                 this.dialogFormVisible2 = true;
             },
-            showDialog(id){
+            showDialog(id,content){
                 this.form.id = id;
                 this.form.describe ='';
+                if(content){
+                    this.form.describe =content;
+                }
                 if(this.$refs['my-upload'] != undefined){
                     this.$refs['my-upload'].clearFiles();
                 }

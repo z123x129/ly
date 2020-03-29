@@ -9,14 +9,7 @@
                     <dv-border-box-12 style="padding: 30px;height: 42%" class="box1" ref="box1">
                         <h2>数据概览</h2>
                         <ul style="font-size: 12px">
-                            <li>辖区名称: {{list.general.hq_name}}</li>
-                            <li>行政区类别: {{list.general.rank}}</li>
-                            <li>乡镇: {{list.general.regions}}</li>
-                            <li>学校个数: {{list.general.school}}</li>
-                            <li>后厨: {{list.general.kitchen}}</li>
-                            <li>超市: {{list.general.damp}}</li>
-                            <li>食品安全管理员: {{list.general.food_admin}}</li>
-                            <li>超市人员: {{list.general.damp_admin}}</li>
+                            <li v-for="(item,index) in list.general" :key="index">{{item.title}} {{item.value}}</li>
                         </ul>
                     </dv-border-box-12>
                     <dv-border-box-12 style="height: 58%;padding: 15px 10px 20px 5px" class="box1" ref="box2">
@@ -97,16 +90,7 @@
         data(){
                 return{
                     list:{
-                        general:{
-                            hq_name:'',
-                            rank:'',
-                            regions:'',
-                            school:'',
-                            kitchen:'',
-                            damp:'',
-                            food_admin:'',
-                            damp_admin:'',
-                        },
+                        general:{},
                         area_chart:{
                             all:'',
                             normal:'',
