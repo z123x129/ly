@@ -207,6 +207,7 @@
             chageShow(val){
                 if(val.indexOf('单兵视频') > -1){
                     if(this.markers.length >0){
+                        this.map.setZoomAndCenter(11,this.tzSite);
                         return
                     }else{
                         this.addsite()
@@ -233,6 +234,7 @@
                     marker.setMap(_this.map);
                     _this.markers.push(marker)
                 })
+                _this.map.setZoomAndCenter(11,_this.tzSite);
             },
             //删除点标记
             delsite(){
