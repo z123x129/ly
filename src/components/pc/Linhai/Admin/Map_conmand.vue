@@ -1,9 +1,13 @@
 <template>
     <div id="i1" style="width: 100%">
         <div class="demo">
-            <p>摄像点选择:</p>
+            <p style="padding-bottom:10px">摄像点选择:</p>
+            <CheckboxGroup v-model="value" @on-change="chageShow">
+                <Checkbox label="单兵视频"></Checkbox>
+                <Checkbox label="车载视频"></Checkbox>
+            </CheckboxGroup>
             <el-input
-                    style="padding:10px;"
+                    style="padding:10px 0;"
                     size="small"
                     placeholder="输入关键字搜索"
                     v-model="filterText">
@@ -20,7 +24,6 @@
         <div class="map_box">
             <div id="content" v-cloak>
                 <div id="container" class="map"></div>
-                <div id="xy" style="color: red;height: 80px;width: 160px;"></div>
             </div>
         </div>
         <videoDialog class="dialog" :visible.sync="videoVisible" @resize="resize" @cancel="hideVideo" >
@@ -78,9 +81,9 @@
                 lineArr:[[121.434756, 28.666385], [121.437235, 28.660603], [121.435004, 28.657439], [121.426592, 28.638458], [121.425734, 28.636499], [121.411658, 28.637253], [121.412001, 28.664971], [121.397067, 28.664218], [121.395865, 28.643882]],
                 tzSite:[121.15923,28.861499],//台州的坐标
                 map:"",//地图
-                marker:{},//点标记
+                markers:[],//点标记合集
                 isPath:false,
-                pline:{},
+                plines:[],//轨迹合集
                 markerArr:[
                     {id:1,isSign:false,unit:0,text:'单',xy:[121.156569,28.86646],line:[[121.156569,28.86646],[121.140984,28.853966],[121.106308,28.859078]]},
                     {id:2,isSign:false,unit:0,text:'车',xy:[121.214848,28.871721],line:[[121.214848,28.871721],[121.193855,28.892148],[121.211365,28.921301]]},
@@ -88,6 +91,7 @@
                 ],
                 videoVisible:false,
                 ddd:'aWebControl',
+                value: [],
             }
         },
         watch: {
@@ -107,9 +111,6 @@
         },
         mounted: function () {
             this.startMap();//地图
-            this.getxy();//经纬度
-            this.addsite();//标点
-
             this.winresize()//监听窗口大小变化
         },
         methods:{
@@ -141,7 +142,7 @@
             resize(){//拖动窗口时视频插件跟随移动
                 this.$refs.H1.resizeWindow(this.$refs.H1.$el.offsetHeight,this.$refs.H1.$el.offsetWidth);
             },
-            winresize(){
+            winresize(){//监听窗口大小变化改变视频插件窗口大小
                 if(this.$refs.H1.checkWebC()) return//如果插件未初始化
 
                 const that = this
@@ -203,31 +204,45 @@
                     isHotspot: true//是否开启地图热点和标注效果
                 });
             },
-            //点击经纬度
-            getxy:function(){
-                let _this=this
-                _this.map.on('click', function (e) {
-                    $("#xy").text(e.lnglat.getLng() + ',' + e.lnglat.getLat())
-                });
+            chageShow(val){
+                if(val.indexOf('单兵视频') > -1){
+                    if(this.markers.length >0){
+                        return
+                    }else{
+                        this.addsite()
+                    }
+                    
+                }else if(val.indexOf('单兵视频') == -1){
+                    this.delsite()
+                }
+                
             },
             //添加点标记,
             addsite: function () {
                 let _this=this
                 _this.markerArr.map((va,key) => {
                     // console.log(key)
-                    _this.marker = new AMap.Marker({
+                    let marker = new AMap.Marker({
                         position: va.xy,
                         map: _this.map,
                         offset: new AMap.Pixel(-13, -30)
                     });
-                    _this.marker.content = '<div class="mapBox2"><div style="width: 200px">选择操作</div><a class=\'btn btn-info\' onclick=\'opvideo()\' style="margin-left: 12px;margin-top: 10px">查看监控</a><a class=\'btn btn-info\' onclick=\'polyline('+key+')\' style="margin-left: 12px;margin-top: 10px">查看轨迹</a></div>';
-                    _this.marker.on('click', markerClick);
-                    _this.marker.emit('click', {target: _this.marker});
-                    _this.marker.setMap(_this.map);
+                    marker.content = '<div class="mapBox2"><div style="width: 200px">选择操作</div><a class=\'btn btn-info\' onclick=\'opvideo()\' style="margin-left: 12px;margin-top: 10px">查看监控</a><a class=\'btn btn-info\' onclick=\'polyline('+key+')\' style="margin-left: 12px;margin-top: 10px">查看轨迹</a></div>';
+                    marker.on('click', markerClick);
+                    // marker.emit('click', {target: marker});
+                    marker.setMap(_this.map);
+                    _this.markers.push(marker)
                 })
             },
+            //删除点标记
+            delsite(){
+                if (this.markers <1)return
+                this.map.remove(this.markers);//删除点标记
+                this.map.remove(this.plines);//删除轨迹
+                this.markers =[]
+                this.plines =[]
+            },
             markerClick:function(e) {
-                // console.log(e)console
                 let _this=this
                 _this.infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -30)});
                 _this.infoWindow.setContent(e.target.content);
@@ -237,7 +252,7 @@
             polyline:function(key){
                 let _this=this
                 let line=_this.markerArr[key]
-                _this.pline=new AMap.Polyline({
+                let pline=new AMap.Polyline({
                     map: _this.map,
                     path: line.line,
                     showDir: true,
@@ -246,6 +261,7 @@
                     strokeWeight: 6,      //线宽
                     // strokeStyle: "solid"  //线样式
                 });
+                _this.plines.push(pline)
             },
             //查看监控
             opvideo:function(data){
@@ -415,21 +431,11 @@
         align-items: center;
     }
     .demo{
-        // width: 18%;
-        // float: left;
-        // min-width: 200px;
-        // max-width:20vw;
-        // min-width:20vw;
         padding: 10px;
         box-sizing: border-box;
         height: 100%;
         background: #fff;
         overflow: auto;
-        // transition: all .8s ease;
-        // .el-date-editor{
-        //     max-width: calc(~'100% - 20px');
-        //     margin:0 10px;
-        // }
     }
     .map_box{
         // float: left;
