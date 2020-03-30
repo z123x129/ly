@@ -9,14 +9,7 @@
                     <dv-border-box-12 style="padding: 30px;height: 42%" class="box1" ref="box1">
                         <h2>数据概览</h2>
                         <ul style="font-size: 12px">
-                            <li>辖区名称: {{list.general.hq_name}}</li>
-                            <li>行政区类别: {{list.general.rank}}</li>
-                            <li>乡镇: {{list.general.regions}}</li>
-                            <li>学校个数: {{list.general.school}}</li>
-                            <li>后厨: {{list.general.kitchen}}</li>
-                            <li>超市: {{list.general.damp}}</li>
-                            <li>食品安全管理员: {{list.general.food_admin}}</li>
-                            <li>超市人员: {{list.general.damp_admin}}</li>
+                            <li v-for="(item,index) in list.general" :key="index">{{item.title}} {{item.value}}</li>
                         </ul>
                     </dv-border-box-12>
                     <dv-border-box-12 style="height: 58%;padding: 15px 10px 20px 5px" class="box1" ref="box2">
@@ -25,14 +18,14 @@
                     </dv-border-box-12>
                 </div>
                 <div style="position: relative" class="cont2">
-                    <div @click="back" v-if="showBack   ">
+                    <div @click="back" v-if="showBack">
                         <dv-decoration-9 ref="button_1" style="z-index:999;cursor: pointer;width:50px;height:50px;position: absolute;top: 20px;left: 20px;color: #7ec699;text-shadow: 0 0 3px #7acaec;">返回</dv-decoration-9>
                     </div>
                     <Map style="width: 100%;height: 100%" :address_info="address_info" ref="map" @showButton="showButton"  @getAreaInfo="getAreaInfo"></Map>
                     <ul>
-                        <li>学校个数: <span>{{list.general.school}}</span></li>
-                        <li>没有异常的学校: <span>{{list.general.yes_school}}</span></li>
-                        <li>有异常的学校: <span>{{list.general.no_school}}</span></li>
+                        <li>学校个数: <span>{{list.school}}</span></li>
+                        <li>没有异常的学校: <span>{{list.yes_school}}</span></li>
+                        <li>有异常的学校: <span>{{list.no_school}}</span></li>
                     </ul>
                 </div>
                 <div class="cont1">
@@ -97,16 +90,7 @@
         data(){
                 return{
                     list:{
-                        general:{
-                            hq_name:'',
-                            rank:'',
-                            regions:'',
-                            school:'',
-                            kitchen:'',
-                            damp:'',
-                            food_admin:'',
-                            damp_admin:'',
-                        },
+                        general:{},
                         area_chart:{
                             all:'',
                             normal:'',
@@ -123,9 +107,9 @@
                     showBack:false,
                 address_info:[],
                 config:{},
-
                 config2:{},
-                data:[[1,1,1,1]]
+                data:[],
+                data2:[],
             }
         },
         methods:{
@@ -195,27 +179,25 @@
                 let params ={};
                 this.$https.fetchPost('/plugin/statistics/api_index/schoolViolation',params).then((res) => {
                     var arr = [];
-                    var data = [];
                     for (let i = 0; i < res.length ; i++) {
                         arr.push(res[i].name);
                         arr.push(res[i].violation);
                         arr.push(String(res[i].num));
                         arr.push(String(res[i].code));
-                        // arr.push(String(res[i].id));
-                        data.push(arr);
-                        data.push(arr);
+                        this.data2.push(arr);
                         arr = []
                     }
-
-                    this.config2 = {
-                        header: ['学校','违规选项','违规次数','严重级别'],
-                        data: data,
-                        index: true,
-                        columnWidth: [40,120,100,90,90],
-                        align: ['center','center','center','center','center'],
-                    };
-
+                    this.getConfig2();
                 })
+            },
+            getConfig2(){
+                this.config2 = {
+                    header: ['学校','违规选项','违规次数','严重级别'],
+                    data: this.data2,
+                    index: true,
+                    columnWidth: [40,120,100,90,90],
+                    align: ['center','center','center','center','center'],
+                };
             },
             getAreaInfo(city, indexCode, city_name){
                 let that = this;
@@ -229,10 +211,21 @@
             getWeigui(row){
                 console.log(row)
             },
-            getTime(mes){
-                if(mes){
-                    this.data.unshift(mes);
-                }
+            getTime(){
+                let params = {};
+                this.$https.fetchPost('/plugin/statistics/api_index/indexAlarm',params).then((res) => {
+                    var arr = [];
+                    for (let i = 0; i < res.length ; i++) {
+                        arr.push(res[i].dirName);
+                        arr.push(res[i].type);
+                        arr.push(res[i].faceTime);
+                        this.data.push(arr);
+                        arr = []
+                    }
+                    this.getConfig();
+                });
+            },
+            getConfig(){
                 this.config = {
                     header: ['学校','类型','时间'],
                     data: this.data,
@@ -240,7 +233,7 @@
                     columnWidth: [40,120,100,90,90],
                     align: ['center','center','center','center','center'],
                 };
-            },
+            }
         },
         mounted() {
             this.getAddress();
@@ -250,22 +243,36 @@
             this.getTime();
             var that = this;
             bus.$on("outmes", function(mes) {
-                console.log(mes)
-                let data = [];
-                data.push(mes)
-                // that.getTime(mes)
+                let arr = [];
+                arr.push(mes.content.dirName);
+                arr.push(mes.describe);
+                arr.push(mes.content.faceTime);
+                that.data.unshift(arr);
+                that.getConfig();
+            });
+            bus.$on("school", function(mes) {
+                let arr = [];
+                arr.push(mes.content.name);
+                arr.push(mes.content.violation);
+                arr.push(mes.content.num);
+                arr.push(mes.content.code);
+                that.data2.unshift(arr);
+                that.getConfig2();
             });
         },
         activated() {
-            this.$refs.srroll_1.autoResizeMixinInit();
-            this.$refs.srroll_2.autoResizeMixinInit();
-            this.$refs.map.map_resize();
-            this.$refs.Editor.Editor_resize();
-            this.$refs.Dataset.Dataset_resize();
-            this.$refs.Mixed.Mixed_resize();
-            for(let i = 1; i<=6; i++)
+            if(this.$refs.hasOwnProperty("map"))
             {
-                this.$refs["box"+i].initWH();
+                this.$refs.srroll_1.autoResizeMixinInit();
+                this.$refs.srroll_2.autoResizeMixinInit();
+                this.$refs.map.map_resize();
+                this.$refs.Editor.Editor_resize();
+                this.$refs.Dataset.Dataset_resize();
+                this.$refs.Mixed.Mixed_resize();
+                for(let i = 1; i<=6; i++)
+                {
+                    this.$refs["box"+i].initWH();
+                }
             }
         }
     }
