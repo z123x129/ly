@@ -67,7 +67,7 @@
                 <div class="cont1">
                     <dv-border-box-12 class="box2" ref="box6">
                         <h2>实时警报数据</h2>
-                        <dv-scroll-board ref="srroll_2" :config="config" style="width:94%;height:82%;margin: 3%" />
+                        <dv-scroll-board @click="gotoStock" ref="srroll_2" :config="config" style="width:94%;height:82%;margin: 3%" />
                     </dv-border-box-12>
                 </div>
             </div>
@@ -119,8 +119,10 @@
                    that.address_info = data;
                    that.$nextTick(()=>{
                        setTimeout(()=> {
-                           that.$refs.map.init("LinHai");
-                       },500);
+                           // that.$refs.map.init("LinHai");
+                           that.init_child("map");
+                       },800);
+
                    })
                 })
             },
@@ -152,9 +154,9 @@
                     this.$nextTick(function () {
                         let that = this;
                         setTimeout(()=>{
-                            that.$refs.Editor.init();
-                            that.$refs.Mixed.init();
-                            that.$refs.Dataset.init();
+                            that.init_child("Editor");
+                            that.init_child("Mixed");
+                            that.init_child("Dataset");
                         }, 500)
                     })
                 })
@@ -166,11 +168,22 @@
                     this.$nextTick(function () {
                         let that = this;
                         setTimeout(()=>{
-                            that.$refs.Dataset.init();
+                            that.init_child("Dataset");
                         },500)
 
                     })
                 })
+            },
+            init_child(name){
+                let that = this;
+                if(this.$refs.hasOwnProperty(name))
+                {
+                    this.$refs[name].init();
+                }
+                else
+                {
+                    setTimeout(function(){that.init_child(name)},500)
+                }
             },
             showButton(data){
                 this.showBack = data;
@@ -225,14 +238,18 @@
                     this.getConfig();
                 });
             },
-            getConfig(){
+                getConfig(){
                 this.config = {
                     header: ['学校','类型','时间'],
                     data: this.data,
                     index: true,
-                    columnWidth: [40,120,100,90,90],
-                    align: ['center','center','center','center','center'],
+                    columnWidth: [40,120,100],
+                    align: ['center','center','center','center']
                 };
+            },
+            gotoStock(row){
+                this.$router.push('/Intelligence/Strange_people')
+                // console.log(row)
             }
         },
         mounted() {

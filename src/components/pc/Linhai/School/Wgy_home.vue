@@ -34,10 +34,23 @@
                     this.$nextTick(function () {
                         let that = this;
                         setTimeout(() => {
-                            that.$refs.Doughnut.init();
+                            that.init_child("Doughnut");
                         }, 500);
                 })
             })
+        },
+        methods:{
+            init_child(name){
+                let that = this;
+                if(this.$refs.hasOwnProperty(name))
+                {
+                    this.$refs[name].init();
+                }
+                else
+                {
+                    setTimeout(function(){that.init_child(name)},500)
+                }
+            },
         }
     }
 </script>

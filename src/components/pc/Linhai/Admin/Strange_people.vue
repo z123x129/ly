@@ -43,7 +43,7 @@
                 </el-date-picker>
             </el-form-item>
             <el-form-item style="margin-top: 9px">
-                <el-button size="small" type="primary" @click="getList">搜索</el-button>
+                <el-button size="small" type="primary" @click="search">搜索</el-button>
                 <el-button size="small" type="primary" @click="exports">导出excel</el-button>
 <!--                <el-button size="small" type="primary">生成报表至网格员</el-button>-->
             </el-form-item>
@@ -211,6 +211,10 @@
             this.getAddress();
         },
         methods: {
+            search(){
+                this.page = 1;
+                this.getList();
+            },
             getDataset(name){
                 this.formInline.indexCode = name;
                 this.dir = this.dir_2;

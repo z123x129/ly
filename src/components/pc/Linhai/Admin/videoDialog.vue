@@ -3,7 +3,7 @@
         <div v-show="visible"  class="my_dialog_box" id="my_dialog_box" v-drag>
             <!-- 标题 -->
             <div class="my_dialog_title">
-                录像查看
+                实时监控
                 <span class="my_dialog_close" @click="cancel">X</span>
             </div>
             <!-- 内容 -->

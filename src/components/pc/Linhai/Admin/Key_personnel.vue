@@ -28,7 +28,7 @@
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item style="margin-top: -2px">
-                        <el-button size="small" type="primary" @click="getList2">搜索</el-button>
+                        <el-button size="small" type="primary" @click="search2">搜索</el-button>
                     </el-form-item>
                 </el-form>
                 <el-table
@@ -119,7 +119,7 @@
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item style="margin-top: -2px">
-                        <el-button size="small" type="primary" @click="getList">搜索</el-button>
+                        <el-button size="small" type="primary" @click="search">搜索</el-button>
                         <el-button size="small" type="primary" @click="showAdd">添加重点人员</el-button>
                         <el-button size="small" type="primary" @click="delAll">批量删除</el-button>
                     </el-form-item>
@@ -204,7 +204,7 @@
                         <el-form-item label="上传人物照片:" prop="face_img" :label-width="formLabelWidth">
                             <el-upload
                                     class="avatar-uploader"
-                                    action="/public/plugin/file_manage/api_index/upload_img"
+                                    :action='url+"/public/plugin/file_manage/api_index/upload_img"'
                                     :show-file-list="false"
                                     :on-success="handleAvatarSuccess"
                                     :before-upload="beforeAvatarUpload">
@@ -248,6 +248,7 @@
         },
         data(){
             return{
+                url:this.$store.state.route.http,
                 activeName: 'first',
                 formInline: {
                     user_name: '',
@@ -328,6 +329,14 @@
             this.getAddress();
         },
         methods: {
+            search(){
+                this.page = 1;
+                this.getList();
+            },
+            search2(){
+                this.page2 = 1;
+                this.getList2();
+            },
             getList(){
                 var time_start = '',time_end = '';
                 if(this.formInline.timeStr){
