@@ -48,7 +48,7 @@
                     label="图片信息"
                     min-width="80">
                 <template slot-scope="scope">
-                    <el-image v-if="scope.row.path.length>0"
+                    <el-image v-if="scope.row.path&&scope.row.path.length>0"
                             style="width: 60px; height: 60px;"
                             :src="scope.row.path[0]"
                             :preview-src-list="scope.row.path">
@@ -280,9 +280,9 @@
                 this.form.re_path.push(res.data.filepath);
             },
             beforeAvatarUpload(file) {
-                const isJPG = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/bmp';
+                const isJPG = file.type === 'image/jpeg' || file.type === 'image/png';
                 if (!isJPG) {
-                    Message.error('附件只能上传图片!');
+                    Message.error('附件只能上传jpg和png格式的图片!');
                 }
                 return isJPG;
             },

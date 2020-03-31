@@ -284,7 +284,6 @@
                 this.getList();
             },
             exports(){
-                console.log(this.tableData)
                 let xlsCell = [["id","ID"],["name","抓拍区域"],["cameraName","抓拍地点"],["bkgUrl","背景图"],
                     ["faceUrl","抓拍图片"],["faceTime","抓拍时间"],["stranger_status","当前状态"]];
                 let xlsData = [];
@@ -303,9 +302,9 @@
                         'stranger_status': text,
                     })
                 }
-                let params ={'xlsName':'陌生人员列表','isImg':'6,7','xlsCell':xlsCell,'xlsData':xlsData,};
+                let params ={'xlsName':'陌生人员列表','isImg':'3,4','out_img':'3,4','xlsCell':xlsCell,'xlsData':xlsData,};
                 params = this.$secret_key.func(this.$store.state.on_off, params);
-                this.$https.fetchPost('/plugin/school/api_index/out_excel',params).then((res) => {
+                this.$https.fetchPost('/plugin/statistics/api_index/out_excel',params).then((res) => {
                     window.location.href=res;
                 })
             },
