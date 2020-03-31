@@ -290,9 +290,9 @@
                 this.form.file.push(res.data.filepath);
             },
             beforeAvatarUpload(file) {
-                const isJPG = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/bmp';
+                const isJPG = file.type === 'image/jpeg' || file.type === 'image/png';
                 if (!isJPG) {
-                    Message.error('附件只能上传图片!');
+                    Message.error('附件只能上传jpg和png格式的图片!');
                 }
                 return isJPG;
             },
