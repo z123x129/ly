@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-tabs style="padding: 0 10px" v-model="activeName">
-            <el-tab-pane label="学校数据展示" name="first">
+            <el-tab-pane label="健康证清单" name="first">
                 <el-form :inline="true" :model="formInline" class="demo-form-inline">
                     <el-form-item label="选择区域:">
                         <el-select @change="getSchool" size="small" filterable clearable v-model="formInline.indexCode">
@@ -28,7 +28,7 @@
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item style="margin-top: -2px">
-                        <el-button size="small" type="primary" @click="getList">搜索</el-button>
+                        <el-button size="small" type="primary" @click="search">搜索</el-button>
                         <el-button size="small" type="primary" @click="exports">导出excel</el-button>
                     </el-form-item>
                 </el-form>
@@ -108,7 +108,7 @@
                     </el-pagination>
                 </div>
             </el-tab-pane>
-            <el-tab-pane label="违规数据" name="second">
+            <el-tab-pane label="抽查违规清单" name="second">
                 <el-form :inline="true" :model="formInline" class="demo-form-inline">
                     <el-form-item label="选择区域:">
                         <el-select @change="getSchool2" size="small" filterable clearable v-model="formInline2.indexCode">
@@ -126,7 +126,7 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item style="margin-top: -2px">
-                        <el-button size="small" type="primary" @click="getList2">搜索</el-button>
+                        <el-button size="small" type="primary" @click="search2">搜索</el-button>
                     </el-form-item>
                 </el-form>
                 <el-table
@@ -185,7 +185,7 @@
                             align="center"
                             label="处理结果">
                         <template slot-scope="scope">
-                            <el-button v-if="scope.row.status==1" @click="look('处理结果',scope.row.describe)" type="text" size="small">已处理</el-button>
+                            <el-button v-if="scope.row.status==1" @click="look('处理结果',scope.row.describe,scope.row.re_path)" type="text" size="small">已处理</el-button>
                             <span v-else>未处理</span>
                         </template>
                     </el-table-column>
@@ -206,6 +206,13 @@
                         :title=title
                         :visible.sync="dialogFormVisible">
                     <span v-html="content"></span>
+                    <div class="demo-image__preview">
+                        <el-image v-if="img"
+                                style="width: 100px; height: 100px"
+                                :src="img[0]"
+                                :preview-src-list="img">
+                        </el-image>
+                    </div>
                 </el-dialog>
             </el-tab-pane>
         </el-tabs>
@@ -281,6 +288,7 @@
                 },
                 title: '',
                 content: '',
+                img:'',
                 dialogFormVisible:false,
                 currentPage: 1,
                 total:0,
@@ -299,6 +307,14 @@
             this.getAddress();
         },
         methods: {
+            search(){
+                this.page = 1;
+                this.getList();
+            },
+            search2(){
+                this.page2 = 1;
+                this.getList2();
+            },
             getList(){
                 var timeStart = '',timeEnd = '';
                 if(this.formInline.timeStr !== null){
@@ -413,9 +429,14 @@
                 }
                 return 'success-row';
             },
-            look(title,content){
+            look(title,content,img){
                 this.title = title;
                 this.content = content;
+                if(img){
+                    this.img = img;
+                }else{
+                    this.img = '';
+                }
                 this.dialogFormVisible = true;
             },
         },

@@ -57,7 +57,7 @@
             {
                 this.chart.resize();
             },
-            init(initData){
+            init(initData="LinHai"){
                 // 指定图表的配置项和数据
                 // var mapData = [
                 //
@@ -186,7 +186,7 @@
                                                     offset: 1, color: '#003a8c' // 100% 处的颜色
                                                 }],
                                                 global: false // 缺省为 false
-                                            },                               
+                                            },
                                         },
                                         emphasis: {
                                             areaColor: '#1890ff',

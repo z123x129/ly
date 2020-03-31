@@ -8,27 +8,27 @@
                 <el-date-picker size="small" type="date" placeholder="年/月/日" v-model="formInline.date2"></el-date-picker>
             </el-form-item>
             <el-form-item label="抓拍点:" :label-width="formLabelWidth">
-                <el-select size="small" v-model="formInline.region" placeholder="请选择区域">
-                    <el-option label="选择区域" value="shanghai"></el-option>
-                    <el-option label="选择学校" value="beijing"></el-option>o
+                <el-select clearable size="small" v-model="formInline.address" placeholder="请选择抓拍点">
+                    <el-option v-for="(item,index) in option" :key="index" :label="item.cameraName" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="年龄段:" :label-width="formLabelWidth">
-                <el-select size="small" v-model="formInline.region" placeholder="不限">
-                    <el-option label="选择区域" value="shanghai"></el-option>
-                    <el-option label="选择学校" value="beijing"></el-option>
+                <el-select clearable size="small" v-model="formInline.region" placeholder="不限">
+                    <el-option label="青年" value="shanghai"></el-option>
+                    <el-option label="中年" value="beijing"></el-option>
+                    <el-option label="老年" value="beijing"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="性别:" :label-width="formLabelWidth">
-                <el-select size="small" v-model="formInline.region" placeholder="不限">
-                    <el-option label="选择区域" value="shanghai"></el-option>
-                    <el-option label="选择学校" value="beijing"></el-option>
+                <el-select clearable size="small" v-model="formInline.region2" placeholder="不限">
+                    <el-option label="男" value="shanghai"></el-option>
+                    <el-option label="女" value="beijing"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="是否戴眼镜:" :label-width="formLabelWidth">
-                <el-select size="small" v-model="formInline.region" placeholder="不限">
-                    <el-option label="选择区域" value="shanghai"></el-option>
-                    <el-option label="选择学校" value="beijing"></el-option>
+                <el-select clearable size="small" v-model="formInline.region3" placeholder="不限">
+                    <el-option label="是" value="shanghai"></el-option>
+                    <el-option label="否" value="beijing"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item style="padding-left: 40px">
@@ -174,11 +174,15 @@
         },
         data(){
             return{
+                option:[],
                 formInline: {
                     date1:'',
                     date2:'',
                     user: '',
-                    region: 'shanghai'
+                    region: '',
+                    region2: '',
+                    region3: '',
+                    address:''
                 },
                 formLabelWidth: '100px',
                 radio: '图标',
@@ -214,7 +218,17 @@
                 ]
             }
         },
+        mounted(){
+            this.getAddress();
+        },
         methods: {
+            getAddress(){
+                let params ={'uid':this.$store.state.user.uid};
+                params = this.$secret_key.func(this.$store.state.on_off, params);
+                this.$https.fetchPost('/plugin/statistics/api_index/getSchoolTake ',params).then((res) => {
+                    this.option = this.$secret_key.func(this.$store.state.on_off, res ,"key");
+                })
+            },
             onSubmit() {
                 console.log('submit!');
             },

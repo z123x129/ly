@@ -253,14 +253,14 @@
                                     that.$router.push('/Alert_monitor');
                                 }
                                 break;
-                            case 'school_violation':
+                            case 'wgy_violation':
                                 if(that.$store.state.user.jurisdiction=='MQ=='){
                                     that.$router.push('/Intelligence/School_show');
                                 }else if(that.$store.state.user.jurisdiction=="Mg=="){
                                     that.$router.push('/Report_msg');
                                 }
                                 break;
-                            case 'wgy_upload':
+                            case 'school_upload':
                                 if(that.$store.state.user.jurisdiction=='MQ=='){
                                     that.$router.push('/Intelligence/School_show');
                                 }else if(that.$store.state.user.jurisdiction=="Mw=="){
@@ -301,12 +301,12 @@
                         that.$store.commit("getMessage", data);
                         bus.$emit("outmes",data);
                         break;
-                    case "school_violation":
+                    case "wgy_violation":
                         that.open(data.describe,data.content.name,type);
                         that.$store.commit("getMessage", data);
                         bus.$emit("school",data);
                         break;
-                    case "wgy_upload":
+                    case "school_upload":
                         that.open(data.describe,data.content.name,type);
                         that.$store.commit("getMessage", data);
                         break;
