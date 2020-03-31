@@ -30,6 +30,7 @@ import Wgy_home from '@/components/pc/Linhai/School/Wgy_home.vue'
 import School_list from '@/components/pc/Linhai/School/School_list.vue'
 import Violation_list from '@/components/pc/Linhai/School/Violation_list.vue'
 import Alert_monitor from '@/components/pc/Linhai/School/Alert_monitor.vue'
+import Maintain_wgy from '@/components/pc/Linhai/School/Maintain_wgy.vue'
 
 import Main from '@/components/main'
 
@@ -205,7 +206,7 @@ export const asyncRouterMap = [
                 name: 'School_show',
                 meta: {
                     icon: 'md-school',
-                    title: '学校列表展示',
+                    title: '学校列表清单',
                     role: [1],
                 },
                 component: School_show
@@ -347,12 +348,34 @@ export const asyncRouterMap = [
         ]
     },
     {
+        path: '/school',
+        name: 'school',
+        component: Main,
+        meta: {
+            icon: 'md-school',
+            title: '学校健康证维护',
+            role: [3]
+        },
+        children:[
+            {
+                path: 'Maintain_wgy',
+                name: 'Maintain_wgy',
+                meta: {
+                    icon: 'md-school',
+                    title: '学校健康证维护',
+                    role: [3]
+                },
+                component: Maintain_wgy
+            }
+        ]
+    },
+    {
         path: '/alert',
         name: 'alert',
         component: Main,
         meta: {
             icon: 'md-information-circle',
-            title: '警报监测',
+            title: '陌生人脸抓拍清单',
             role: [2,3]
         },
         children:[
@@ -361,7 +384,7 @@ export const asyncRouterMap = [
                 name: 'Alert_monitor',
                 meta: {
                     icon: 'md-information-circle',
-                    title: '警报监测',
+                    title: '陌生人脸抓拍清单',
                     role: [2,3]
                 },
                 component: Alert_monitor

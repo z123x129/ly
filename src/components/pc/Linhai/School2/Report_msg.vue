@@ -22,7 +22,7 @@
                 </el-date-picker>
             </el-form-item>
             <el-form-item style="margin-top: -2px">
-                <el-button size="small" type="primary" @click="getList">搜索</el-button>
+                <el-button size="small" type="primary" @click="search">搜索</el-button>
             </el-form-item>
         </el-form>
         <el-table
@@ -230,6 +230,10 @@
             });
         },
         methods: {
+            search(){
+                this.page = 1;
+                this.getList()
+            },
             getList(){
                 var timeStart = '',timeEnd = '';
                 if(this.formInline.timeStr){
