@@ -131,7 +131,7 @@
                 this.showBack = false;
             },
             getAdd(){
-                let params ={};
+                let params ={'uid':this.$store.state.user.uid};
                 this.$https.fetchPost('/plugin/statistics/api_index/getmapselectdir',params).then((res) => {
                     this.getMen();
                     this.$nextTick(function () {
@@ -145,7 +145,7 @@
                 })
             },
             getList(){
-                let params ={};
+                let params ={'uid':this.$store.state.user.uid};
                 this.$https.fetchPost('/plugin/statistics/api_index/indexStat',params).then((res) => {
                     this.list = res;
                     this.normal[0] = Math.round(res.area_chart.normal/res.area_chart.all*100);
@@ -162,7 +162,7 @@
                 })
             },
             getMen(indexCode){
-                let params ={'indexCode':indexCode};
+                let params ={'indexCode':indexCode,'uid':this.$store.state.user.uid};
                 this.$https.fetchPost('/plugin/statistics/api_index/indexStatSchool',params).then((res) => {
                     this.regions_chart = res;
                     this.$nextTick(function () {
@@ -189,7 +189,7 @@
                 this.showBack = data;
             },
             getSchool(){
-                let params ={};
+                let params ={'uid':this.$store.state.user.uid};
                 this.$https.fetchPost('/plugin/statistics/api_index/schoolViolation',params).then((res) => {
                     var arr = [];
                     for (let i = 0; i < res.length ; i++) {
@@ -214,7 +214,7 @@
             },
             getAreaInfo(city, indexCode, city_name){
                 let that = this;
-                let params = {indexCode:indexCode};
+                let params = {indexCode:indexCode,'uid':this.$store.state.user.uid};
                 this.$https.fetchPost('/plugin/statistics/api_index/getMapSchool',params).then((res) => {
                     that.$refs.map.changeCityMap(city, res);
                 });
@@ -222,10 +222,10 @@
                 this.getMen(indexCode);
             },
             getWeigui(row){
-                console.log(row)
+                this.$router.push('/Intelligence/School_show')
             },
             getTime(){
-                let params = {};
+                let params = {'uid':this.$store.state.user.uid};
                 this.$https.fetchPost('/plugin/statistics/api_index/indexAlarm',params).then((res) => {
                     var arr = [];
                     for (let i = 0; i < res.length ; i++) {
@@ -248,8 +248,11 @@
                 };
             },
             gotoStock(row){
-                this.$router.push('/Intelligence/Strange_people')
-                // console.log(row)
+                if(row.ceil=='发现陌生人'){
+                    this.$router.push('/Intelligence/Strange_people')
+                }else{
+                    this.$router.push('/Intelligence/Key_personnel')
+                }
             }
         },
         mounted() {

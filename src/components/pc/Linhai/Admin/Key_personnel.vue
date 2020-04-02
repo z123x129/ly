@@ -343,7 +343,8 @@
                     time_start = this.formInline.timeStr[0];
                     time_end = this.formInline.timeStr[1];
                 }
-                let params ={'page':this.page,'paginate':this.paginate,
+                let params ={'uid':this.$store.state.user.uid,
+                    'page':this.page,'paginate':this.paginate,
                     'user_name':this.formInline.user_name,
                     'id_card':this.formInline.id_card,
                     'start_time':time_start,
@@ -360,7 +361,8 @@
                     time_start = this.formInline2.value[0];
                     time_end = this.formInline2.value[1];
                 }
-                let params ={'page':this.page2,'paginate':this.paginate2,
+                let params ={'uid':this.$store.state.user.uid,
+                    'page':this.page2,'paginate':this.paginate2,
                     'indexCode':this.formInline2.indexCode,
                     'dir_id':this.formInline2.dir_id,
                     'start_time':time_start,
@@ -409,8 +411,8 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        let params = this.form;
-                        params = this.$secret_key.func(this.$store.state.on_off, params);
+                        let params ={'uid':this.$store.state.user.uid,};
+                        params = Object.assign(this.form,params);
                         var add = '';
                         if(this.type == 1){
                             add = '/plugin/statistics/api_index/addEmphasisInfo'
@@ -487,7 +489,7 @@
                 return result;
             },
             delList(id){
-                let params ={'id':id};
+                let params ={'id':id,'uid':this.$store.state.user.uid};
                 params = this.$secret_key.func(this.$store.state.on_off, params);
                 this.$https.fetchPost('/plugin/statistics/api_index/deleteEmphasis',params).then((res) => {
                     this.getList()
@@ -498,14 +500,14 @@
                     Message.error('请选择删除项');
                     return false;
                 }
-                let params ={'arr':this.ids};
+                let params ={'arr':this.ids,'uid':this.$store.state.user.uid};
                 params = this.$secret_key.func(this.$store.state.on_off, params);
                 this.$https.fetchPost('/plugin/statistics/api_index/deleteEmphasisArr',params).then((res) => {
                     this.getList()
                 })
             },
             getAddress(){
-                let params ={};
+                let params ={'uid':this.$store.state.user.uid};
                 this.$https.fetchPost('/plugin/statistics/api_index/getmapselectdir',params).then((res) => {
                     this.regions = res.regions;
                     this.dir = res.dir;
@@ -516,7 +518,7 @@
                 this.dir = this.dir_2;
                 this.formInline2.dir_id = '';
                 if(this.formInline2.indexCode){
-                    let params ={'indexCode':this.formInline2.indexCode};
+                    let params ={'indexCode':this.formInline2.indexCode,'uid':this.$store.state.user.uid};
                     this.$https.fetchPost('/plugin/statistics/api_index/getSchool',params).then((res) => {
                         this.dir = res;
                     })

@@ -267,6 +267,11 @@
                                     that.$router.push('/school/School_list');
                                 }
                                 break;
+                            case 'examine_stranger':
+                                if(that.$store.state.user.jurisdiction=='MQ=='){
+                                    that.$router.push('/Intelligence/Strange_people');
+                                }
+                                break;
                         }
                     },
                 });
@@ -284,6 +289,18 @@
             this.ws.onmessage = function(e){
                 let data = eval("("+e.data+")");
                 let type = data.type || '';
+                let age = {
+                    "unknown":"未知",
+                    "infant":"婴幼儿",
+                    "kid":"儿童",
+                    "child":"少年",
+                    "teenager":"青少年",
+                    "young":"青年",
+                    "frime":"壮年",
+                    "middle":"中年",
+                    "middleaged":"中老年",
+                    "old":"老年",
+                };
                 switch(type){
                     case 'init':
                         var params_1 ={'uid':that.$store.state.user.uid,'client_id':data.client_id};
@@ -297,7 +314,7 @@
                         bus.$emit("outmes",data);
                         break;
                     case 'stranger':
-                        that.open(data.describe,data.content.ageGroup,type);
+                        that.open(data.describe,data.content.gender+','+age[data.content.ageGroup],type);
                         that.$store.commit("getMessage", data);
                         bus.$emit("outmes",data);
                         break;
@@ -308,6 +325,10 @@
                         break;
                     case "school_upload":
                         that.open(data.describe,data.content.name,type);
+                        that.$store.commit("getMessage", data);
+                        break;
+                    case "examine_stranger":
+                        that.open(data.describe,data.content.user_login,type);
                         that.$store.commit("getMessage", data);
                         break;
                 }
