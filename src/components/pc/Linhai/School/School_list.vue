@@ -117,7 +117,7 @@
                                 multiple>
                             <i class="el-icon-upload"></i>
                             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                            <div class="el-upload__tip" slot="tip">只能上传jpg/png/bmp文件</div>
+                            <div class="el-upload__tip" slot="tip">只能上传jpg/png文件</div>
                         </el-upload>
                     </el-form-item>
                 </div>
@@ -217,19 +217,6 @@
         mounted(){
             this.getList();
             this.getCity();
-            // setTimeout(()=>{
-            //     console.log(11234);
-            //     layui.use('layedit', function () {
-            //         layedit = layui.layedit;
-            //         index = layedit.build('demo', {
-            //             tool: ['strong' //加粗
-            //                 ,'left' //左对齐
-            //                 ,'center' //居中对齐
-            //                 ,'right' //右对齐
-            //             ]
-            //         });
-            //     });
-            // }, 10000)
         },
         methods: {
             ds(){

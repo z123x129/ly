@@ -100,7 +100,7 @@
                     label="当前状态">
                 <template slot-scope="scope">
                     <span v-if="scope.row.stranger_status==0">未处理</span>
-                    <span v-if="scope.row.stranger_status==1">学校以反馈</span>
+                    <span v-if="scope.row.stranger_status==1">已处理</span>
                 </template>
             </el-table-column>
             <el-table-column
@@ -109,7 +109,7 @@
                     label="操作"
                     width="100">
                 <template slot-scope="scope">
-                    <el-button v-if="scope.row.stranger_status==0" type="text" size="small">提醒</el-button>
+                    <el-button v-if="scope.row.stranger_status==0" @click="remind(scope.row.id)" type="text" size="small">提醒</el-button>
                     <el-popconfirm v-if="scope.row.stranger_status==0"
                             title="是否确定忽略？"
                             @onConfirm="delList(scope.row.id)"
@@ -117,7 +117,7 @@
                         <el-button style="margin-left: 10px" slot="reference" type="text" size="small">忽略</el-button>
                     </el-popconfirm>
 
-                    <el-button v-if="scope.row.stranger_status==1"  type="text" size="small">查看反馈</el-button>
+                    <el-button v-if="scope.row.stranger_status==1" @click="look(scope.row.id)" type="text" size="small">查看反馈</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -133,11 +133,23 @@
                     :total="total">
             </el-pagination>
         </div>
+        <el-dialog
+                :title=content.examine_title
+                :visible.sync="dialogFormVisible">
+            <span v-html="content.examine_content"></span>
+            <div class="demo-image__preview">
+                <el-image v-if="content.examine_img"
+                          style="width: 100px; height: 100px"
+                          :src="content.examine_img[0]"
+                          :preview-src-list="content.examine_img">
+                </el-image>
+            </div>
+        </el-dialog>
     </div>
 </template>
 <script>
     import { Form,FormItem,Select,Option,Button,DatePicker,Table,TableColumn,Image,Pagination,
-        Message,Popconfirm,RadioGroup,Radio } from 'element-ui'
+        Message,Popconfirm,RadioGroup,Radio,Dialog } from 'element-ui'
     import 'element-ui/lib/theme-chalk/index.css'
     export default {
         components:{
@@ -156,6 +168,7 @@
             [Popconfirm.name]:Popconfirm,
             [RadioGroup.name]:RadioGroup,
             [Radio.name]:Radio,
+            [Dialog.name]:Dialog,
         },
         data(){
             return{
@@ -202,7 +215,9 @@
                 page:1,
                 paginate:10,
                 paginates:10,
-                data:[]
+                data:[],
+                dialogFormVisible:false,
+                content:'',
             }
         },
         mounted(){
@@ -310,6 +325,19 @@
                 params = this.$secret_key.func(this.$store.state.on_off, params);
                 this.$https.fetchPost('/plugin/statistics/api_index/out_excel',params).then((res) => {
                     window.location.href=res;
+                })
+            },
+            remind(id){
+                let params ={'uid':this.$store.state.user.uid,'id':id};
+                this.$https.fetchPost('/plugin/statistics/api_index/reShoolStranger',params).then((res) => {
+                    Message.success('已提醒');
+                })
+            },
+            look(id){
+                let params ={'uid':this.$store.state.user.uid,'id':id};
+                this.$https.fetchPost('/plugin/statistics/api_index/getIdStrangerAlarm',params).then((res) => {
+                    this.content = res;
+                    this.dialogFormVisible = true;
                 })
             },
         },

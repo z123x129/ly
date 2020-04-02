@@ -267,6 +267,11 @@
                                     that.$router.push('/school/School_list');
                                 }
                                 break;
+                            case 'examine_stranger':
+                                if(that.$store.state.user.jurisdiction=='MQ=='){
+                                    that.$router.push('/Intelligence/Strange_people');
+                                }
+                                break;
                         }
                     },
                 });
@@ -308,6 +313,10 @@
                         break;
                     case "school_upload":
                         that.open(data.describe,data.content.name,type);
+                        that.$store.commit("getMessage", data);
+                        break;
+                    case "examine_stranger":
+                        that.open(data.describe,data.content.user_login,type);
                         that.$store.commit("getMessage", data);
                         break;
                 }
