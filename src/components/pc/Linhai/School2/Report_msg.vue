@@ -22,7 +22,7 @@
                 </el-date-picker>
             </el-form-item>
             <el-form-item style="margin-top: -2px">
-                <el-button size="small" type="primary" @click="getList">搜索</el-button>
+                <el-button size="small" type="primary" @click="search">搜索</el-button>
             </el-form-item>
         </el-form>
         <el-table
@@ -48,7 +48,7 @@
                     label="图片信息"
                     min-width="80">
                 <template slot-scope="scope">
-                    <el-image v-if="scope.row.path.length>0"
+                    <el-image v-if="scope.row.path&&scope.row.path.length>0"
                             style="width: 60px; height: 60px;"
                             :src="scope.row.path[0]"
                             :preview-src-list="scope.row.path">
@@ -117,7 +117,7 @@
                                multiple>
                         <i class="el-icon-upload"></i>
                         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png/bmp文件</div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件</div>
                     </el-upload>
                 </el-form-item>
             </el-form>
@@ -230,6 +230,10 @@
             });
         },
         methods: {
+            search(){
+                this.page = 1;
+                this.getList()
+            },
             getList(){
                 var timeStart = '',timeEnd = '';
                 if(this.formInline.timeStr){
@@ -280,9 +284,9 @@
                 this.form.re_path.push(res.data.filepath);
             },
             beforeAvatarUpload(file) {
-                const isJPG = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/bmp';
+                const isJPG = file.type === 'image/jpeg' || file.type === 'image/png';
                 if (!isJPG) {
-                    Message.error('附件只能上传图片!');
+                    Message.error('附件只能上传jpg和png格式的图片!');
                 }
                 return isJPG;
             },

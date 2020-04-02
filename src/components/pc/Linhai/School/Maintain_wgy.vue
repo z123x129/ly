@@ -1,6 +1,11 @@
 <template>
     <div>
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
+            <el-form-item label="选择学校:">
+                <el-select clearable size="small" v-model="formInline.school_id" placeholder="请选择">
+                    <el-option v-for="(item,index) in option" :key="index" :label="item.dirName" :value="item.id"></el-option>
+                </el-select>
+            </el-form-item>
             <el-form-item label="姓名:">
                     <el-input size="small" v-model="formInline.nickname"></el-input>
             </el-form-item>
@@ -25,8 +30,7 @@
                 </el-date-picker>
             </el-form-item>
             <el-form-item style="margin-top: -2px">
-                <el-button size="small" type="primary" @click="search">搜索</el-button>
-                <el-button size="small" type="primary" @click="showAdd">添加新人员</el-button>
+                <el-button size="small" type="primary" @click="seach">搜索</el-button>
                 <el-button size="small" type="primary" @click="exports">导出excel</el-button>
             </el-form-item>
         </el-form>
@@ -103,21 +107,6 @@
                     prop="timeStr"
                     label="添加时间">
             </el-table-column>
-            <el-table-column
-                    align="center"
-                    fixed="right"
-                    label="操作"
-                    width="100">
-                <template slot-scope="scope">
-                    <el-button @click="showDialog(scope.row)" type="text" size="small">编辑</el-button>
-                    <el-popconfirm
-                            title="确定删除该人员吗？"
-                            @onConfirm="delList(scope.row.MIID)"
-                    >
-                        <el-button style="margin-left: 10px" slot="reference" type="text" size="mini">删除</el-button>
-                    </el-popconfirm>
-                </template>
-            </el-table-column>
         </el-table>
         <div style="padding: 15px;display: flex;justify-content: flex-end;">
                 <el-pagination
@@ -131,64 +120,6 @@
                         :total="total">
                 </el-pagination>
             </div>
-        <el-dialog :title="type==1?'添加人员' : '编辑人员' " :visible.sync="dialogFormVisible" @closed="handleClose">
-            <el-form :model="form" :rules="rules" ref="form">
-                <el-form-item label="姓名:" prop="nickname" :label-width="formLabelWidth">
-                    <el-input style="width: 80%" size="small" v-model="form.nickname" placeholder="请输入姓名" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="人员类别:" prop="member_type" :label-width="formLabelWidth">
-                    <el-select style="width: 80%" size="small" v-model="form.member_type" placeholder="请选择">
-                        <el-option label="食品安全管理员" value="食品安全管理员"></el-option>
-                        <el-option label="后厨人员" value="后厨人员"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="手机号码:" prop="mobile" :label-width="formLabelWidth">
-                    <el-input style="width: 80%" size="small" v-model="form.mobile" placeholder="请输入手机号" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="身份证号:" prop="id_card" :label-width="formLabelWidth">
-                    <el-input v-if="type == 1" style="width: 80%" size="small" v-model="form.id_card" placeholder="请输入身份证" autocomplete="off"></el-input>
-                    <el-input v-else-if="type == 2" style="width: 80%" size="small" v-model="form.id_card" disabled="disabled" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="健康证号:" prop="health_id_card" :label-width="formLabelWidth">
-                    <el-input style="width: 80%" size="small" v-model="form.health_id_card" placeholder="请输入健康证" autocomplete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="人脸照片:" prop="face" :label-width="formLabelWidth">
-                    <el-upload
-                            class="avatar-uploader"
-                            :action='url+"/public/plugin/file_manage/api_index/upload_img"'
-                            :show-file-list="false"
-                            :on-success="handleAvatarSuccess"
-                            :before-upload="beforeAvatarUpload">
-                        <img v-if="form.face" :src="form.face" class="avatar">
-                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                    </el-upload>
-                </el-form-item>
-                <el-form-item label="健康证照片:" prop="health" :label-width="formLabelWidth">
-                    <el-upload
-                            class="avatar-uploader"
-                            :action='url+"/public/plugin/file_manage/api_index/upload_img"'
-                            :show-file-list="false"
-                            :on-success="handleAvatarSuccess2"
-                            :before-upload="beforeAvatarUpload">
-                        <img v-if="form.health" :src="form.health" class="avatar">
-                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                    </el-upload>
-                </el-form-item>
-                <el-form-item label="健康证到期时间:" prop="health_endtime" :label-width="formLabelWidth">
-                    <el-date-picker
-                            size="small"
-                            v-model="form.health_endtime"
-                            type="date"
-                            value-format="yyyy-MM-dd"
-                            placeholder="选择日期">
-                    </el-date-picker>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="submitForm('form')">确 定</el-button>
-            </div>
-        </el-dialog>
     </div>
 </template>
 <script>
@@ -221,6 +152,7 @@
                     id_card: '',
                     health_id_card:'',
                     timeStr:'',
+                    school_id:'',
                 },
                 pickerOptions: {
                     shortcuts: [{
@@ -256,56 +188,19 @@
                 paginate:5,
                 paginates:5,
                 dialogFormVisible: false,
-                form: {
-                    nickname: '',
-                    member_type: '',
-                    mobile: '',
-                    id_card: '',
-                    health_id_card: '',
-                    face: '',
-                    face_thumb: '',
-                    health: '',
-                    health_card: '',
-                    health_endtime: '',
-                },
                 type: 1,
                 formLabelWidth: '140px',
-                rules: {
-                    nickname: [
-                        {required: true, message: '姓名不能为空', trigger: 'blur'},
-                        {min: 2, max: 5, message: '长度在 2 到 5 个字符', trigger: 'blur'}
-                    ],
-                    member_type: [
-                        {required: true, message: '请选择人员类别', trigger: 'change'},
-                    ],
-                    mobile: [
-                        {required: true, message: '手机号码不能为空', trigger: 'blur'},
-                    ],
-                    id_card: [
-                        {required: true, message: '身份证号码不能为空', trigger: 'blur'},
-                    ],
-                    health_id_card: [
-                        {required: true, message: '健康证号码不能为空', trigger: 'blur'},
-                    ],
-                    face: [
-                        {required: true, message: '请上传人脸照片', trigger: 'blur'},
-                    ],
-                    health: [
-                        {required: true, message: '请上传健康证照片', trigger: 'blur'},
-                    ],
-                    health_endtime: [
-                        {required: true, message: '请选择到期时间', trigger: 'change'},
-                    ],
-                }
+                option:[]
             }
         },
         mounted(){
             this.getList();
+            this.getSchool();
         },
         methods: {
-            search(){
-                this.page = 1;
-                this.getList()
+            seach(){
+              this.page = 1;
+              this.getList()
             },
             getList(){
                 var time_start = '',time_end = '';
@@ -319,7 +214,8 @@
                     'id_card':this.formInline.id_card,
                     'health_id_card':this.formInline.health_id_card,
                     'time_start':time_start,
-                    'time_end':time_end};
+                    'time_end':time_end,
+                    'school_id':this.formInline.school_id,};
                 params = this.$secret_key.func(this.$store.state.on_off, params);
                 this.$https.fetchPost('/plugin/school/api_index/health_list',params).then((res) => {
                     var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
@@ -328,76 +224,12 @@
                     this.total = res_data.total;
                 })
             },
-            delList(id){
-                let params ={'id':id};
+            getSchool(){ //获取学校列表
+                let params ={'user_id':this.$store.state.user.uid};
                 params = this.$secret_key.func(this.$store.state.on_off, params);
-                this.$https.fetchPost('/plugin/school/api_index/del_health',params).then((res) => {
-                    this.getList()
+                this.$https.fetchPost('/plugin/school/api_index/schoolList',params).then((res) => {
+                   this.option = this.$secret_key.func(this.$store.state.on_off, res ,"key");
                 })
-            },
-            showDialog(res){
-                this.type = 2;
-                this.form = this.deepClone(res);
-                this.form.face = res.faceThumbPath;
-                this.form.face_thumb = res.face_thumb;
-                this.form.health = res.healthCardPath;
-                this.form.health_card = res.health_card;
-                this.dialogFormVisible = true;
-            },
-            deepClone(target) {
-                //深拷贝
-                // 定义一个变量
-                var result;
-                // 如果当前需要深拷贝的是一个对象的话
-                if (typeof target === 'object') {
-                    // 如果是一个数组的话
-                    if (Array.isArray(target)) {
-                        result = []; // 将result赋值为一个数组，并且执行遍历
-                        for (let i in target) {
-                            // 递归克隆数组中的每一项
-                            result.push(this.deepClone(target[i]))
-                        }
-                        // 判断如果当前的值是null的话；直接赋值为null
-                    } else if(target===null) {
-                        result = null;
-                        // 判断如果当前的值是一个RegExp对象的话，直接赋值
-                    } else if(target.constructor===RegExp){
-                        result = target;
-                    }else {
-                        // 否则是普通对象，直接for in循环，递归赋值对象的所有值
-                        result = {};
-                        for (let i in target) {
-                            result[i] = this.deepClone(target[i]);
-                        }
-                    }
-                    // 如果不是对象的话，就是基本数据类型，那么直接赋值
-                } else {
-                    result = target;
-                }
-                // 返回最终结果
-                return result;
-            },
-            showAdd(){
-                this.type = 1;
-                this.form = {
-                    nickname: '',
-                    member_type: '',
-                    mobile: '',
-                    id_card: '',
-                    health_id_card: '',
-                    face: '',
-                    face_thumb: '',
-                    health: '',
-                    health_card: '',
-                    health_endtime: '',
-                };
-                if(this.$refs.form != undefined){
-                    this.$refs.form.resetFields();
-                }
-                this.dialogFormVisible = true;
-            },
-            handleClose(){
-                this.$refs.form.resetFields();
             },
             handleSizeChange(val) {//分页器
                 this.paginate = val;
@@ -425,36 +257,6 @@
                 this.form.health = res.data.fileurl;
                 this.form.health_card = res.data.filepath;
                 this.$forceUpdate();
-            },
-            beforeAvatarUpload(file) {
-                const isJPG = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/bmp';
-                if (!isJPG) {
-                    Message.error('只能上传图片!');
-                }
-                return isJPG;
-            },
-            submitForm(formName) {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        let arr = {'uid':this.$store.state.user.uid};
-                        let params = Object.assign(this.form,arr);
-                        params = this.$secret_key.func(this.$store.state.on_off, params);
-                        this.$https.fetchPost('/plugin/school/api_index/add_health_person',params).then((res) => {
-                            this.getList();
-                            if(this.type == 1){
-                                Message.success('添加成功');
-                            }else{
-                                Message.success('编辑成功');
-                            }
-                            this.form.face_thumb = '';
-                            this.form.health_card = '';
-                            this.dialogFormVisible = false;
-                            this.$refs.form.resetFields();
-                        })
-                    } else {
-                        return false;
-                    }
-                });
             },
             exports(){
                 let xlsCell = [["MIID","ID"],["nickname","姓名"],["company","单位名称"],["mobile","手机号"],

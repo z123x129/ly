@@ -1,40 +1,57 @@
 <template>
     <div>
-        <el-form id="form" :inline="true" :model="formInline" class="demo-form-inline">
-            <el-form-item label="开始时间:" :label-width="formLabelWidth">
-                <el-date-picker size="small" type="date" placeholder="年/月/日" v-model="formInline.date1"></el-date-picker>
+        <el-form id="form" :inline="true" ref="formInline" :model="formInline" class="demo-form-inline">
+            <el-form-item prop="date" label="抓拍时间:" :label-width="formLabelWidth">
+                <el-date-picker
+                        v-model="formInline.date"
+                        size="small"
+                        type="daterange"
+                        align="right"
+                        unlink-panels
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期"
+                        value-format="yyyy-MM-dd"
+                        :picker-options="pickerOptions">
+                </el-date-picker>
             </el-form-item>
-            <el-form-item label="结束时间:" :label-width="formLabelWidth">
-                <el-date-picker size="small" type="date" placeholder="年/月/日" v-model="formInline.date2"></el-date-picker>
-            </el-form-item>
-            <el-form-item label="抓拍点:" :label-width="formLabelWidth">
-                <el-select size="small" v-model="formInline.region" placeholder="请选择区域">
-                    <el-option label="选择区域" value="shanghai"></el-option>
-                    <el-option label="选择学校" value="beijing"></el-option>o
+            <el-form-item prop="encodeDevIndexCode" label="抓拍点:" :label-width="formLabelWidth">
+                <el-select clearable size="small" v-model="formInline.encodeDevIndexCode" placeholder="请选择抓拍点">
+                    <el-option v-for="(item,index) in option" :key="index" :label="item.cameraName" :value="item.encodeDevIndexCode"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="年龄段:" :label-width="formLabelWidth">
-                <el-select size="small" v-model="formInline.region" placeholder="不限">
-                    <el-option label="选择区域" value="shanghai"></el-option>
-                    <el-option label="选择学校" value="beijing"></el-option>
+            <el-form-item prop="ageGroup" label="年龄段:" :label-width="formLabelWidth">
+                <el-select clearable size="small" v-model="formInline.ageGroup" placeholder="不限">
+                    <el-option label="未知" value="unknown"></el-option>
+                    <el-option label="婴幼儿" value="infant"></el-option>
+                    <el-option label="儿童" value="kid"></el-option>
+                    <el-option label="少年" value="child"></el-option>
+                    <el-option label="青少年" value="teenager"></el-option>
+                    <el-option label="青年" value="young"></el-option>
+                    <el-option label="壮年" value="frime"></el-option>
+                    <el-option label="中年" value="middle"></el-option>
+                    <el-option label="中老年" value="middleaged"></el-option>
+                    <el-option label="老年" value="old"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="性别:" :label-width="formLabelWidth">
-                <el-select size="small" v-model="formInline.region" placeholder="不限">
-                    <el-option label="选择区域" value="shanghai"></el-option>
-                    <el-option label="选择学校" value="beijing"></el-option>
+            <el-form-item prop="gender" label="性别:" :label-width="formLabelWidth">
+                <el-select clearable size="small" v-model="formInline.gender" placeholder="不限">
+                    <el-option label="未知" value="unknown"></el-option>
+                    <el-option label="男" value="male"></el-option>
+                    <el-option label="女" value="female"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="是否戴眼镜:" :label-width="formLabelWidth">
-                <el-select size="small" v-model="formInline.region" placeholder="不限">
-                    <el-option label="选择区域" value="shanghai"></el-option>
-                    <el-option label="选择学校" value="beijing"></el-option>
+            <el-form-item prop="glass" label="是否戴眼镜:" :label-width="formLabelWidth">
+                <el-select clearable size="small" v-model="formInline.glass" placeholder="不限">
+                    <el-option label="未知" value="unknown"></el-option>
+                    <el-option label="是" value="yes"></el-option>
+                    <el-option label="否" value="no"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item style="padding-left: 40px">
-                <el-button size="small" type="primary" @click="onSubmit">查询</el-button>
-                <el-button size="small" type="primary" @click="onSubmit">重置</el-button>
-                <el-button size="small" type="primary" @click="onSubmit">导出</el-button>
+                <el-button size="small" type="primary" @click="search">查询</el-button>
+                <el-button size="small" type="primary" @click="resetForm('formInline')">重置</el-button>
+                <el-button size="small" type="primary" @click="exports">导出</el-button>
             </el-form-item>
             <el-form-item style="float: right;padding-right: 50px">
                 <el-radio-group @change="show = !show" v-model="radio" size="small">
@@ -44,10 +61,15 @@
             </el-form-item>
         </el-form>
         <div v-if="show == false" class="big_box">
-            <div v-for="(item,index) in tableData" @click="dialogFormVisible = true" :key="index" class="box">
-                <img src="" />
-                <h5 v-text="item.name"></h5>
-                <p v-text="item.date"></p>
+            <div v-for="(item,index) in tableData" @click="openLoak(item)" :key="index" class="box">
+                <img :src="item.faceUrl[0]" />
+                <div style="display: flex;justify-content: space-between;align-items: center;padding-right: 10px">
+                    <h5 v-text="item.gender+','+item.ageGroup"></h5>
+                    <span v-if="item.stranger_status == 0">未处理</span>
+                    <span style="color: #409EFF;" v-if="item.stranger_status == 1">已处理</span>
+                    <span v-if="item.stranger_status == 2">已忽略</span>
+                </div>
+                <p v-text="item.faceTime"></p>
             </div>
         </div>
         <el-table v-if="show == true"
@@ -56,20 +78,29 @@
                   style="width: 100%">
             <el-table-column
                     align="center"
-                    prop="date"
+                    prop="faceTime"
                     label="抓拍时间">
             </el-table-column>
             <el-table-column
                     align="center"
-                    prop="name"
+                    prop="cameraName"
                     label="抓拍点">
+            </el-table-column>
+            <el-table-column
+                    align="center"
+                    label="状态">
+                <template slot-scope="scope">
+                    <span v-if="scope.row.stranger_status == 0">未处理</span>
+                    <el-button v-if="scope.row.stranger_status==1" @click="openLoak(scope.row)" type="text" size="small">已处理</el-button>
+                    <span v-if="scope.row.stranger_status == 2">已忽略</span>
+                </template>
             </el-table-column>
             <el-table-column
                     fixed="right"
                     label="操作"
                     width="100">
                 <template slot-scope="scope">
-                    <el-button @click="dialogFormVisible = true" type="text" size="small">详情</el-button>
+                    <el-button @click="openLoak(scope.row)" type="text" size="small">详情</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -85,23 +116,23 @@
                     :total="total">
             </el-pagination>
         </div>
-        <el-dialog title="识别详情" :visible.sync="dialogFormVisible">
+        <el-dialog @closed="handleClose" v-if="list" title="识别详情" :visible.sync="dialogFormVisible">
             <el-tabs v-model="activeName">
                 <el-tab-pane label="识别信息" name="first">
                     <div style="display: flex;justify-content: space-around">
                         <ul class="message">
-                            <li>抓拍时间：2020年03月03日</li>
-                            <li>抓拍点：测试小学后厨</li>
-                            <li>年龄段：老年人</li>
-                            <li>性别：男</li>
-                            <li>是否戴眼镜：是</li>
+                            <li>抓拍时间：{{list.faceTime}}</li>
+                            <li>抓拍点：{{list.cameraName}}</li>
+                            <li>年龄段：{{list.ageGroup}}</li>
+                            <li>性别：{{list.gender}}</li>
+                            <li>是否戴眼镜：{{list.glass}}</li>
                         </ul>
                         <div class="demo-image__preview">
                             <el-image
                                     style="width: 300px; height: 250px;"
-                                    :src="url"
+                                    :src="list.faceUrl[0]"
                                     fit="contain"
-                                    :preview-src-list="srcList">
+                                    :preview-src-list="list.faceUrl">
                             </el-image>
                         </div>
                     </div>
@@ -110,33 +141,36 @@
                     <div class="demo-image__preview">
                         <el-image
                                 style="width: 300px; height: 250px;margin: 0 auto;display: block"
-                                :src="url"
+                                :src="list.bkgUrl[0]"
                                 fit="contain"
-                                :preview-src-list="srcList">
+                                :preview-src-list="list.bkgUrl">
                         </el-image>
                     </div>
                 </el-tab-pane>
                 <el-tab-pane label="上报信息" name="third">
-                    <el-form :model="form">
-                        <el-form-item label="上报标题:" :label-width="formLabelWidth">
-                            <el-input style="width: 80%" v-model="form.name" placeholder="请输入标题" autocomplete="off"></el-input>
+                    <el-form :model="form" :rules="rules" ref="form">
+                        <el-form-item label="上报标题:" prop="examine_title" :label-width="formLabelWidth">
+                            <el-input style="width: 80%" v-model="form.examine_title" placeholder="请输入标题" autocomplete="off"></el-input>
                         </el-form-item>
-                        <el-form-item label="上报内容:" :label-width="formLabelWidth">
-                            <el-input type="textarea" style="width: 80%" v-model="form.region" placeholder="请输入内容" autocomplete="off"></el-input>
+                        <el-form-item label="上报内容:" prop="examine_content" :label-width="formLabelWidth">
+                            <textarea  placeholder="请输入上报内容" id="demo" v-html="form.examine_content" style="display: none;"></textarea>
                         </el-form-item>
                         <el-form-item label="附件:" :label-width="formLabelWidth">
-                            <el-upload
-                                    class="avatar-uploader"
-                                    action="https://jsonplaceholder.typicode.com/posts/"
-                                    :show-file-list="false"
-                                    :on-success="handleAvatarSuccess"
-                                    :before-upload="beforeAvatarUpload">
-                                <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar">
-                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                            <el-upload ref="my-upload"
+                                       class="upload-demo"
+                                       drag
+                                       :action='url+"/public/plugin/file_manage/api_index/upload_img"'
+                                       :on-success="handleAvatarSuccess"
+                                       :before-upload="beforeAvatarUpload"
+                                       :on-remove="removeFile"
+                                       multiple>
+                                <i class="el-icon-upload"></i>
+                                <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                                <div class="el-upload__tip" slot="tip">只能上传jpg/png文件</div>
                             </el-upload>
                         </el-form-item>
                         <el-form-item style="display: flex;justify-content: flex-end">
-                            <el-button type="primary" @click="onSubmit">上报</el-button>
+                            <el-button type="primary" @click="onSubmit('form')">上报</el-button>
                             <el-button @click="dialogFormVisible = false">取消</el-button>
                         </el-form-item>
                     </el-form>
@@ -150,6 +184,7 @@
         DatePicker,Table,TableColumn,Pagination,Dialog,
         Tabs,TabPane,Input,Upload,Message,Image} from 'element-ui'
     import 'element-ui/lib/theme-chalk/index.css'
+    var layedit,index;
     export default {
         name:'Alert_monitor',
         components:{
@@ -174,49 +209,142 @@
         },
         data(){
             return{
+                url:this.$store.state.route.http,
+                option:[],
                 formInline: {
-                    date1:'',
-                    date2:'',
-                    user: '',
-                    region: 'shanghai'
+                    encodeDevIndexCode:'',
+                    date:'',
+                    ageGroup: '',
+                    gender: '',
+                    glass: '',
+                },
+                pickerOptions: {
+                    shortcuts: [{
+                        text: '最近一周',
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: '最近一个月',
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: '最近三个月',
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }]
                 },
                 formLabelWidth: '100px',
                 radio: '图标',
                 show:false,
-                tableData: [{
-                    date: '2016-05-02',
-                    name: '王小虎',
-                }, {
-                    date: '2016-05-04',
-                    name: '王小虎',
-                }, {
-                    date: '2016-05-01',
-                    name: '王小虎',
-                }, {
-                    date: '2016-05-03',
-                    name: '王小虎',
-                }],
+                tableData: [],
                 currentPage: 1,
                 total:0,
                 page:1,
-                paginate:5,
-                paginates:5,
+                paginate:10,
+                paginates:10,
                 dialogFormVisible:false,
                 activeName: 'first',
+                list:'',
                 form: {
-                    name: '',
-                    region: '',
-                    imageUrl: '',
+                    examine_title: '',
+                    examine_content: '',
+                    examine_img: [],
                 },
-                url: 'https://fuss10.elemecdn.com/8/27/f01c15bb73e1ef3793e64e6b7bbccjpeg.jpeg',
-                srcList: [
-                    'https://fuss10.elemecdn.com/8/27/f01c15bb73e1ef3793e64e6b7bbccjpeg.jpeg'
-                ]
+                rules: {
+                    examine_title: [
+                        { required: true, message: '上报标题不能为空', trigger: 'blur' },
+                    ],
+                    examine_content: [
+                        { required: true, message: '上报内容不能为空', trigger: 'change' }
+                    ]
+                }
             }
         },
+        mounted(){
+            this.getList();
+            this.getAddress();
+        },
         methods: {
-            onSubmit() {
-                console.log('submit!');
+            search(){
+                this.page = 1;
+                this.getList()
+            },
+            getList(){
+                var timeStart = '',timeEnd = '';
+                if(this.formInline.date !== null){
+                    timeStart = this.formInline.date[0];
+                    timeEnd = this.formInline.date[1];
+                }
+                let params ={'uid':this.$store.state.user.uid,'page':this.page,'paginate':this.paginate,
+                'encodeDevIndexCode':this.formInline.encodeDevIndexCode,
+                'start_time':timeStart,
+                'end_time':timeEnd,
+                'ageGroup':this.formInline.ageGroup,
+                'gender':this.formInline.gender,
+                'glass':this.formInline.glass,
+                };
+                params = this.$secret_key.func(this.$store.state.on_off, params);
+                this.$https.fetchPost('/plugin/statistics/api_index/getStrangerAlarm',params).then((res) => {
+                    var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
+                    this.tableData = res_data.data;
+                    this.currentPage = res_data.current_page;
+                    this.total = res_data.total;
+                })
+            },
+            getAddress(){
+                let params ={'uid':this.$store.state.user.uid};
+                params = this.$secret_key.func(this.$store.state.on_off, params);
+                this.$https.fetchPost('/plugin/statistics/api_index/getSchoolTake',params).then((res) => {
+                    this.option = this.$secret_key.func(this.$store.state.on_off, res ,"key");
+                })
+            },
+            openLoak(res){
+                this.list = res;
+                this.form.examine_title = res.examine_title;
+                this.form.examine_content = res.examine_content;
+                this.$nextTick(()=>{this.ds(res.examine_content)});
+                if(this.$refs['my-upload'] != undefined){
+                    this.$refs['my-upload'].clearFiles();
+                }
+                this.dialogFormVisible = true;
+            },
+            handleClose(){
+                this.$refs.form.resetFields();
+            },
+            onSubmit(formName) {
+                this.form.examine_content = layedit.getContent(index);
+                if(this.form.examine_content == "")
+                {
+                    Message.error("请输入上传内容");
+                    return;
+                }
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        this.form.examine_img = String(this.form.examine_img);
+                        let arr = {'uid':this.$store.state.user.uid,'id':this.list.id};
+                        let params = Object.assign(this.form,arr);
+                        params = this.$secret_key.func(this.$store.state.on_off, params);
+                        this.$https.fetchPost('/plugin/statistics/api_index/upStrangerAlarm',params).then((res) => {
+                            Message.success("上报成功");
+                            this.getList();
+                            this.dialogFormVisible = false;
+                        })
+                    } else {
+                        return false;
+                    }
+                });
             },
             handleSizeChange(val) {//分页器
                 this.paginate = val;
@@ -227,21 +355,65 @@
                 this.page = val;
                 this.getList();
             },
+            removeFile(file, fileList){
+                for (let i = 0; i <this.form.examine_img.length ; i++) {
+                    if(this.form.examine_img[i] == file.response.data.filepath){
+                        this.form.examine_img.splice(i,1);
+                    }
+                }
+            },
             handleAvatarSuccess(res, file) {
-                this.form.imageUrl = URL.createObjectURL(file.raw);
+                this.form.examine_img.push(res.data.filepath);
             },
             beforeAvatarUpload(file) {
-                const isJPG = file.type === 'image/jpeg';
-                const isLt2M = file.size / 1024 / 1024 < 2;
-
+                const isJPG = file.type === 'image/jpeg' || file.type === 'image/png';
                 if (!isJPG) {
-                    Message.error('上传头像图片只能是 JPG 格式!');
+                    Message.error('附件只能上传jpg和png格式的图片!');
                 }
-                if (!isLt2M) {
-                    Message.error('上传头像图片大小不能超过 2MB!');
+                return isJPG;
+            },
+            ds(res){
+                layui.use('layedit', function () {
+                    layedit = layui.layedit;
+                    index = layedit.build('demo', {
+                        tool: ['strong' //加粗
+                            ,'left' //左对齐
+                            ,'center' //居中对齐
+                            ,'right' //右对齐
+                        ]
+                    });
+                });
+            },
+            resetForm(formName) {
+                this.$refs[formName].resetFields();
+            },
+            exports(){
+                let xlsCell = [["id","ID"],["gender","性别"],["ageGroup","年龄段"],["glass","是否戴眼镜"],["cameraName","抓拍地点"],["bkgUrl","背景图"],
+                    ["faceUrl","抓拍图片"],["faceTime","抓拍时间"],["stranger_status","当前状态"]];
+                let xlsData = [];
+                for (let i = 0; i <this.tableData.length ; i++) {
+                    var text = '已处理';
+                    if(this.tableData[i].stranger_status==0){
+                        text = '未处理';
+                    }
+                    xlsData.push({
+                        'id': this.tableData[i].id,
+                        'gender': this.tableData[i].gender,
+                        'ageGroup': this.tableData[i].ageGroup,
+                        'glass': this.tableData[i].glass,
+                        'cameraName': this.tableData[i].cameraName,
+                        'bkgUrl': String(this.tableData[i].bkgUrl),
+                        'faceUrl': String(this.tableData[i].faceUrl),
+                        'faceTime': this.tableData[i].faceTime,
+                        'stranger_status': text,
+                    })
                 }
-                return isJPG && isLt2M;
-            }
+                let params ={'xlsName':' 陌生人脸抓拍清单','isImg':'5,6','out_img':'5,6','xlsCell':xlsCell,'xlsData':xlsData,};
+                params = this.$secret_key.func(this.$store.state.on_off, params);
+                this.$https.fetchPost('/plugin/statistics/api_index/out_excel',params).then((res) => {
+                    window.location.href=res;
+                })
+            },
         },
     }
 </script>
@@ -277,13 +449,13 @@
     .box img{
         width: 100%;
         height: 130px;
-        background: skyblue;
     }
     .box h5{
         text-indent: 10px;
         line-height: 25px;
     }
     .box p{
+        font-size: 12px;
         text-indent: 10px;
         color: #999;
     }
@@ -315,6 +487,9 @@
     }
     .message li{
         line-height: 30px;
+    }
+    .el-image /deep/ .el-icon-circle-close{
+        color: #fff;
     }
 </style>
 

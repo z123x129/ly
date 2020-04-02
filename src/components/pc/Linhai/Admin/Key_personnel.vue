@@ -28,7 +28,7 @@
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item style="margin-top: -2px">
-                        <el-button size="small" type="primary" @click="getList2">搜索</el-button>
+                        <el-button size="small" type="primary" @click="search2">搜索</el-button>
                     </el-form-item>
                 </el-form>
                 <el-table
@@ -119,7 +119,7 @@
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item style="margin-top: -2px">
-                        <el-button size="small" type="primary" @click="getList">搜索</el-button>
+                        <el-button size="small" type="primary" @click="search">搜索</el-button>
                         <el-button size="small" type="primary" @click="showAdd">添加重点人员</el-button>
                         <el-button size="small" type="primary" @click="delAll">批量删除</el-button>
                     </el-form-item>
@@ -204,7 +204,7 @@
                         <el-form-item label="上传人物照片:" prop="face_img" :label-width="formLabelWidth">
                             <el-upload
                                     class="avatar-uploader"
-                                    action="/public/plugin/file_manage/api_index/upload_img"
+                                    :action='url+"/public/plugin/file_manage/api_index/upload_img"'
                                     :show-file-list="false"
                                     :on-success="handleAvatarSuccess"
                                     :before-upload="beforeAvatarUpload">
@@ -248,6 +248,7 @@
         },
         data(){
             return{
+                url:this.$store.state.route.http,
                 activeName: 'first',
                 formInline: {
                     user_name: '',
@@ -328,13 +329,22 @@
             this.getAddress();
         },
         methods: {
+            search(){
+                this.page = 1;
+                this.getList();
+            },
+            search2(){
+                this.page2 = 1;
+                this.getList2();
+            },
             getList(){
                 var time_start = '',time_end = '';
                 if(this.formInline.timeStr){
                     time_start = this.formInline.timeStr[0];
                     time_end = this.formInline.timeStr[1];
                 }
-                let params ={'page':this.page,'paginate':this.paginate,
+                let params ={'uid':this.$store.state.user.uid,
+                    'page':this.page,'paginate':this.paginate,
                     'user_name':this.formInline.user_name,
                     'id_card':this.formInline.id_card,
                     'start_time':time_start,
@@ -351,7 +361,8 @@
                     time_start = this.formInline2.value[0];
                     time_end = this.formInline2.value[1];
                 }
-                let params ={'page':this.page2,'paginate':this.paginate2,
+                let params ={'uid':this.$store.state.user.uid,
+                    'page':this.page2,'paginate':this.paginate2,
                     'indexCode':this.formInline2.indexCode,
                     'dir_id':this.formInline2.dir_id,
                     'start_time':time_start,
@@ -400,8 +411,8 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        let params = this.form;
-                        params = this.$secret_key.func(this.$store.state.on_off, params);
+                        let params ={'uid':this.$store.state.user.uid,};
+                        params = Object.assign(this.form,params);
                         var add = '';
                         if(this.type == 1){
                             add = '/plugin/statistics/api_index/addEmphasisInfo'
@@ -478,7 +489,7 @@
                 return result;
             },
             delList(id){
-                let params ={'id':id};
+                let params ={'id':id,'uid':this.$store.state.user.uid};
                 params = this.$secret_key.func(this.$store.state.on_off, params);
                 this.$https.fetchPost('/plugin/statistics/api_index/deleteEmphasis',params).then((res) => {
                     this.getList()
@@ -489,14 +500,14 @@
                     Message.error('请选择删除项');
                     return false;
                 }
-                let params ={'arr':this.ids};
+                let params ={'arr':this.ids,'uid':this.$store.state.user.uid};
                 params = this.$secret_key.func(this.$store.state.on_off, params);
                 this.$https.fetchPost('/plugin/statistics/api_index/deleteEmphasisArr',params).then((res) => {
                     this.getList()
                 })
             },
             getAddress(){
-                let params ={};
+                let params ={'uid':this.$store.state.user.uid};
                 this.$https.fetchPost('/plugin/statistics/api_index/getmapselectdir',params).then((res) => {
                     this.regions = res.regions;
                     this.dir = res.dir;
@@ -507,7 +518,7 @@
                 this.dir = this.dir_2;
                 this.formInline2.dir_id = '';
                 if(this.formInline2.indexCode){
-                    let params ={'indexCode':this.formInline2.indexCode};
+                    let params ={'indexCode':this.formInline2.indexCode,'uid':this.$store.state.user.uid};
                     this.$https.fetchPost('/plugin/statistics/api_index/getSchool',params).then((res) => {
                         this.dir = res;
                     })

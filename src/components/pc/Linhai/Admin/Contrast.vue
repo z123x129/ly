@@ -119,7 +119,7 @@
         },
         methods: {
             getAddress(){
-                let params ={};
+                let params ={'uid':this.$store.state.user.uid,};
                 this.$https.fetchPost('/plugin/statistics/api_index/getmapselectdir',params).then((res) => {
                     this.regions = res.regions;
                     if(this.value1 === true){
@@ -130,7 +130,7 @@
             },
             getData(){
                 if(this.value1 === true){
-                    let params ={'indexCode':this.formInline.indexCode};
+                    let params ={'indexCode':this.formInline.indexCode,'uid':this.$store.state.user.uid,};
                     this.$https.fetchPost('/plugin/statistics/api_index/dataContrast',params).then((res) => {
                         this.data = res.top_chart;
                         this.tableData = res.dir;
@@ -142,7 +142,7 @@
                         }
                     })
                 }else{
-                    let params ={};
+                    let params ={'uid':this.$store.state.user.uid,};
                     this.$https.fetchPost('/plugin/statistics/api_index/dataRegionsContrast',params).then((res) => {
                         this.data = res;
                         this.$nextTick(function () {
@@ -154,7 +154,7 @@
             },
             getDataset(id){
                 if(this.value1 === true){
-                    let params ={'dir_id':id};
+                    let params ={'dir_id':id,'uid':this.$store.state.user.uid,};
                     this.$https.fetchPost('/plugin/statistics/api_index/getSchoolHealth',params).then((res) => {
                         this.data1[0] = res[0];
                         this.data2[0] = res[1];
@@ -170,7 +170,7 @@
                     })
                 }else{
                     if(this.value2 === true){
-                        let params ={'indexCode':id};
+                        let params ={'indexCode':id,'uid':this.$store.state.user.uid,};
                         this.$https.fetchPost('/plugin/statistics/api_index/getRegionsHealth',params).then((res) => {
                             this.data1[0] = res[0];
                             this.data2[0] = res[1];
@@ -185,7 +185,7 @@
                             })
                         });
                     }else{
-                        let paramss ={'indexCode':id};
+                        let paramss ={'indexCode':id,'uid':this.$store.state.user.uid,};
                         this.$https.fetchPost('/plugin/statistics/api_index/dataContrast',paramss).then((res) => {
                             this.tableData = res.dir;
                         })

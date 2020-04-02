@@ -67,7 +67,7 @@
                 <div class="cont1">
                     <dv-border-box-12 class="box2" ref="box6">
                         <h2>实时警报数据</h2>
-                        <dv-scroll-board ref="srroll_2" :config="config" style="width:94%;height:82%;margin: 3%" />
+                        <dv-scroll-board @click="gotoStock" ref="srroll_2" :config="config" style="width:94%;height:82%;margin: 3%" />
                     </dv-border-box-12>
                 </div>
             </div>
@@ -119,8 +119,10 @@
                    that.address_info = data;
                    that.$nextTick(()=>{
                        setTimeout(()=> {
-                           that.$refs.map.init("LinHai");
-                       },500);
+                           // that.$refs.map.init("LinHai");
+                           that.init_child("map");
+                       },800);
+
                    })
                 })
             },
@@ -129,7 +131,7 @@
                 this.showBack = false;
             },
             getAdd(){
-                let params ={};
+                let params ={'uid':this.$store.state.user.uid};
                 this.$https.fetchPost('/plugin/statistics/api_index/getmapselectdir',params).then((res) => {
                     this.getMen();
                     this.$nextTick(function () {
@@ -143,7 +145,7 @@
                 })
             },
             getList(){
-                let params ={};
+                let params ={'uid':this.$store.state.user.uid};
                 this.$https.fetchPost('/plugin/statistics/api_index/indexStat',params).then((res) => {
                     this.list = res;
                     this.normal[0] = Math.round(res.area_chart.normal/res.area_chart.all*100);
@@ -152,31 +154,42 @@
                     this.$nextTick(function () {
                         let that = this;
                         setTimeout(()=>{
-                            that.$refs.Editor.init();
-                            that.$refs.Mixed.init();
-                            that.$refs.Dataset.init();
+                            that.init_child("Editor");
+                            that.init_child("Mixed");
+                            that.init_child("Dataset");
                         }, 500)
                     })
                 })
             },
             getMen(indexCode){
-                let params ={'indexCode':indexCode};
+                let params ={'indexCode':indexCode,'uid':this.$store.state.user.uid};
                 this.$https.fetchPost('/plugin/statistics/api_index/indexStatSchool',params).then((res) => {
                     this.regions_chart = res;
                     this.$nextTick(function () {
                         let that = this;
                         setTimeout(()=>{
-                            that.$refs.Dataset.init();
+                            that.init_child("Dataset");
                         },500)
 
                     })
                 })
             },
+            init_child(name){
+                let that = this;
+                if(this.$refs.hasOwnProperty(name))
+                {
+                    this.$refs[name].init();
+                }
+                else
+                {
+                    setTimeout(function(){that.init_child(name)},500)
+                }
+            },
             showButton(data){
                 this.showBack = data;
             },
             getSchool(){
-                let params ={};
+                let params ={'uid':this.$store.state.user.uid};
                 this.$https.fetchPost('/plugin/statistics/api_index/schoolViolation',params).then((res) => {
                     var arr = [];
                     for (let i = 0; i < res.length ; i++) {
@@ -201,7 +214,7 @@
             },
             getAreaInfo(city, indexCode, city_name){
                 let that = this;
-                let params = {indexCode:indexCode};
+                let params = {indexCode:indexCode,'uid':this.$store.state.user.uid};
                 this.$https.fetchPost('/plugin/statistics/api_index/getMapSchool',params).then((res) => {
                     that.$refs.map.changeCityMap(city, res);
                 });
@@ -209,10 +222,10 @@
                 this.getMen(indexCode);
             },
             getWeigui(row){
-                console.log(row)
+                this.$router.push('/Intelligence/School_show')
             },
             getTime(){
-                let params = {};
+                let params = {'uid':this.$store.state.user.uid};
                 this.$https.fetchPost('/plugin/statistics/api_index/indexAlarm',params).then((res) => {
                     var arr = [];
                     for (let i = 0; i < res.length ; i++) {
@@ -225,14 +238,21 @@
                     this.getConfig();
                 });
             },
-            getConfig(){
+                getConfig(){
                 this.config = {
                     header: ['学校','类型','时间'],
                     data: this.data,
                     index: true,
-                    columnWidth: [40,120,100,90,90],
-                    align: ['center','center','center','center','center'],
+                    columnWidth: [40,120,100],
+                    align: ['center','center','center','center']
                 };
+            },
+            gotoStock(row){
+                if(row.ceil=='发现陌生人'){
+                    this.$router.push('/Intelligence/Strange_people')
+                }else{
+                    this.$router.push('/Intelligence/Key_personnel')
+                }
             }
         },
         mounted() {

@@ -15,7 +15,7 @@
                 <el-input size="small" v-model="formInline.dirName" ></el-input>
             </el-form-item>
             <el-form-item style="margin-top: -2px">
-                <el-button size="small" type="primary" @click="getList">搜索</el-button>
+                <el-button size="small" type="primary" @click="search">搜索</el-button>
             </el-form-item>
         </el-form>
         <el-table
@@ -104,7 +104,7 @@
                         <el-input style="width: 80%" size="small" v-model="form.title" placeholder="请输入上报标题" autocomplete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="上报内容:" prop="content" :label-width="formLabelWidth">
-                        <textarea v-model="form.content" placeholder="请输入上报内容" id="demo" style="display: none;"></textarea>
+                        <textarea  placeholder="请输入上报内容" id="demo" style="display: none;"></textarea>
                     </el-form-item>
                     <el-form-item label="附件:" :label-width="formLabelWidth">
                         <el-upload ref="my-upload"
@@ -117,7 +117,7 @@
                                 multiple>
                             <i class="el-icon-upload"></i>
                             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                            <div class="el-upload__tip" slot="tip">只能上传jpg/png/bmp文件</div>
+                            <div class="el-upload__tip" slot="tip">只能上传jpg/png文件</div>
                         </el-upload>
                     </el-form-item>
                 </div>
@@ -177,6 +177,7 @@
                 page:1,
                 paginate:10,
                 paginates:5,
+                fasd:"",
                 dialogFormVisible: false,
                 dialogVisible: false,
                 type: 1,
@@ -217,19 +218,23 @@
             this.getList();
             this.getCity();
         },
-        updated(){
-            layui.use('layedit', function () {
-                layedit = layui.layedit;
-                index = layedit.build('demo', {
-                    tool: ['strong' //加粗
-                        ,'left' //左对齐
-                        ,'center' //居中对齐
-                        ,'right' //右对齐
-                    ]
-                });
-            });
-        },
         methods: {
+            ds(){
+                layui.use('layedit', function () {
+                    layedit = layui.layedit;
+                    index = layedit.build('demo', {
+                        tool: ['strong' //加粗
+                            ,'left' //左对齐
+                            ,'center' //居中对齐
+                            ,'right' //右对齐
+                        ]
+                    });
+                });
+            },
+            search(){
+                this.page = 1;
+                this.getList()
+            },
             getList(){ //获取学校列表
                 let params ={'user_id':this.$store.state.user.uid,'page':this.page,'paginate':this.paginate,'dirName':this.formInline.dirName,'cameraIndexCode':this.formInline.cameraIndexCode[1]};
                 params = this.$secret_key.func(this.$store.state.on_off, params);
@@ -247,6 +252,10 @@
             },
             dialogShow(type,res){
                 this.type = type;
+                if(type == 2)
+                {
+                    this.$nextTick(()=>{this.ds()});
+                }
                 this.form = this.deepClone(res);
                 this.form.file= [];
                 if(this.$refs['my-upload'] != undefined){
@@ -268,9 +277,9 @@
                 this.form.file.push(res.data.filepath);
             },
             beforeAvatarUpload(file) {
-                const isJPG = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/bmp';
+                const isJPG = file.type === 'image/jpeg' || file.type === 'image/png';
                 if (!isJPG) {
-                    Message.error('附件只能上传图片!');
+                    Message.error('附件只能上传jpg和png格式的图片!');
                 }
                 return isJPG;
             },
@@ -319,6 +328,11 @@
             submitForm(formName) {
                 if(this.type == 2){
                     this.form.content = layedit.getContent(index);
+                    if(this.form.content == "")
+                    {
+                        Message.error("请输入上传内容")
+                        return;
+                    }
                 }
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
@@ -345,8 +359,11 @@
                 });
             },
             goViolation(id){
-                this.id = id;
                 this.dialogVisible = true;
+                let that = this;
+                this.$nextTick(()=>{
+                    that.id = id;
+                })
             },
         },
     }
