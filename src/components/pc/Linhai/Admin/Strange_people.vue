@@ -236,7 +236,7 @@
                 this.formInline.dir_id = name;
             },
             getAddress(){
-                let params ={};
+                let params ={'uid':this.$store.state.user.uid};
                 this.$https.fetchPost('/plugin/statistics/api_index/getmapselectdir',params).then((res) => {
                     this.regions = res.regions;
                     this.dir = res.dir;
@@ -247,7 +247,7 @@
                 this.dir = this.dir_2;
                 this.formInline.dir_id = '';
                 if(this.formInline.indexCode){
-                    let params ={'indexCode':this.formInline.indexCode};
+                    let params ={'indexCode':this.formInline.indexCode,'uid':this.$store.state.user.uid};
                     this.$https.fetchPost('/plugin/statistics/api_index/getSchool',params).then((res) => {
                         this.dir = res;
                     })
@@ -269,7 +269,7 @@
                 })
             },
             getData(){
-                let params ={'code':this.code,'num':this.num};
+                let params ={'code':this.code,'num':this.num,'uid':this.$store.state.user.uid};
                 this.$https.fetchPost('/plugin/statistics/api_index/schoolStrangerStat',params).then((res) => {
                     var arr = [];
                     this.data = [];
@@ -288,7 +288,7 @@
                 })
             },
             delList(id){
-                let params ={'id':id};
+                let params ={'id':id,'uid':this.$store.state.user.uid};
                 this.$https.fetchPost('/plugin/statistics/api_index/overStranger',params).then(() => {
                     this.getList();
                 })

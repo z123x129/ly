@@ -63,7 +63,12 @@
         <div v-if="show == false" class="big_box">
             <div v-for="(item,index) in tableData" @click="openLoak(item)" :key="index" class="box">
                 <img :src="item.faceUrl[0]" />
-                <h5 v-text="item.gender+','+item.ageGroup"></h5>
+                <div style="display: flex;justify-content: space-between;align-items: center;padding-right: 10px">
+                    <h5 v-text="item.gender+','+item.ageGroup"></h5>
+                    <span v-if="item.stranger_status == 0">未处理</span>
+                    <span style="color: #409EFF;" v-if="item.stranger_status == 1">已处理</span>
+                    <span v-if="item.stranger_status == 2">已忽略</span>
+                </div>
                 <p v-text="item.faceTime"></p>
             </div>
         </div>
@@ -80,6 +85,15 @@
                     align="center"
                     prop="cameraName"
                     label="抓拍点">
+            </el-table-column>
+            <el-table-column
+                    align="center"
+                    label="状态">
+                <template slot-scope="scope">
+                    <span v-if="scope.row.stranger_status == 0">未处理</span>
+                    <el-button v-if="scope.row.stranger_status==1" @click="openLoak(scope.row)" type="text" size="small">已处理</el-button>
+                    <span v-if="scope.row.stranger_status == 2">已忽略</span>
+                </template>
             </el-table-column>
             <el-table-column
                     fixed="right"
@@ -298,12 +312,12 @@
             },
             openLoak(res){
                 this.list = res;
+                this.form.examine_title = res.examine_title;
+                this.form.examine_content = res.examine_content;
                 this.$nextTick(()=>{this.ds(res.examine_content)});
                 if(this.$refs['my-upload'] != undefined){
                     this.$refs['my-upload'].clearFiles();
                 }
-                this.form.examine_title = res.examine_title;
-                this.form.examine_content = res.examine_content;
                 this.dialogFormVisible = true;
             },
             handleClose(){
