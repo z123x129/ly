@@ -13,6 +13,7 @@
                             <p v-if="item.type=='stranger'" style="font-size: 14px;color: #5e6d82;margin-top: 8px">{{item.content.ageGroup}} {{item.content.cn}}</p>
                             <p v-if="item.type=='school_violation'" style="font-size: 14px;color: #5e6d82;margin-top: 8px">{{item.content.user_login}} {{item.content.title}}</p>
                             <p v-if="item.type=='wgy_upload'" style="font-size: 14px;color: #5e6d82;margin-top: 8px">{{item.content.name}}</p>
+                            <p v-if="item.type=='examine_stranger'" style="font-size: 14px;color: #5e6d82;margin-top: 8px">{{item.content.user_login}}</p>
                         </div>
                         <el-button style="float: right;padding: 0" @click="gotocont(item.type)" type="text">查看详情</el-button>
                         <div style="clear: both"></div>
@@ -75,6 +76,11 @@
                             that.$router.push('/Intelligence/School_show');
                         }else if(that.$store.state.user.jurisdiction=="Mw=="){
                             that.$router.push('/school/School_list');
+                        }
+                        break;
+                    case 'examine_stranger':
+                        if(that.$store.state.user.jurisdiction=='MQ=='){
+                            that.$router.push('/Intelligence/Strange_people');
                         }
                         break;
                 }
