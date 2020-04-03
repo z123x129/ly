@@ -9,7 +9,7 @@
         <DropdownItem name="message">
           消息中心<Badge style="margin-left: 10px" :count="messageUnreadCount"></Badge>
         </DropdownItem>
-        <DropdownItem v-if="$store.state.user.jurisdiction=='MQ=='" name="setting">
+        <DropdownItem name="setting">
           设置<Badge style="margin-left: 10px"></Badge>
         </DropdownItem>
         <DropdownItem name="logout">退出登录</DropdownItem>
