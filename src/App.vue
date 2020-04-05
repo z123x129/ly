@@ -54,4 +54,13 @@
    
   }
 }
+#i2 >div >.demo-form-inline {
+    margin: 10px 0;
+    background-color: #fff;
+    padding:15px 10px;
+    .el-form-item{
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+}
 </style>
