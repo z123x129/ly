@@ -1,4 +1,4 @@
-<!--柱形图and折线图(合并图)-->
+<!--堆叠柱状图-->
 <template>
     <div style="width: 100%;height: 100%;">
         <div ref="chart" class="echarts"></div>
@@ -27,32 +27,16 @@
                 this.chart.resize();
             },
             init(){
-                var arr=[];
-                var that = this;
-                this.data[1].forEach(function(v,index){
-                    arr.push(v+that.data[2][index])
-                });
-
                 // 指定图表的配置项和数据
                 var option = {
                     tooltip: {
                         trigger: 'axis',
-                        axisPointer: {
-                            type: 'cross',
-                            crossStyle: {
-                                color: '#999'
-                            },
-                        },
-                        axisLabel: {
-                            show: true,
-                            textStyle: {
-                                color: '#fff',  //更改坐标轴文字颜色
-                                fontSize : 10      //更改坐标轴文字大小
-                            }
-                        },
+                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                        }
                     },
                     legend: {
-                        data: ['正常', '异常', '总数'],
+                        data: ['正常', '异常'],
                         top: "5%",
                         right: "5%",
                         textStyle: {
@@ -60,13 +44,15 @@
                             fontSize: 13,
                         },
                     },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
                     xAxis: [
                         {
                             type: 'category',
-                            data: this.data[0],
-                            axisPointer: {
-                                type: 'shadow'
-                            },
                             axisLabel: {
                                 show: true,
                                 textStyle: {
@@ -74,20 +60,17 @@
                                     fontSize : 10      //更改坐标轴文字大小
                                 }
                             },
-                            axisTick: {
-                                show: false
-                            },
-                            axisLine:{
-                                show: false,
-                            }
+                            // axisLine:{
+                            //     lineStyle:{
+                            //         color:'#fff' //更改坐标轴颜色
+                            //     }
+                            // },
+                            data: this.data[0]
                         }
                     ],
                     yAxis: [
                         {
                             type: 'value',
-                            // min: 0,
-                            // max: 24,
-                            // interval: 4,
                             axisLabel: {
                                 formatter: '{value}',
                                 show: true,
@@ -131,54 +114,52 @@
                     ],
                     series: [
                         {
-                            name: '正常',
-                            type: 'bar',
-                            itemStyle: {
-                                normal: {
-                                    color: "#2AA956"
-                                }
-                            },
-                            data: this.data[1],
-                        },
-                        {
                             name: '异常',
                             type: 'bar',
+                            stack: '广告',
                             itemStyle: {
                                 normal: {
-                                    color: "#f44336"
+                                    color: { type: 'linear',
+                                        x: 0,
+                                        y: 0,
+                                        x2: 0,
+                                        y2: 1,
+                                        colorStops: [{
+                                            offset: 0, color: '#f87b83' // 0% 处的颜色
+                                        }, {
+                                            offset: 1, color: '#150ca3' // 100% 处的颜色
+                                        }],
+                                        globalCoord: false // 缺省为 false
+                                    }
+
                                 }
                             },
-                            data: this.data[2],
+                            data: this.data[2]
                         },
                         {
-                            name: '总数',
-                            type: 'line',
-                            yAxisIndex: 1,
+                            name: '正常',
+                            type: 'bar',
+                            stack: '广告',
                             itemStyle: {
                                 normal: {
-                                    color: "#178DFA"
+                                    color: { type: 'linear',
+                                        x: 0,
+                                        y: 0,
+                                        x2: 0,
+                                        y2: 1,
+                                        colorStops: [{
+                                            offset: 0, color: '#44f8d5' // 0% 处的颜色
+                                        }, {
+                                            offset: 1, color: '#2182f5' // 100% 处的颜色
+                                        }],
+                                        globalCoord: false // 缺省为 false
+                                         }
                                 }
                             },
-                            data: arr
-                        }
-                    ],
-                    dataZoom: [
-                        {
-                            show: false,
-                            realtime: false,
-                            start: 0,
-                            end: 100
+                            data: this.data[1]
                         },
-                        {
-                            type: 'inside',
-                            realtime: false,
-                            start: 0,
-                            end: 100,
-                            textStyle:{
-                                color:"#fff",
-                            }
-                        }
-                    ],
+
+                    ]
                 };
 
                 // 使用刚指定的配置项和数据显示图表。

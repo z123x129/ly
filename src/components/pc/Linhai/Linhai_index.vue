@@ -6,16 +6,16 @@
         <div class="content">
             <div class="cont_flex">
                 <div class="cont1">
-                    <dv-border-box-12 style="padding: 30px;height: 42%" class="box1" ref="box1">
+                    <dv-border-box-13 style="height: 42%" class="box1" ref="box1">
                         <h2>数据概览</h2>
-                        <ul style="font-size: 12px">
+                        <ul style="font-size: 12px;padding: 20px;">
                             <li v-for="(item,index) in list.general" :key="index">{{item.title}} {{item.value}}</li>
                         </ul>
-                    </dv-border-box-12>
-                    <dv-border-box-12 style="height: 58%;padding: 15px 10px 20px 5px" class="box1" ref="box2">
+                    </dv-border-box-13>
+                    <dv-border-box-13 style="height: 58%;padding: 15px 10px 20px 5px" class="box1" ref="box2">
                         <h2 style="text-indent: 15px">健康证情况</h2>
                         <Mixed :data="list.area_health" ref="Mixed" style="width: 100%;height: 100%"></Mixed>
-                    </dv-border-box-12>
+                    </dv-border-box-13>
                 </div>
                 <div style="position: relative" class="cont2">
                     <div @click="back" v-if="showBack">
@@ -23,52 +23,37 @@
                     </div>
                     <Map style="width: 100%;height: 100%" :address_info="address_info" ref="map" @showButton="showButton"  @getAreaInfo="getAreaInfo"></Map>
                     <ul>
-                        <li>学校个数: <span>{{list.school}}</span></li>
-                        <li>没有异常的学校: <span>{{list.yes_school}}</span></li>
-                        <li>有异常的学校: <span>{{list.no_school}}</span></li>
+                        <li>学校个数: <span>{{regions_chart.school_general.all_school}}</span></li>
+                        <li>没有异常的学校: <span>{{regions_chart.school_general.normal_school}}</span></li>
+                        <li>有异常的学校: <span>{{regions_chart.school_general.anomaly_school}}</span></li>
                     </ul>
                 </div>
                 <div class="cont1">
-                    <dv-border-box-12 class="box1" ref="box3">
+                    <dv-border-box-13 class="box1" ref="box3">
                         <h2>健康证图表</h2>
-                        <div style="display: flex;justify-content: space-around">
-                            <ol>
-                                <li>{{list.area_chart.all}}</li>
-                                <li>健康证总数</li>
-                            </ol>
-                            <ol>
-                                <li>{{list.area_chart.normal}}</li>
-                                <li>正常常健康证数</li>
-                            </ol>
-                            <ol>
-                                <li>{{list.area_chart.anomaly}}</li>
-                                <li>异常健康证数</li>
-                            </ol>
-                        </div>
-                        <Editor :normal="normal" :anomaly="anomaly" ref="Editor" style="width: 100%;height: 50%"></Editor>
-                    </dv-border-box-12>
-                    <dv-border-box-12 class="box1" ref="box4">
+                        <Customized :data="regions_chart.area_chart" ref="Customized" style="width: 100%;height: 100%"></Customized>
+                    </dv-border-box-13>
+                    <dv-border-box-13 class="box1" ref="box4">
                         <h2>学校异常情况</h2>
                         <dv-scroll-board ref="srroll_1" @click="getWeigui" :config="config2" style="width:94%;height:82%;margin: 3%" />
-
-                    </dv-border-box-12>
+                    </dv-border-box-13>
                 </div>
             </div>
             <div class="cont_flex2">
                 <div class="cont3">
-                    <dv-border-box-12 class="box2" ref="box5">
+                    <dv-border-box-13 class="box2" ref="box5">
                         <div style="display: flex;justify-content:flex-start">
                             <h2>当月重点人员陌生人员情况</h2>
-                            <span style="margin-left: 20px;color: #7ec699;text-shadow: 0 0 3px #7acaec;">{{city_name}}</span>
+                            <span style="margin-left: 20px;color: #95f204;font-size: 15px">{{city_name}}</span>
                         </div>
-                        <Dataset :data="regions_chart" :type="1" ref="Dataset" style="width: 100%;height: 100%"></Dataset>
-                    </dv-border-box-12>
+                        <Dataset :data="regions_chart.stat_people" :type="1" ref="Dataset" style="width: 100%;height: 100%"></Dataset>
+                    </dv-border-box-13>
                 </div>
                 <div class="cont1">
-                    <dv-border-box-12 class="box2" ref="box6">
+                    <dv-border-box-13 class="box2" ref="box6">
                         <h2>实时警报数据</h2>
                         <dv-scroll-board @click="gotoStock" ref="srroll_2" :config="config" style="width:94%;height:82%;margin: 3%" />
-                    </dv-border-box-12>
+                    </dv-border-box-13>
                 </div>
             </div>
         </div>
@@ -81,9 +66,9 @@
         name:'home',
         components:{
             Mixed:()=>import('./Linhai_mixed'),
-            Editor:()=>import('./Linhai_editor'),
             Map:()=>import('./component/Map'),
             Dataset:()=>import('./Linhai_dataset'),
+            Customized:()=>import('./Customized'),
             [Select.name]:Select,
             [Option.name]:Option,
         },
@@ -91,15 +76,22 @@
                 return{
                     list:{
                         general:{},
-                        area_chart:{
-                            all:'',
-                            normal:'',
-                            anomaly:'',
-                        },
                         area_health:[],
                     },
-                    city_name:"杜桥镇",
-                    regions_chart:[],
+                    city_name:"临海市",
+                    regions_chart:{
+                        area_chart:{
+                            all_health:0,
+                            anomaly_health:0,
+                            normal_health:0,
+                        },
+                        school_general:{
+                            all_school:0,
+                            anomaly_school:0,
+                            normal_school:0,
+                        },
+                        stat_people:[],
+                    },
                     indexCode:'',
                     options:'',
                     normal:[''],
@@ -128,6 +120,8 @@
             },
             back(){
                 this.$refs.map.init("LinHai");
+                this.getMen();
+                this.city_name = '临海市';
                 this.showBack = false;
             },
             getAdd(){
@@ -140,7 +134,6 @@
                             that.options = res.regions;
                             that.indexCode = res.regions[0].indexCode;
                         },500)
-
                     })
                 })
             },
@@ -148,13 +141,10 @@
                 let params ={'uid':this.$store.state.user.uid};
                 this.$https.fetchPost('/plugin/statistics/api_index/indexStat',params).then((res) => {
                     this.list = res;
-                    this.normal[0] = Math.round(res.area_chart.normal/res.area_chart.all*100);
-                    this.anomaly[0] = Math.round(res.area_chart.anomaly/res.area_chart.all*100);
 
                     this.$nextTick(function () {
                         let that = this;
                         setTimeout(()=>{
-                            that.init_child("Editor");
                             that.init_child("Mixed");
                             that.init_child("Dataset");
                         }, 500)
@@ -163,14 +153,18 @@
             },
             getMen(indexCode){
                 let params ={'indexCode':indexCode,'uid':this.$store.state.user.uid};
-                this.$https.fetchPost('/plugin/statistics/api_index/indexStatSchool',params).then((res) => {
+                let arr = '/plugin/statistics/api_index/indexStatRegion';
+                if(indexCode){
+                    arr = '/plugin/statistics/api_index/indexStatSchool'
+                }
+                this.$https.fetchPost(arr,params).then((res) => {
                     this.regions_chart = res;
                     this.$nextTick(function () {
                         let that = this;
                         setTimeout(()=>{
                             that.init_child("Dataset");
+                            that.init_child("Customized");
                         },500)
-
                     })
                 })
             },
@@ -192,15 +186,18 @@
                 let params ={'uid':this.$store.state.user.uid};
                 this.$https.fetchPost('/plugin/statistics/api_index/schoolViolation',params).then((res) => {
                     var arr = [];
-                    for (let i = 0; i < res.length ; i++) {
-                        arr.push(res[i].name);
-                        arr.push(res[i].violation);
-                        arr.push(String(res[i].num));
-                        arr.push(String(res[i].code));
-                        this.data2.push(arr);
-                        arr = []
+                    if(res){
+                        for (let i = 0; i < res.length ; i++) {
+                            arr.push(res[i].name);
+                            arr.push(res[i].violation);
+                            arr.push(String(res[i].num));
+                            arr.push(String(res[i].code));
+                            this.data2.push(arr);
+                            arr = []
+                        }
+                        this.getConfig2();
                     }
-                    this.getConfig2();
+
                 })
             },
             getConfig2(){
@@ -238,7 +235,7 @@
                     this.getConfig();
                 });
             },
-                getConfig(){
+            getConfig(){
                 this.config = {
                     header: ['学校','类型','时间'],
                     data: this.data,
@@ -287,7 +284,7 @@
                 this.$refs.srroll_1.initWH();
                 this.$refs.srroll_2.initWH();
                 this.$refs.map.map_resize();
-                this.$refs.Editor.Editor_resize();
+                this.$refs.Customized.Customized_resize();
                 this.$refs.Dataset.Dataset_resize();
                 this.$refs.Mixed.Mixed_resize();
                 for(let i = 1; i<=6; i++)
@@ -409,8 +406,8 @@
         height: 100%;
     }
     h2{
-        font-size: 14px;
-        color: #5986DF;
+        font-size: 16px;
+        color: #07e2ff;
     }
     tr,th{
         text-align: center;

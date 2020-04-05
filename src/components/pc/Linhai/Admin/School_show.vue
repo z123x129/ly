@@ -1,6 +1,114 @@
 <template>
     <div>
-        <el-tabs style="padding: 0 10px" v-model="activeName">
+        <el-tabs v-model="activeName">
+            <el-tab-pane label="健康证清单" name="first">
+                <el-form :inline="true" :model="formInline" class="demo-form-inline">
+                    <el-form-item label="选择区域:">
+                        <el-select @change="getSchool" size="small" filterable clearable v-model="formInline.indexCode">
+                            <el-option v-for="(item,index) in regions" :label="item.name" :value="item.indexCode" :key="index"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="选择学校:">
+                        <el-select size="small" filterable clearable v-model="formInline.dir_id">
+                            <el-option v-for="(item,index) in dir" :label="item.dirName" :value="item.id" :key="index"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="健康证到期时间:">
+                        <el-date-picker
+                                v-model="formInline.timeStr"
+                                size="small"
+                                type="daterange"
+                                align="right"
+                                unlink-panels
+                                range-separator="至"
+                                start-placeholder="开始日期"
+                                end-placeholder="结束日期"
+                                value-format="yyyy-MM-dd"
+                                :picker-options="pickerOptions">
+                        </el-date-picker>
+                    </el-form-item>
+                    <el-form-item style="margin-top: -2px">
+                        <el-button size="small" type="primary" @click="search">搜索</el-button>
+                        <el-button size="small" type="primary" @click="exports">导出excel</el-button>
+                    </el-form-item>
+                </el-form>
+                <div style="width: 100%;height: 16px;background: #f0f2f5"></div>
+                <el-table
+                        :data="tableData"
+                        border
+                        :row-class-name="tableRowClassName"
+                        style="width: 100%">
+                    <el-table-column
+                            align="center"
+                            prop="MIID"
+                            label="ID">
+                    </el-table-column>
+                    <el-table-column
+                            align="center"
+                            prop="nickname"
+                            label="姓名">
+                    </el-table-column>
+                    <el-table-column
+                            align="center"
+                            prop="name"
+                            label="所属地区">
+                    </el-table-column>
+                    <el-table-column
+                            align="center"
+                            prop="dirName"
+                            label="所属学校">
+                    </el-table-column>
+                    <el-table-column
+                            align="center"
+                            prop="mobile"
+                            label="联系方式">
+                    </el-table-column>
+                    <el-table-column
+                            align="center"
+                            label="人脸照片">
+                        <template slot-scope="scope">
+                            <el-image
+                                    style="width: 35px; height: 35px"
+                                    :src="scope.row.face_thumb[0]"
+                                    :preview-src-list="scope.row.face_thumb">
+                            </el-image>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            align="center"
+                            label="健康证照片">
+                        <template slot-scope="scope">
+                            <el-image
+                                    style="width: 35px; height: 35px"
+                                    :src="scope.row.health_card[0]"
+                                    :preview-src-list="scope.row.health_card">
+                            </el-image>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            align="center"
+                            prop="member_type"
+                            label="人员类别">
+                    </el-table-column>
+                    <el-table-column
+                            align="center"
+                            prop="health_endtime"
+                            label="健康证到期时间">
+                    </el-table-column>
+                </el-table>
+                <div style="padding: 15px;display: flex;justify-content: flex-end;background-color:#fff">
+                    <el-pagination
+                            @size-change="handleSizeChange"
+                            @current-change="handleCurrentChange"
+                            :current-page="currentPage"
+                            :page-sizes="[paginates, paginates*2, paginates*3, paginates*4]"
+                            :page-size="paginate"
+                            background
+                            layout="total, sizes, prev, pager, next, jumper"
+                            :total="total">
+                    </el-pagination>
+                </div>
+            </el-tab-pane>
             <el-tab-pane label="抽查违规清单" name="second">
                 <el-form :inline="true" :model="formInline" class="demo-form-inline">
                     <el-form-item label="选择区域:">
@@ -22,6 +130,7 @@
                         <el-button size="small" type="primary" @click="search2">搜索</el-button>
                     </el-form-item>
                 </el-form>
+                <div style="width: 100%;height: 16px;background: #f0f2f5"></div>
                 <el-table
                         :data="tableData2"
                         border
@@ -101,121 +210,13 @@
                     <span v-html="content"></span>
                     <div class="demo-image__preview">
                         <el-image v-if="img"
-                                  style="width: 100px; height: 100px"
-                                  :src="img[0]"
-                                  :preview-src-list="img">
+                                style="width: 100px; height: 100px"
+                                :src="img[0]"
+                                :preview-src-list="img">
                         </el-image>
                     </div>
                 </el-dialog>
             </el-tab-pane>
-            <el-tab-pane label="健康证清单" name="first">
-                <el-form :inline="true" :model="formInline" class="demo-form-inline">
-                    <el-form-item label="选择区域:">
-                        <el-select @change="getSchool" size="small" filterable clearable v-model="formInline.indexCode">
-                            <el-option v-for="(item,index) in regions" :label="item.name" :value="item.indexCode" :key="index"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="选择学校:">
-                        <el-select size="small" filterable clearable v-model="formInline.dir_id">
-                            <el-option v-for="(item,index) in dir" :label="item.dirName" :value="item.id" :key="index"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="健康证到期时间:">
-                        <el-date-picker
-                                v-model="formInline.timeStr"
-                                size="small"
-                                type="daterange"
-                                align="right"
-                                unlink-panels
-                                range-separator="至"
-                                start-placeholder="开始日期"
-                                end-placeholder="结束日期"
-                                value-format="yyyy-MM-dd"
-                                :picker-options="pickerOptions">
-                        </el-date-picker>
-                    </el-form-item>
-                    <el-form-item style="margin-top: -2px">
-                        <el-button size="small" type="primary" @click="search">搜索</el-button>
-                        <el-button size="small" type="primary" @click="exports">导出excel</el-button>
-                    </el-form-item>
-                </el-form>
-                <el-table
-                        :data="tableData"
-                        border
-                        :row-class-name="tableRowClassName"
-                        style="width: 100%">
-                    <el-table-column
-                            align="center"
-                            prop="MIID"
-                            label="ID">
-                    </el-table-column>
-                    <el-table-column
-                            align="center"
-                            prop="nickname"
-                            label="姓名">
-                    </el-table-column>
-                    <el-table-column
-                            align="center"
-                            prop="name"
-                            label="所属地区">
-                    </el-table-column>
-                    <el-table-column
-                            align="center"
-                            prop="dirName"
-                            label="所属学校">
-                    </el-table-column>
-                    <el-table-column
-                            align="center"
-                            prop="mobile"
-                            label="联系方式">
-                    </el-table-column>
-                    <el-table-column
-                            align="center"
-                            label="人脸照片">
-                        <template slot-scope="scope">
-                            <el-image
-                                    style="width: 100px; height: 100px"
-                                    :src="scope.row.face_thumb[0]"
-                                    :preview-src-list="scope.row.face_thumb">
-                            </el-image>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                            align="center"
-                            label="健康证照片">
-                        <template slot-scope="scope">
-                            <el-image
-                                    style="width: 100px; height: 100px"
-                                    :src="scope.row.health_card[0]"
-                                    :preview-src-list="scope.row.health_card">
-                            </el-image>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                            align="center"
-                            prop="member_type"
-                            label="人员类别">
-                    </el-table-column>
-                    <el-table-column
-                            align="center"
-                            prop="health_endtime"
-                            label="健康证到期时间">
-                    </el-table-column>
-                </el-table>
-                <div style="padding: 15px;display: flex;justify-content: flex-end;">
-                    <el-pagination
-                            @size-change="handleSizeChange"
-                            @current-change="handleCurrentChange"
-                            :current-page="currentPage"
-                            :page-sizes="[paginates, paginates*2, paginates*3, paginates*4]"
-                            :page-size="paginate"
-                            background
-                            layout="total, sizes, prev, pager, next, jumper"
-                            :total="total">
-                    </el-pagination>
-                </div>
-            </el-tab-pane>
-
         </el-tabs>
     </div>
 </template>
@@ -241,7 +242,7 @@
         },
         data(){
             return{
-                activeName: 'second',
+                activeName: 'first',
                 formInline: {
                     indexCode: '',
                     dir_id: '',
@@ -331,6 +332,19 @@
                     this.total = res.total;
                 })
             },
+            exports(){
+                var timeStart = '',timeEnd = '';
+                if(this.formInline.timeStr !== null){
+                    timeStart = this.formInline.timeStr[0];
+                    timeEnd = this.formInline.timeStr[1];
+                }
+                let params ={'uid':this.$store.state.user.uid,
+                    'indexCode':this.formInline.indexCode,'dir_id':this.formInline.dir_id,
+                    'start_time':timeStart,'end_time':timeEnd};
+                this.$https.fetchPost('/plugin/statistics/Excel/out_schoolList',params).then((res) => {
+                    window.location.href=res;
+                })
+            },
             getList2(){
                 let params ={'uid':this.$store.state.user.uid,'page':this.page2,'paginate':this.paginate2,
                     'indexCode':this.formInline2.indexCode,'dir_id':this.formInline2.dir_id};
@@ -380,30 +394,29 @@
                     })
                 }
             },
-            exports(){
-                console.log(this.tableData)
-                let xlsCell = [["MIID","ID"],["nickname","姓名"],["name","所属地区"],["dirName","所属学校"],["mobile","联系方式"],
-                    ["face_thumb","人脸照片"],["health_card","健康证照片"],["member_type","人员类别"],["health_endtime","健康证到期时间"]];
-                let xlsData = [];
-                for (let i = 0; i <this.tableData.length ; i++) {
-                    xlsData.push({
-                        'MIID': this.tableData[i].MIID,
-                        'nickname': this.tableData[i].nickname,
-                        'name': this.tableData[i].name,
-                        'dirName': this.tableData[i].dirName,
-                        'mobile': this.tableData[i].mobile,
-                        'face_thumb': String(this.tableData[i].face_thumb),
-                        'health_card': String(this.tableData[i].health_card),
-                        'member_type': this.tableData[i].member_type,
-                        'health_endtime': this.tableData[i].health_endtime,
-                    })
-                }
-                let params ={'xlsName':'学校数据列表','isImg':'5,6','xlsCell':xlsCell,'xlsData':xlsData,};
-                params = this.$secret_key.func(this.$store.state.on_off, params);
-                this.$https.fetchPost('/plugin/school/api_index/out_excel',params).then((res) => {
-                    window.location.href=res;
-                })
-            },
+            // exports(){
+            //     let xlsCell = [["MIID","ID"],["nickname","姓名"],["name","所属地区"],["dirName","所属学校"],["mobile","联系方式"],
+            //         ["face_thumb","人脸照片"],["health_card","健康证照片"],["member_type","人员类别"],["health_endtime","健康证到期时间"]];
+            //     let xlsData = [];
+            //     for (let i = 0; i <this.tableData.length ; i++) {
+            //         xlsData.push({
+            //             'MIID': this.tableData[i].MIID,
+            //             'nickname': this.tableData[i].nickname,
+            //             'name': this.tableData[i].name,
+            //             'dirName': this.tableData[i].dirName,
+            //             'mobile': this.tableData[i].mobile,
+            //             'face_thumb': String(this.tableData[i].face_thumb),
+            //             'health_card': String(this.tableData[i].health_card),
+            //             'member_type': this.tableData[i].member_type,
+            //             'health_endtime': this.tableData[i].health_endtime,
+            //         })
+            //     }
+            //     let params ={'xlsName':'学校数据列表','isImg':'5,6','xlsCell':xlsCell,'xlsData':xlsData,};
+            //     params = this.$secret_key.func(this.$store.state.on_off, params);
+            //     this.$https.fetchPost('/plugin/school/api_index/out_excel',params).then((res) => {
+            //         window.location.href=res;
+            //     })
+            // },
             handleSizeChange(val) {//分页器
                 this.paginate = val;
                 this.page = 1;
@@ -470,5 +483,8 @@
 }
 .el-image /deep/ .el-icon-circle-close{
     color: #fff;
+}
+.el-tabs /deep/ .el-tabs__header{
+    margin: 0 1rem 1rem;
 }
 </style>

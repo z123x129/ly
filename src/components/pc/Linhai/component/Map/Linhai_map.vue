@@ -6,6 +6,7 @@
 </template>
 <script>
     import echarts from 'echarts'
+    import 'echarts-gl'
     const json = require("./LHMap");
     export default {
         props:{
