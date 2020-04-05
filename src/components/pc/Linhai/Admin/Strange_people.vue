@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="body">
         <div class="header">
             <div style="display: flex;justify-content: space-between;padding-right: 80px">
                 <p>学校被拍陌生人数量排列柱状图</p>
@@ -121,7 +121,7 @@
                 </template>
             </el-table-column>
         </el-table>
-        <div style="padding: 15px;display: flex;justify-content: flex-end;">
+        <div style="padding: 15px;display: flex;justify-content: flex-end;background-color:#fff">
             <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
@@ -367,5 +367,8 @@
 }
 .el-image /deep/ .el-icon-circle-close{
     color: #fff;
+}
+.body >.demo-form-inline {
+    margin: 10px 0;
 }
 </style>

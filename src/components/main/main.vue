@@ -97,7 +97,7 @@
                             <tags-nav :value="$route" @input="handleClick" :list="tagsNav" @on-close="closeClick"/>
                         </div>
                         <Content class="content-wrapper" >
-                            <div style="background-color:#fff;height:100%" id='i2'>
+                            <div id='i2'>
                            <keep-alive :include="cacheList">
                                     <router-view></router-view>
                            </keep-alive>
@@ -377,12 +377,19 @@
     #i1{
         background-color:#f0f0f0;
     }
-    #i1{}
+    #i2{
+        background-color: #f0f0f0;
+        height: 100%;
+        padding: 15px 0 15px 15px;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
     .main .main-layout-con{background: #f0f0f0;}
     .main .content-wrapper{
         padding: 0;
-        margin: 15px 0 15px 15px;
-        background: '#fff';
-        min-Height: '260px'
+        margin: 0;
+        // margin: 15px 0 15px 15px;
+        // background: #fff;
+        // min-Height: 260px
     }
 </style>

@@ -64,7 +64,7 @@
                     align="center">
             </el-table-column>
         </el-table>
-        <div style="padding: 15px;display: flex;justify-content: flex-end;">
+        <div style="padding: 15px;display: flex;justify-content: flex-end;background-color:#fff">
             <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
