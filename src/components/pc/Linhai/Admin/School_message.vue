@@ -1,15 +1,18 @@
 <template>
-    <div style="padding-top: 20px">
-        <div style="width: 40%;margin: 0 auto">
-            <el-input size="small" placeholder="请输入内容" v-model="input" class="input-with-select">
-                <el-select style="width: 110px" v-model="select" slot="prepend" placeholder="请选择">
-                    <el-option label="学校名称" value="dirName"></el-option>
-                    <el-option label="单位名称" value="company"></el-option>
-                    <el-option label="负责人" value="personCharge"></el-option>
-                    <el-option label="学校地址" value="street"></el-option>
-                </el-select>
-                <el-button @click="getList" slot="append" icon="el-icon-search"></el-button>
-            </el-input>
+    <div>
+        <div class="headerSearch">
+            <div>
+                <el-input size="small" placeholder="请输入内容" v-model="input" class="input-with-select">
+                    <el-select style="width: 110px" v-model="select" slot="prepend" placeholder="请选择">
+                        <el-option label="学校名称" value="dirName"></el-option>
+                        <el-option label="单位名称" value="company"></el-option>
+                        <el-option label="负责人" value="personCharge"></el-option>
+                        <el-option label="学校地址" value="street"></el-option>
+                    </el-select>
+                    <el-button @click="getList" slot="append" icon="el-icon-search"></el-button>
+                </el-input>
+            </div>
+            
         </div>
         <el-table
                 :data="tableData"
@@ -127,3 +130,14 @@
         }
     }
 </script>
+<style scoped lang="less">
+    .headerSearch{
+        background-color: #fff;
+        padding: 10px;
+        margin-bottom: 10px;
+        >div{
+            width: 40%;
+            margin: auto;
+        }
+    }
+</style>
