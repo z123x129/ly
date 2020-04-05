@@ -248,7 +248,8 @@
                 };
             },
             gotoStock(row){
-                if(row.ceil=='发现陌生人'){
+                console.log(row);
+                if(row.row[2]=='发现陌生人'){
                     this.$router.push('/Intelligence/Strange_people')
                 }else{
                     this.$router.push('/Intelligence/Key_personnel')
@@ -283,8 +284,8 @@
         activated() {
             if(this.$refs.hasOwnProperty("map"))
             {
-                this.$refs.srroll_1.autoResizeMixinInit();
-                this.$refs.srroll_2.autoResizeMixinInit();
+                this.$refs.srroll_1.initWH();
+                this.$refs.srroll_2.initWH();
                 this.$refs.map.map_resize();
                 this.$refs.Editor.Editor_resize();
                 this.$refs.Dataset.Dataset_resize();

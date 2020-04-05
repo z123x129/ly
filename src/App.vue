@@ -26,7 +26,7 @@
 
 <style lang="less">
 #app {
-  background: #fff;
+  background: #001529;
   height: 100%;
   font-size: 13px;
 }
