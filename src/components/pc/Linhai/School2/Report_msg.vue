@@ -25,6 +25,7 @@
                 <el-button size="small" type="primary" @click="search">搜索</el-button>
             </el-form-item>
         </el-form>
+        <div style="width: 100%;height: 16px;background: #f0f2f5"></div>
         <el-table
                 :data="tableData"
                 style="width: 100%">
@@ -89,7 +90,7 @@
                 </template>
             </el-table-column>
         </el-table>
-        <div style="padding: 15px;display: flex;justify-content: flex-end;">
+        <div style="padding: 15px;display: flex;justify-content: flex-end;background-color:#fff">
             <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"

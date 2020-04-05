@@ -97,7 +97,7 @@
                             <tags-nav :value="$route" @input="handleClick" :list="tagsNav" @on-close="closeClick"/>
                         </div>
                         <Content class="content-wrapper" >
-                            <div style="background-color:#fff;height:100%" id='i2'>
+                            <div id='i2'>
                            <keep-alive :include="cacheList">
                                     <router-view></router-view>
                            </keep-alive>
@@ -167,13 +167,11 @@
                 return this.$store.getters.menuList
             },
             tagsNav () {
-                window.console.log(this.$store.state.app.tagNavList);
                 return this.$store.state.app.tagNavList
             },
             cacheList () {
                 const list = ["home", ...this.tagNavList.length ? this.tagNavList.filter(item => !(item.meta && item.meta.notCache)).map(item => item.name) : []]
                 // const x1 = (this.tagNavList.length);
-                window.console.log(list);
                 return list
             },
         },
@@ -190,7 +188,6 @@
                 this.$refs.side1.toggleCollapse();
             },
             turnToPage:function(route){
-                window.console.log(route);
                 let { name, params, query } = {}
                 if (typeof route === 'string') name = route
                 else {
@@ -375,14 +372,22 @@
         display: flex;
     }
     #i1{
-        background-color:#f0f0f0;
+        background-color:#f0f2f5;
     }
-    #i1{}
+    #i2{
+        background-color: #f0f2f5;
+        height: 100%;
+        padding: 15px 0 15px 15px;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
     .main .main-layout-con{background: #f0f0f0;}
+
     .main .content-wrapper{
         padding: 0;
-        margin: 15px 0 15px 15px;
-        background: '#fff';
-        min-Height: '260px'
+        margin: 0;
+        // margin: 15px 0 15px 15px;
+        // background: #fff;
+        // min-Height: 260px
     }
 </style>
