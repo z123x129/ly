@@ -19,8 +19,8 @@
                     label="学校Logo"
                     align="center">
                 <template slot-scope="scope">
-                    <img v-if="scope.row.school_cover" style="border-radius: 100%" width="80px" height="80px" :src="scope.row.school_cover" />
-                    <span v-else>无</span>
+                    <img v-if="scope.row.school_cover" style="border-radius: 100%" width="35px" height="35px" :src="scope.row.school_cover" />
+                    <img v-else width="35px" height="35px" src="../images/school_logo.png">
                 </template>
             </el-table-column>
             <el-table-column

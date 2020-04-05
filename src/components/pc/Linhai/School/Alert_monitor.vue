@@ -60,6 +60,7 @@
                 </el-radio-group>
             </el-form-item>
         </el-form>
+        <div style="width: 100%;height: 16px;background: #f0f2f5"></div>
         <div v-if="show == false" class="big_box">
             <div v-for="(item,index) in tableData" @click="openLoak(item)" :key="index" class="box">
                 <img :src="item.faceUrl[0]" />
@@ -303,6 +304,25 @@
                     this.total = res_data.total;
                 })
             },
+            exports(){
+                var timeStart = '',timeEnd = '';
+                if(this.formInline.date !== null){
+                    timeStart = this.formInline.date[0];
+                    timeEnd = this.formInline.date[1];
+                }
+                let params ={'uid':this.$store.state.user.uid,
+                'encodeDevIndexCode':this.formInline.encodeDevIndexCode,
+                'start_time':timeStart,
+                'end_time':timeEnd,
+                'ageGroup':this.formInline.ageGroup,
+                'gender':this.formInline.gender,
+                'glass':this.formInline.glass,
+                };
+                params = this.$secret_key.func(this.$store.state.on_off, params);
+                this.$https.fetchPost('/plugin/statistics/Excel/out_strangerAlarm',params).then((res) => {
+                    window.location.href=res;
+                })
+            },
             getAddress(){
                 let params ={'uid':this.$store.state.user.uid};
                 params = this.$secret_key.func(this.$store.state.on_off, params);
@@ -387,33 +407,33 @@
             resetForm(formName) {
                 this.$refs[formName].resetFields();
             },
-            exports(){
-                let xlsCell = [["id","ID"],["gender","性别"],["ageGroup","年龄段"],["glass","是否戴眼镜"],["cameraName","抓拍地点"],["bkgUrl","背景图"],
-                    ["faceUrl","抓拍图片"],["faceTime","抓拍时间"],["stranger_status","当前状态"]];
-                let xlsData = [];
-                for (let i = 0; i <this.tableData.length ; i++) {
-                    var text = '已处理';
-                    if(this.tableData[i].stranger_status==0){
-                        text = '未处理';
-                    }
-                    xlsData.push({
-                        'id': this.tableData[i].id,
-                        'gender': this.tableData[i].gender,
-                        'ageGroup': this.tableData[i].ageGroup,
-                        'glass': this.tableData[i].glass,
-                        'cameraName': this.tableData[i].cameraName,
-                        'bkgUrl': String(this.tableData[i].bkgUrl),
-                        'faceUrl': String(this.tableData[i].faceUrl),
-                        'faceTime': this.tableData[i].faceTime,
-                        'stranger_status': text,
-                    })
-                }
-                let params ={'xlsName':' 陌生人脸抓拍清单','isImg':'5,6','out_img':'5,6','xlsCell':xlsCell,'xlsData':xlsData,};
-                params = this.$secret_key.func(this.$store.state.on_off, params);
-                this.$https.fetchPost('/plugin/statistics/api_index/out_excel',params).then((res) => {
-                    window.location.href=res;
-                })
-            },
+            // exports(){
+            //     let xlsCell = [["id","ID"],["gender","性别"],["ageGroup","年龄段"],["glass","是否戴眼镜"],["cameraName","抓拍地点"],["bkgUrl","背景图"],
+            //         ["faceUrl","抓拍图片"],["faceTime","抓拍时间"],["stranger_status","当前状态"]];
+            //     let xlsData = [];
+            //     for (let i = 0; i <this.tableData.length ; i++) {
+            //         var text = '已处理';
+            //         if(this.tableData[i].stranger_status==0){
+            //             text = '未处理';
+            //         }
+            //         xlsData.push({
+            //             'id': this.tableData[i].id,
+            //             'gender': this.tableData[i].gender,
+            //             'ageGroup': this.tableData[i].ageGroup,
+            //             'glass': this.tableData[i].glass,
+            //             'cameraName': this.tableData[i].cameraName,
+            //             'bkgUrl': String(this.tableData[i].bkgUrl),
+            //             'faceUrl': String(this.tableData[i].faceUrl),
+            //             'faceTime': this.tableData[i].faceTime,
+            //             'stranger_status': text,
+            //         })
+            //     }
+            //     let params ={'xlsName':' 陌生人脸抓拍清单','isImg':'5,6','out_img':'5,6','xlsCell':xlsCell,'xlsData':xlsData,};
+            //     params = this.$secret_key.func(this.$store.state.on_off, params);
+            //     this.$https.fetchPost('/plugin/statistics/api_index/out_excel',params).then((res) => {
+            //         window.location.href=res;
+            //     })
+            // },
         },
     }
 </script>

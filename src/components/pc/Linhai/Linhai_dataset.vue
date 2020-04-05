@@ -24,7 +24,7 @@
             var that = this;
             this.chart.on('click', function (params) {
                 // 控制台打印数据的名称
-                that.$emit('getDataset',params.data[4])
+                that.$emit('getSet',params.data[4])
             });
         },
         methods:{
