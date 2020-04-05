@@ -17,6 +17,7 @@
             </div>
             <Dataset @getDataset="getDataset" ref="Dataset" :data="data" style="width: 100%;height: 100%"></Dataset>
         </div>
+        <div style="width: 100%;height: 16px;background: #f0f2f5"></div>
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
             <el-form-item label="选择区域:">
                 <el-select @change="getSchool" size="small" filterable clearable v-model="formInline.indexCode">
@@ -48,6 +49,7 @@
 <!--                <el-button size="small" type="primary">生成报表至网格员</el-button>-->
             </el-form-item>
         </el-form>
+        <div style="width: 100%;height: 16px;background: #f0f2f5"></div>
         <el-table
                 :data="tableData"
                 border
@@ -67,27 +69,42 @@
                     prop="cameraName"
                     label="抓拍地点">
             </el-table-column>
-            <el-table-column
-                    align="center"
-                    label="背景图">
-                <template slot-scope="scope">
-                    <el-image
-                            style="width: 100px; height: 100px"
-                            :src="scope.row.bkgUrl[0]"
-                            :preview-src-list="scope.row.bkgUrl">
-                    </el-image>
-                </template>
-            </el-table-column>
+<!--            <el-table-column-->
+<!--                    align="center"-->
+<!--                    label="背景图">-->
+<!--                <template slot-scope="scope">-->
+<!--                    <el-image-->
+<!--                            style="width: 100px; height: 100px"-->
+<!--                            :src="scope.row.bkgUrl[0]"-->
+<!--                            :preview-src-list="scope.row.bkgUrl">-->
+<!--                    </el-image>-->
+<!--                </template>-->
+<!--            </el-table-column>-->
             <el-table-column
                     align="center"
                     label="抓拍图片">
                 <template slot-scope="scope">
                     <el-image
-                            style="width: 100px; height: 100px"
+                            style="width: 35px; height: 35px"
                             :src="scope.row.faceUrl[0]"
-                            :preview-src-list="scope.row.faceUrl">
+                            :preview-src-list="scope.row.bkgUrl.concat(scope.row.faceUrl)">
                     </el-image>
                 </template>
+            </el-table-column>
+            <el-table-column
+                    align="center"
+                    prop="gender"
+                    label="性别">
+            </el-table-column>
+            <el-table-column
+                    align="center"
+                    prop="ageGroup"
+                    label="年龄段">
+            </el-table-column>
+            <el-table-column
+                    align="center"
+                    prop="glass"
+                    label="是否戴眼镜">
             </el-table-column>
             <el-table-column
                     align="center"

@@ -31,6 +31,7 @@
                         <el-button size="small" type="primary" @click="search2">搜索</el-button>
                     </el-form-item>
                 </el-form>
+                <div style="width: 100%;height: 16px;background: #f0f2f5"></div>
                 <el-table
                         :data="tableData2"
                         border
@@ -60,7 +61,7 @@
                             label="人脸图">
                         <template slot-scope="scope">
                             <el-image
-                                    style="width: 100px; height: 100px"
+                                    style="width: 35px; height: 35px"
                                     :src="scope.row.face_img[0]"
                                     :preview-src-list="scope.row.face_img">
                             </el-image>
@@ -71,7 +72,7 @@
                             label="抓拍图片">
                         <template slot-scope="scope">
                             <el-image
-                                    style="width: 100px; height: 100px"
+                                    style="width: 35px; height: 35px"
                                     :src="scope.row.faceUrl[0]"
                                     :preview-src-list="scope.row.faceUrl">
                             </el-image>
@@ -124,6 +125,7 @@
                         <el-button size="small" type="primary" @click="delAll">批量删除</el-button>
                     </el-form-item>
                 </el-form>
+                <div style="width: 100%;height: 16px;background: #f0f2f5"></div>
                 <el-table
                         :data="tableData"
                         border
@@ -154,7 +156,7 @@
                             label="人脸图">
                         <template slot-scope="scope">
                             <el-image
-                                    style="width: 100px; height: 100px"
+                                    style="width: 35px; height: 35px"
                                     :src="scope.row.face_img[0]"
                                     :preview-src-list="scope.row.face_img">
                             </el-image>
@@ -560,5 +562,8 @@
 }
 .el-image /deep/ .el-icon-circle-close{
     color: #fff;
+}
+.el-tabs /deep/ .el-tabs__header{
+    margin: 0 1rem 1rem;
 }
 </style>

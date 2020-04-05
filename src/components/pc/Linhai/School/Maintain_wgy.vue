@@ -34,6 +34,7 @@
                 <el-button size="small" type="primary" @click="exports">导出excel</el-button>
             </el-form-item>
         </el-form>
+        <div style="width: 100%;height: 16px;background: #f0f2f5"></div>
         <el-table
                 :data="tableData"
                 :row-class-name="tableRowClassName"
@@ -224,6 +225,25 @@
                     this.total = res_data.total;
                 })
             },
+            exports(){
+                var time_start = '',time_end = '';
+                if(this.formInline.timeStr){
+                    time_start = this.formInline.timeStr[0];
+                    time_end = this.formInline.timeStr[1];
+                }
+                let params ={'uid':this.$store.state.user.uid,
+                    'nickname':this.formInline.nickname,
+                    'id_card':this.formInline.id_card,
+                    'health_id_card':this.formInline.health_id_card,
+                    'time_start':time_start,
+                    'time_end':time_end,
+                    'school_id':this.formInline.school_id,};
+                params = this.$secret_key.func(this.$store.state.on_off, params);
+                this.$https.fetchPost('/plugin/school/api_index/out_health_list',params).then((res) => {
+                    var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
+                    window.location.href=res_data;
+                })
+            },
             getSchool(){ //获取学校列表
                 let params ={'user_id':this.$store.state.user.uid};
                 params = this.$secret_key.func(this.$store.state.on_off, params);
@@ -258,33 +278,33 @@
                 this.form.health_card = res.data.filepath;
                 this.$forceUpdate();
             },
-            exports(){
-                let xlsCell = [["MIID","ID"],["nickname","姓名"],["company","单位名称"],["mobile","手机号"],
-                              ["id_card","身份证号"],["health_id_card","健康证号"],["face_thumb","人脸照片"],
-                              ["health_card","健康证照片"],["health_endtime","健康证到期时间"],["member_type","人员类型"],
-                              ["timeStr","添加时间"]];
-                let xlsData = [];
-                for (let i = 0; i <this.tableData.length ; i++) {
-                    xlsData.push({
-                        'MIID': this.tableData[i].MIID,
-                        'nickname': this.tableData[i].nickname,
-                        'company': this.tableData[i].company,
-                        'mobile': this.tableData[i].mobile,
-                        'id_card': this.tableData[i].id_card,
-                        'health_id_card': this.tableData[i].health_id_card,
-                        'face_thumb': this.tableData[i].face_thumb,
-                        'health_card': this.tableData[i].health_card,
-                        'health_endtime': this.tableData[i].health_endtime,
-                        'member_type': this.tableData[i].member_type,
-                        'timeStr': this.tableData[i].timeStr,
-                    })
-                }
-                let params ={'xlsName':'健康证人员列表','isImg':'6,7','xlsCell':xlsCell,'xlsData':xlsData,};
-                params = this.$secret_key.func(this.$store.state.on_off, params);
-                this.$https.fetchPost('/plugin/school/api_index/out_excel',params).then((res) => {
-                    window.location.href=res;
-                })
-            },
+            // exports(){
+            //     let xlsCell = [["MIID","ID"],["nickname","姓名"],["company","单位名称"],["mobile","手机号"],
+            //                   ["id_card","身份证号"],["health_id_card","健康证号"],["face_thumb","人脸照片"],
+            //                   ["health_card","健康证照片"],["health_endtime","健康证到期时间"],["member_type","人员类型"],
+            //                   ["timeStr","添加时间"]];
+            //     let xlsData = [];
+            //     for (let i = 0; i <this.tableData.length ; i++) {
+            //         xlsData.push({
+            //             'MIID': this.tableData[i].MIID,
+            //             'nickname': this.tableData[i].nickname,
+            //             'company': this.tableData[i].company,
+            //             'mobile': this.tableData[i].mobile,
+            //             'id_card': this.tableData[i].id_card,
+            //             'health_id_card': this.tableData[i].health_id_card,
+            //             'face_thumb': this.tableData[i].face_thumb,
+            //             'health_card': this.tableData[i].health_card,
+            //             'health_endtime': this.tableData[i].health_endtime,
+            //             'member_type': this.tableData[i].member_type,
+            //             'timeStr': this.tableData[i].timeStr,
+            //         })
+            //     }
+            //     let params ={'xlsName':'健康证人员列表','isImg':'6,7','xlsCell':xlsCell,'xlsData':xlsData,};
+            //     params = this.$secret_key.func(this.$store.state.on_off, params);
+            //     this.$https.fetchPost('/plugin/school/api_index/out_excel',params).then((res) => {
+            //         window.location.href=res;
+            //     })
+            // },
         },
     }
 </script>
