@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-tabs style="padding: 0 10px" v-model="activeName">
+        <el-tabs v-model="activeName">
             <el-tab-pane label="被抓拍到的重点人员" name="first">
                 <el-form :inline="true" :model="formInline2" class="demo-form-inline">
                     <el-form-item label="选择区域:">
