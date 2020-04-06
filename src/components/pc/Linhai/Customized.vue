@@ -107,18 +107,6 @@
                             x: 'center',
                             y: 'center',
                         },
-                        tooltip: {
-                            trigger: 'item',
-                            formatter: function(params, ticket, callback) {
-                                var total = 0; //考生总数量
-                                var percent = 0; //考生占比
-                                echartData.forEach(function(value, index, array) {
-                                    total += value.value;
-                                });
-                                percent = ((params.value / total) * 100).toFixed(1);
-                                return '{yellow|' + params.value + '}\n{blue|' + percent + '%}';
-                            },
-                        },
                         legend: {
                             // orient 设置布局方式，默认水平布局，可选值：'horizontal'（水平） | 'vertical'（垂直）
                             orient: 'vertical',
@@ -155,7 +143,9 @@
                                         echartData.forEach(function(value, index, array) {
                                             total += value.value;
                                         });
-                                        percent = ((params.value / total) * 100).toFixed(1);
+
+                                        if(total  != 0)
+                                            percent = ((params.value / total) * 100).toFixed(1);
                                         return '{yellow|' + params.value + '}\n{blue|' + percent + '%}';
                                     },
                                     rich: rich
