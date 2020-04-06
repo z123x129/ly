@@ -27,122 +27,13 @@
                 this.chart.resize();
             },
             init(){
-                // 指定图表的配置项和数据
-                // var option = {
-                //     tooltip: {
-                //         trigger: 'axis',
-                //         axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-                //             type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-                //         }
-                //     },
-                //     legend: {
-                //         data: ['正常', '异常'],
-                //         top: "5%",
-                //         right: "5%",
-                //         textStyle: {
-                //             color: "#fff",
-                //             fontSize: 13,
-                //         },
-                //     },
-                //     grid: {
-                //         left: '3%',
-                //         right: '4%',
-                //         bottom: '3%',
-                //         containLabel: true
-                //     },
-                //     xAxis: [
-                //         {
-                //             type: 'category',
-                //             axisLabel: {
-                //                 show: true,
-                //                 textStyle: {
-                //                     color: '#fff',  //更改坐标轴文字颜色
-                //                     fontSize : 10      //更改坐标轴文字大小
-                //                 }
-                //             },
-                //             // axisLine:{
-                //             //     lineStyle:{
-                //             //         color:'#fff' //更改坐标轴颜色
-                //             //     }
-                //             // },
-                //             data: this.data[0]
-                //         }
-                //     ],
-                //     yAxis: [
-                //         {
-                //             type: 'value',
-                //             axisLabel: {
-                //                 formatter: '{value}',
-                //                 show: true,
-                //                 textStyle: {
-                //                     show:false,
-                //                     color: '#fff',  //更改坐标轴文字颜色
-                //                     fontSize : 10      //更改坐标轴文字大小
-                //                 }
-                //             },
-                //             axisTick: {
-                //                 show: false
-                //             },
-                //             // axisLine:{
-                //             //     lineStyle:{
-                //             //         color:'#fff' //更改坐标轴颜色
-                //             //     }
-                //             // }
-                //         },
-                //         {
-                //             type: 'value',
-                //             // min: 10,
-                //             // max: 40,
-                //             // interval: 5,
-                //             axisLabel: {
-                //                 formatter: '{value}',
-                //                 show: true,
-                //                 textStyle: {
-                //                     color: '#fff',  //更改坐标轴文字颜色
-                //                     fontSize : 10      //更改坐标轴文字大小
-                //                 }
-                //             },
-                //             axisTick: {
-                //                 show: false
-                //             },
-                //             // axisLine:{
-                //             //     lineStyle:{
-                //             //         color:'#fff' //更改坐标轴颜色
-                //             //     }
-                //             // }
-                //         }
-                //     ],
-                //     series: [
-                //         {
-                //             name: '正常',
-                //             type: 'bar',
-                //             stack: '广告',
-                //             itemStyle: {
-                //                 normal: {
-                //                     color: "#2AA956"
-                //                 }
-                //             },
-                //             data: this.data[1]
-                //         },
-                //         {
-                //             name: '异常',
-                //             type: 'bar',
-                //             stack: '广告',
-                //             itemStyle: {
-                //                 normal: {
-                //                     color: "#f44336"
-                //                 }
-                //             },
-                //             data: this.data[2]
-                //         },
-                //     ]
-                // };
                 var that = this;
                 let ddd = this.data[1].map(function(v, i) {
 
                     return v + that.data[2][i];
 
                 });
+                // 指定图表的配置项和数据
                 var option = {
                     // title: {
                     //     text: '增量设备贯通情况-单位',

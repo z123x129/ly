@@ -414,6 +414,7 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         let params ={'uid':this.$store.state.user.uid,};
+                        this.form.face_img = String(this.form.face_img);
                         params = Object.assign(this.form,params);
                         var add = '';
                         if(this.type == 1){

@@ -46,7 +46,7 @@
                             <h2>当月重点人员陌生人员情况</h2>
                             <span style="margin-left: 20px;color: #95f204;font-size: 15px">{{city_name}}</span>
                         </div>
-                        <Dataset :data="regions_chart.stat_people" :type="1" ref="Dataset" style="width: 100%;height: 100%"></Dataset>
+                        <Dataset :data="regions_chart.stat_people" ref="Dataset" style="width: 100%;height: 100%"></Dataset>
                     </dv-border-box-13>
                 </div>
                 <div class="cont1">
@@ -67,8 +67,8 @@
         components:{
             Mixed:()=>import('./Linhai_mixed'),
             Map:()=>import('./component/Map'),
-            Dataset:()=>import('./Linhai_dataset'),
-            Customized:()=>import('./Customized'),
+            Dataset:()=>import('./New_dataset'),
+            Customized:()=>import('./New_editor'),
             [Select.name]:Select,
             [Option.name]:Option,
         },
