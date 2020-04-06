@@ -97,7 +97,7 @@
                             <tags-nav :value="$route" @input="handleClick" :list="tagsNav" @on-close="closeClick"/>
                         </div>
                         <Content class="content-wrapper" >
-                            <div id='i2'>
+                            <div id='i2' :style="(router_name == 'home'|| router_name =='Map_conmand' || router_name == 'showVideo'|| router_name == 'reVideo')?'padding:0 !important': 'padding: 15px 0 15px 15px;'">
                            <keep-alive :include="cacheList">
                                     <router-view></router-view>
                            </keep-alive>
@@ -133,7 +133,8 @@
                 collapsed:false,
                 img:headImg,
                 isFullscreen:false,
-                ws:new WebSocket("ws://"+"js2.300c.cn"+":7272")
+                ws:new WebSocket("ws://"+"js2.300c.cn"+":7272"),
+                router_name : this.$route.name
                 // ws:new WebSocket("ws://"+"192.168.0.2"+":7272")
             }
         },
@@ -360,7 +361,7 @@
                 }
 
                 let route = newRoute;
-
+                this.router_name = newRoute.name;
                 this.setBreadCrumb(newRoute)
                 this.addTag({route});
             }
@@ -372,10 +373,10 @@
         display: flex;
     }
     #i1{
-        background-color:#f0f2f5;
+        background-color:#f0f0f0;
     }
     #i2{
-        background-color: #f0f2f5;
+        background-color: #f0f0f0;
         height: 100%;
         padding: 15px 0 15px 15px;
         overflow-x: hidden;

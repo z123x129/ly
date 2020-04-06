@@ -21,7 +21,7 @@
                     <div @click="back" v-if="showBack">
                         <dv-decoration-9 ref="button_1" style="z-index:999;cursor: pointer;width:50px;height:50px;position: absolute;top: 20px;left: 20px;color: #7ec699;text-shadow: 0 0 3px #7acaec;">返回</dv-decoration-9>
                     </div>
-                    <Map style="width: 100%;height: 100%" :address_info="address_info" ref="map" @showButton="showButton"  @getAreaInfo="getAreaInfo"></Map>
+                    <Map style="width: 100%;height: 100%" :address_info="address_info" :town_name="city_name" ref="map" @showButton="showButton"  @getAreaInfo="getAreaInfo"></Map>
                     <ul>
                         <li>学校个数: <span>{{regions_chart.school_general.all_school}}</span></li>
                         <li>没有异常的学校: <span>{{regions_chart.school_general.normal_school}}</span></li>
@@ -65,7 +65,7 @@
     export default {
         name:'home',
         components:{
-            Mixed:()=>import('./Linhai_mixed'),
+            Mixed:()=>import('./New_mixed'),
             Map:()=>import('./component/Map'),
             Dataset:()=>import('./Linhai_dataset'),
             Customized:()=>import('./Customized'),
@@ -102,6 +102,7 @@
                 config2:{},
                 data:[],
                 data2:[],
+                town_name:"临海市"
             }
         },
         methods:{
@@ -245,7 +246,8 @@
                 };
             },
             gotoStock(row){
-                if(row.ceil=='发现陌生人'){
+                console.log(row);
+                if(row.row[2]=='发现陌生人'){
                     this.$router.push('/Intelligence/Strange_people')
                 }else{
                     this.$router.push('/Intelligence/Key_personnel')
@@ -280,10 +282,10 @@
         activated() {
             if(this.$refs.hasOwnProperty("map"))
             {
-                this.$refs.srroll_1.autoResizeMixinInit();
-                this.$refs.srroll_2.autoResizeMixinInit();
+                this.$refs.srroll_1.initWH();
+                this.$refs.srroll_2.initWH();
                 this.$refs.map.map_resize();
-                this.$refs.Editor.Editor_resize();
+                this.$refs.Customized.Customized_resize();
                 this.$refs.Dataset.Dataset_resize();
                 this.$refs.Mixed.Mixed_resize();
                 for(let i = 1; i<=6; i++)
