@@ -31,7 +31,6 @@
                         <el-button size="small" type="primary" @click="search2">搜索</el-button>
                     </el-form-item>
                 </el-form>
-                <div style="width: 100%;height: 16px;background: #f0f2f5"></div>
                 <el-table
                         :data="tableData2"
                         border
@@ -125,7 +124,6 @@
                         <el-button size="small" type="primary" @click="delAll">批量删除</el-button>
                     </el-form-item>
                 </el-form>
-                <div style="width: 100%;height: 16px;background: #f0f2f5"></div>
                 <el-table
                         :data="tableData"
                         border
@@ -414,6 +412,7 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         let params ={'uid':this.$store.state.user.uid,};
+                        this.form.face_img = String(this.form.face_img);
                         params = Object.assign(this.form,params);
                         var add = '';
                         if(this.type == 1){

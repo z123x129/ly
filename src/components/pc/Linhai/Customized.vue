@@ -23,6 +23,9 @@
             })
         },
         methods:{
+            Customized_resize(){
+                this.chart.resize();
+            },
             init(){
                 // 指定图表的配置项和数据
                 var option = {
@@ -40,12 +43,12 @@
                             name: '健康证总数 : '+this.data.all_health,
                             type: 'pie',
                             radius: '55%',
-                            center: ['50%', '60%'],
+                            center: ['50%', '50%'],
                             data: [
                                 {value: this.data.normal_health, name: '正常健康证数'},
                                 {value: this.data.anomaly_health, name: '异常健康证数'},
                             ],
-                            color: ['#2AA956','#f44336'],
+                            color: ['#4997d7','#0db2b2'],
                             emphasis: {
                                 itemStyle: {
                                     shadowBlur: 10,
