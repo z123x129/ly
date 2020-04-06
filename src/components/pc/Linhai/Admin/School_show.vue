@@ -35,6 +35,8 @@
                 <el-table
                         :data="tableData"
                         border
+                        stripe
+                        header-row-class-name="headerRow"
                         :row-class-name="tableRowClassName"
                         style="width: 100%">
                     <el-table-column
@@ -133,6 +135,8 @@
                 <el-table
                         :data="tableData2"
                         border
+                        stripe
+                        header-row-class-name="headerRow"
                         style="width: 100%">
                     <el-table-column
                             align="center"

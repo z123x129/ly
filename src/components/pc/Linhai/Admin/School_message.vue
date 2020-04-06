@@ -16,7 +16,9 @@
         </div>
         <el-table
                 :data="tableData"
+                border
                 stripe
+                header-row-class-name="headerRow"
                 style="width: 100%">
             <el-table-column
                     label="学校Logo"

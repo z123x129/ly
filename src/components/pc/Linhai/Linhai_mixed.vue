@@ -27,141 +27,142 @@
                 this.chart.resize();
             },
             init(){
+                var that = this;
+                let ddd = this.data[1].map(function(v, i) {
+
+                    return v + that.data[2][i];
+
+                });
                 // 指定图表的配置项和数据
                 var option = {
+                    // title: {
+                    //     text: '增量设备贯通情况-单位',
+                    //     x: 'center',
+                    //     y: 0,
+                    //     textStyle:{
+                    //         color:'#B4B4B4',
+                    //         fontSize:16,
+                    //         fontWeight:'normal',
+                    //     },
+                    //
+                    // },
+                    // backgroundColor: '#191E40',
                     tooltip: {
                         trigger: 'axis',
-                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-                            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                        backgroundColor:'rgba(255,255,255,0.1)',
+                        axisPointer: {
+                            type: 'shadow',
+                            label: {
+                                show: true,
+                                backgroundColor: '#7B7DDC'
+                            }
                         }
                     },
                     legend: {
-                        data: ['正常', '异常'],
-                        top: "5%",
-                        right: "5%",
+                        data:this.data[0],
                         textStyle: {
-                            color: "#fff",
-                            fontSize: 13,
+                            color: '#B4B4B4'
+                        },
+                        top:'7%',
+                    },
+                    grid:{
+                        x:'12%',
+                        width:'82%',
+                        y:'12%',
+                    },
+                    xAxis: {
+                        data: this.data[0],
+                        // axisLine: {
+                        //     lineStyle: {
+                        //         color: '#B4B4B4'
+                        //     }
+                        // },
+                        axisTick:{
+                            show:false,
+                        },
+                        axisLabel: {
+                            show: true,
+                            textStyle: {
+                                color: '#b4b4b4',  //更改坐标轴文字颜色
+                                fontSize : 10      //更改坐标轴文字大小
+                            }
+                        },
+                        axisLine:{
+                            lineStyle:{
+                                color:'#b4b4b4' //更改坐标轴颜色
+                            }
                         },
                     },
-                    grid: {
-                        left: '3%',
-                        right: '4%',
-                        bottom: '3%',
-                        containLabel: true
-                    },
-                    xAxis: [
-                        {
-                            type: 'category',
-                            axisLabel: {
-                                show: true,
-                                textStyle: {
-                                    color: '#fff',  //更改坐标轴文字颜色
-                                    fontSize : 10      //更改坐标轴文字大小
-                                }
-                            },
-                            // axisLine:{
-                            //     lineStyle:{
-                            //         color:'#fff' //更改坐标轴颜色
-                            //     }
-                            // },
-                            data: this.data[0]
-                        }
-                    ],
-                    yAxis: [
-                        {
-                            type: 'value',
-                            axisLabel: {
-                                formatter: '{value}',
-                                show: true,
-                                textStyle: {
-                                    show:false,
-                                    color: '#fff',  //更改坐标轴文字颜色
-                                    fontSize : 10      //更改坐标轴文字大小
-                                }
-                            },
-                            axisTick: {
-                                show: false
-                            },
-                            // axisLine:{
-                            //     lineStyle:{
-                            //         color:'#fff' //更改坐标轴颜色
-                            //     }
-                            // }
-                        },
-                        {
-                            type: 'value',
-                            // min: 10,
-                            // max: 40,
-                            // interval: 5,
-                            axisLabel: {
-                                formatter: '{value}',
-                                show: true,
-                                textStyle: {
-                                    color: '#fff',  //更改坐标轴文字颜色
-                                    fontSize : 10      //更改坐标轴文字大小
-                                }
-                            },
-                            axisTick: {
-                                show: false
-                            },
-                            // axisLine:{
-                            //     lineStyle:{
-                            //         color:'#fff' //更改坐标轴颜色
-                            //     }
-                            // }
-                        }
-                    ],
-                    series: [
-                        {
-                            name: '异常',
-                            type: 'bar',
-                            stack: '广告',
-                            itemStyle: {
-                                normal: {
-                                    color: { type: 'linear',
-                                        x: 0,
-                                        y: 0,
-                                        x2: 0,
-                                        y2: 1,
-                                        colorStops: [{
-                                            offset: 0, color: '#f87b83' // 0% 处的颜色
-                                        }, {
-                                            offset: 1, color: '#150ca3' // 100% 处的颜色
-                                        }],
-                                        globalCoord: false // 缺省为 false
-                                    }
+                    yAxis: [{
 
+                        splitLine: {show: false},
+                        axisLine: {
+                            lineStyle: {
+                                color: '#b4b4b4',
+                            }
+                        },
+
+                        axisLabel:{
+                            formatter:'{value} ',
+                        }
+                    },
+                        {
+
+                            splitLine: {show: false},
+                            axisLine: {
+                                lineStyle: {
+                                    color: '#b4b4b4',
                                 }
                             },
-                            data: this.data[2]
-                        },
+                            axisLabel:{
+                                formatter:'{value} ',
+                            }
+                        }],
+
+                    series: [
                         {
                             name: '正常',
                             type: 'bar',
-                            stack: '广告',
+                            barWidth: 10,
                             itemStyle: {
                                 normal: {
-                                    color: { type: 'linear',
-                                        x: 0,
-                                        y: 0,
-                                        x2: 0,
-                                        y2: 1,
-                                        colorStops: [{
-                                            offset: 0, color: '#44f8d5' // 0% 处的颜色
-                                        }, {
-                                            offset: 1, color: '#2182f5' // 100% 处的颜色
-                                        }],
-                                        globalCoord: false // 缺省为 false
-                                         }
+                                    barBorderRadius: 5,
+                                    color: new echarts.graphic.LinearGradient(
+                                        0, 0, 0, 1,
+                                        [
+                                            {offset: 0, color: '#956FD4'},
+                                            {offset: 1, color: '#3EACE5'}
+                                        ]
+                                    )
                                 }
                             },
                             data: this.data[1]
                         },
 
+                        {
+                            name: '总数',
+                            type: 'bar',
+                            barGap: '-100%',
+                            barWidth: 10,
+                            itemStyle: {
+                                normal: {
+                                    barBorderRadius: 5,
+                                    color: new echarts.graphic.LinearGradient(
+                                        0, 0, 0, 1,
+                                        [
+                                            {offset: 0, color: 'rgba(156,107,211,0.5)'},
+                                            {offset: 0.2, color: 'rgba(156,107,211,0.3)'},
+                                            {offset: 1, color: 'rgba(156,107,211,0)'}
+                                        ]
+                                    )
+                                }
+                            },
+                            z: -12,
+
+                            data: ddd
+                        },
                     ]
                 };
-
                 // 使用刚指定的配置项和数据显示图表。
                 this.chart.setOption(option);
             }
