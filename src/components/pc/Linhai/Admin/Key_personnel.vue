@@ -84,7 +84,7 @@
                             label="抓拍时间">
                     </el-table-column>
                 </el-table>
-                <div style="padding: 15px;display: flex;justify-content: flex-end;">
+                <div style="padding: 15px;display: flex;justify-content: flex-end;background-color:#fff">
                     <el-pagination
                             @size-change="handleSizeChange2"
                             @current-change="handleCurrentChange2"
