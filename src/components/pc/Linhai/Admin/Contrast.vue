@@ -24,9 +24,17 @@
                 <Dataset @getSet="getSet" ref="Dataset" :type="2" :data="data" style="width: 100%;height: 100%"></Dataset>
             </div>
         </div>
-        <div style="height: 16px;background: #f0f2f5;"></div>
+        <div style="height: 10px"></div>
+        <div style="padding: 15px 20px;background-color: #fff;display: flex;justify-content: space-between">
+
+            <div v-if="value2" style="padding: 0 10px;background-color: #fff;">
+                <el-radio-group @change="getDataset" v-model="code" size="small">
+                    <el-radio-button label="当月"></el-radio-button>
+                    <el-radio-button label="上月"></el-radio-button>
+                </el-radio-group>
+            </div>
+            <div></div>
         <el-switch
-                style="float: right;margin-right: 20px;margin-top: 20px"
                 v-model="value2"
                 @change="getDataset"
                 active-color="#13ce66"
@@ -34,13 +42,9 @@
                 active-text="图表"
                 inactive-text="列表">
         </el-switch>
-        <div v-if="value2" style="margin-top: 20px;margin-left: 20px">
-            <el-radio-group @change="getDataset" v-model="code" size="small">
-                <el-radio-button label="当月"></el-radio-button>
-                <el-radio-button label="上月"></el-radio-button>
-            </el-radio-group>
+
         </div>
-        <div style="height: 20px;background: #fff;clear: both"></div>
+        <div style="clear: both"></div>
         <div v-if="value2" style="width:100%;height: 40vh;background: #fff;">
             <Nested ref="Nested" :data="data1" style="width: 100%;height: 100%"></Nested>
         </div>
