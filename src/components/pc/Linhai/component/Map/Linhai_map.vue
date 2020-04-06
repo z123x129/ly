@@ -15,6 +15,10 @@
                 default:()=>{
                     return[]
                 }
+            },
+            town_name:{
+                type:String,
+                default:"临海市"
             }
         },
         data(){
@@ -28,23 +32,41 @@
             this.chart = echarts.init(this.$refs.chart);
             var that = this;
             this.chart.on('click', function (params) {
-                var city = params.data.py;
                 console.log(params);
-                if(that.mapInfo.hasOwnProperty(city))
+                if(params.componentType === "geo")
                 {
-                    // that.init(city)
-                    that.getAreaInfo(city, params.data.indexCode, params.name)
-                }
-                else if(typeof params.data.value == 'object')
-                {
-                    console.log(params.data.value[0], params.data.value[1]);
-                    that.$router.push({
-                        name:"Map_conmand",
-                        params:{
-                            name:params.data.name
-
+                    let city = params.name;
+                    if(that.town_name == city)
+                        return;
+                    for(let i in that.address_info)
+                    {
+                        if(that.address_info[i].name == city)
+                        {
+                            that.getAreaInfo(that.address_info[i].abbr, that.address_info[i].indexCode, params.name)
+                            console.log(that.address_info[i].abbr, that.address_info[i].indexCode, params.name)
+                            break;
                         }
-                    })
+                    }
+                }
+                else if(params.componentType === "series")
+                {
+                    var city = params.data.py;
+                    if(that.mapInfo.hasOwnProperty(city))
+                    {
+                        // that.init(city)
+                        that.getAreaInfo(city, params.data.indexCode, params.name)
+                    }
+                    else if(typeof params.data.value == 'object')
+                    {
+                        console.log(params.data.value[0], params.data.value[1]);
+                        that.$router.push({
+                            name:"Map_conmand",
+                            params:{
+                                name:params.data.name
+
+                            }
+                        })
+                    }
                 }
             });
             //that.init("LinHai");
@@ -108,8 +130,9 @@
                     tooltip: {
                         trigger: 'item',
                         formatter: function (params) {
-                             if(typeof(params.data.value)== "object")
-                                 return '存在异常学校'+params.data.value[2]+"个";
+                            if(typeof(params.data.value)== "object")
+                                return '存在异常学校'+params.data.value[2]+"个";
+
                             // return params.name+"的摄像头个数："+params.value[2];
                         }
                     },
@@ -139,42 +162,48 @@
                     },
                     geo: {
                         map:initData,
-                        zoom: 1,   //地图初始大小，这里是关键，一定要放在 series中  因为geo在series中会加载，所以zoom放在此处
+                        zoom: 1.2,   //地图初始大小，这里是关键，一定要放在 series中  因为geo在series中会加载，所以zoom放在此处
+                        show: true,
                         // roam: true,
+                        label: {
+                            normal: {
+                                show: true,
+                                color:'white'
+                            },
+                            emphasis: {
+                                show: true,
+                                color:'white'
+                            },
+
+                        },
+                        itemStyle: {
+                            normal: {
+                                areaColor: '#3a7fd5',
+                                borderColor: '#0a53e9',//线
+                                shadowColor: '#092f8f',//外发光
+                                shadowBlur: 20
+                            },
+                            emphasis: {
+                                areaColor: '#0a2dae',//悬浮区背景
+                            }
+                        },
 
                     },
                     series: [
                         {
                             name: initData,
-                            type: 'map',
-                            map: initData,
-                            zoom: 1,
+                            type: 'scatter',
+                            coordinateSystem: 'geo',
                             data:this.address_info.map((item)=>{
                                 return{
                                     name:item.name,
                                     value:item.abbr,
                                     py:item.abbr,
                                     indexCode:item.indexCode,
-                                    label:{
-                                        normal: {
-                                            show: true,
-                                            color:'#f2f2f2',
-                                            textStyle:{
-                                                fontSize:11
-                                            }
-                                        },
-                                        emphasis: {
-                                            show:true,
-                                            textStyle: {
-                                                color: '#fff',
-                                                fontSize:11
-                                            }
-                                        },
-                                    },
                                     itemStyle: {
                                         normal: {
                                             borderColor: '#ffffff', //区域边框颜色
-                                            areaColor: '#2648aa', //区域填充颜色
+                                            areaColor: '#253752', //区域填充颜色
                                             color: {
                                                 type: 'linear',
                                                 x: 0,
@@ -184,16 +213,15 @@
                                                 colorStops: [{
                                                     offset: 0, color: '#096dd9' // 0% 处的颜色
                                                 }, {
-                                                    offset: 1, color: '#003a8c' // 100% 处的颜色
+                                                    offset: 1, color: '#002766' // 100% 处的颜色
                                                 }],
                                                 global: false // 缺省为 false
-                                            },
+                                            }
                                         },
                                         emphasis: {
-                                            areaColor: '#1890ff',
-                                            borderWidth: 0,
+                                            areaColor: '#0a2dae',//悬浮区背景
                                         }
-                                    }
+                                    },
                                 }
                             })
                         },
@@ -203,7 +231,7 @@
                             coordinateSystem: 'geo',
                             showEffectOn: 'render',
                             showSymbol: true,
-                            symbolSize:20,
+                            symbolSize:30,
                             symbol:"pin",
                             color:"#4caf50",
                             data: this.address_info.map(function (itemOpt) { //散点生成
@@ -234,7 +262,7 @@
                             coordinateSystem: 'geo',
                             showEffectOn: 'render',
                             showSymbol: true,
-                            symbolSize:20,
+                            symbolSize:30,
                             symbol:"pin",
                             color:"#d9001b",
                             data: this.address_info.map(function (itemOpt) { //散点生成
@@ -275,7 +303,17 @@
                         trigger: 'item',
                         formatter: function (params) {
                             if(typeof(params.data.value)== "object")
-                                return params.data.name+'检测到异常数:'+params.data.value[2]+"个";
+                            {
+                                // return params.data.name+'检测到异常数:'+params.data.value[2]+"个";
+                                var tipHtml = '';
+                                tipHtml = '<div style="background:#fff;border-radius:10px;padding-top:10px;box-shadow:0 0 10px #666">' +
+                                    '<div style="color:#fff;height:20px;border-radius:6px;font-size:12px;line-height:20px;background-color:#5861a2;text-align:center;margin:0 2px;">' + params.data.name + '</div>' +
+                                    '<div style="text-align:center;color:#494949;padding:8px 6px">' +
+                                    '<span style="font-size:18px;font-weight:bold;">' + params.data.value[2] + ' ' + '</span>' +
+                                    '</div>' + '</div>';
+                                return tipHtml;
+                            }
+
                             // return params.name+"的摄像头个数："+params.value[2];
                         }
                     },
@@ -305,60 +343,109 @@
                     },
                     geo: {
                         map:city,
-                        //zoom: 1.2,   //地图初始大小，这里是关键，一定要放在 series中  因为geo在series中会加载，所以zoom放在此处
+                        zoom: 1.2,   //地图初始大小，这里是关键，一定要放在 series中  因为geo在series中会加载，所以zoom放在此处
                         //roam: true,
+                        label: {
+                            normal: {
+                                show: true,
+                                color:'white'
+                            },
+                            emphasis: {
+                                show: true,
+                                color:'white'
+                            },
+
+                        },
+                        itemStyle: {
+                            normal: {
+                                areaColor: "#3a7fd5",
+                                    // {
+                            //         type: 'linear',
+                            //         x: 0,
+                            //         y: 0,
+                            //         x2: 0,
+                            //         y2: 1,
+                            //         colorStops: [{
+                            //             offset: 0, color: '#3a7fd5' // 0% 处的颜色
+                            //         }, {
+                            //             offset: 1, color: '#002766' // 100% 处的颜色
+                            //         }],
+                            //         global: false // 缺省为 false
+                            //     },
+                                borderColor: '#0a53e9',//线
+                                shadowColor: '#092f8f',//外发光
+                                shadowBlur: 20
+                            },
+                            emphasis: {
+                                areaColor: "#3a7fd5"
+                                //     {
+                                //     type: 'linear',
+                                //     x: 0,
+                                //     y: 0,
+                                //     x2: 0,
+                                //     y2: 1,
+                                //     colorStops: [{
+                                //         offset: 0, color: '#002766' // 0% 处的颜色
+                                //     }, {
+                                //         offset: 1, color: '#3a7fd5' // 100% 处的颜色
+                                //     }],
+                                //     global: false // 缺省为 false
+                                // },//悬浮区背景
+                            }
+                        },
                     },
                     series: [
-                        {
-                            name: city,
-                            type: 'map',
-                            map: city,
-                            data:this.address_info.map((item)=>{
-                                return{
-                                    name:item.name,
-                                    value:item.abbr,
-                                    label:{
-                                        normal: {
-                                            show: true,
-                                            color:'#f2f2f2',
-                                            textStyle:{
-                                                fontSize:11
-                                            }
-                                        },
-                                        emphasis: {
-                                            show:true,
-                                            textStyle: {
-                                                color: '#fff',
-                                                fontSize:11
-                                            }
-                                        },
-                                    },
-                                    itemStyle: {
-                                        normal: {
-                                            borderColor: '#ffffff', //区域边框颜色
-                                            areaColor: '#253752', //区域填充颜色
-                                            color: {
-                                                type: 'linear',
-                                                x: 0,
-                                                y: 0,
-                                                x2: 0,
-                                                y2: 1,
-                                                colorStops: [{
-                                                    offset: 0, color: '#096dd9' // 0% 处的颜色
-                                                }, {
-                                                    offset: 1, color: '#002766' // 100% 处的颜色
-                                                }],
-                                                global: false // 缺省为 false
-                                            },
-                                        },
-                                        emphasis: {
-                                            borderColor: '#ffffff', //区域边框颜色
-                                            areaColor: '#0050b3',
-                                        }
-                                    }
-                                }
-                            })
-                        },
+                        // {
+                        //     name: city,
+                        //     type: 'map',
+                        //     map: city,
+                        //     zoom: 1.2,
+                        //     data:this.address_info.map((item)=>{
+                        //         return{
+                        //             name:item.name,
+                        //             value:item.abbr,
+                        //             label:{
+                        //                 normal: {
+                        //                     show: true,
+                        //                     color:'#f2f2f2',
+                        //                     textStyle:{
+                        //                         fontSize:11
+                        //                     }
+                        //                 },
+                        //                 emphasis: {
+                        //                     show:true,
+                        //                     textStyle: {
+                        //                         color: '#fff',
+                        //                         fontSize:11
+                        //                     }
+                        //                 },
+                        //             },
+                        //             itemStyle: {
+                        //                 normal: {
+                        //                     borderColor: '#ffffff', //区域边框颜色
+                        //                     areaColor: '#253752', //区域填充颜色
+                        //                     color: {
+                        //                         type: 'linear',
+                        //                         x: 0,
+                        //                         y: 0,
+                        //                         x2: 0,
+                        //                         y2: 1,
+                        //                         colorStops: [{
+                        //                             offset: 0, color: '#096dd9' // 0% 处的颜色
+                        //                         }, {
+                        //                             offset: 1, color: '#002766' // 100% 处的颜色
+                        //                         }],
+                        //                         global: false // 缺省为 false
+                        //                     },
+                        //                 },
+                        //                 emphasis: {
+                        //                     borderColor: '#ffffff', //区域边框颜色
+                        //                     areaColor: '#0050b3',
+                        //                 }
+                        //             }
+                        //         }
+                        //     })
+                        // },
                         {
                             name:"正常",
                             type: 'scatter',
