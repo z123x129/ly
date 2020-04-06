@@ -32,7 +32,6 @@
                         <el-button size="small" type="primary" @click="exports">导出excel</el-button>
                     </el-form-item>
                 </el-form>
-                <div style="width: 100%;height: 16px;background: #f0f2f5"></div>
                 <el-table
                         :data="tableData"
                         border
@@ -483,8 +482,5 @@
 }
 .el-image /deep/ .el-icon-circle-close{
     color: #fff;
-}
-.el-tabs /deep/ .el-tabs__header{
-    margin: 0 1rem 1rem;
 }
 </style>

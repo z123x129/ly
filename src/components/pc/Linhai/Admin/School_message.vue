@@ -12,7 +12,7 @@
                     <el-button @click="getList" slot="append" icon="el-icon-search"></el-button>
                 </el-input>
             </div>
-            
+
         </div>
         <el-table
                 :data="tableData"
@@ -134,7 +134,7 @@
     .headerSearch{
         background-color: #fff;
         padding: 10px;
-        margin-bottom: 10px;
+        /*margin-bottom: 10px;*/
         >div{
             width: 40%;
             margin: auto;

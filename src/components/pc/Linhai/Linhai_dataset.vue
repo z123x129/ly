@@ -317,7 +317,9 @@
                     };
                 }else{
                     option = {
-                        legend: {},
+                        legend: {
+                            top:'7%',
+                        },
                         tooltip: {},
                         dataset: {
                             source: [

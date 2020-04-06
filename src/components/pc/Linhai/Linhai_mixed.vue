@@ -114,27 +114,51 @@
                     ],
                     series: [
                         {
-                            name: '正常',
-                            type: 'bar',
-                            stack: '广告',
-                            itemStyle: {
-                                normal: {
-                                    color: "#2AA956"
-                                }
-                            },
-                            data: this.data[1]
-                        },
-                        {
                             name: '异常',
                             type: 'bar',
                             stack: '广告',
                             itemStyle: {
                                 normal: {
-                                    color: "#f44336"
+                                    color: { type: 'linear',
+                                        x: 0,
+                                        y: 0,
+                                        x2: 0,
+                                        y2: 1,
+                                        colorStops: [{
+                                            offset: 0, color: '#f87b83' // 0% 处的颜色
+                                        }, {
+                                            offset: 1, color: '#150ca3' // 100% 处的颜色
+                                        }],
+                                        globalCoord: false // 缺省为 false
+                                    }
+
                                 }
                             },
                             data: this.data[2]
                         },
+                        {
+                            name: '正常',
+                            type: 'bar',
+                            stack: '广告',
+                            itemStyle: {
+                                normal: {
+                                    color: { type: 'linear',
+                                        x: 0,
+                                        y: 0,
+                                        x2: 0,
+                                        y2: 1,
+                                        colorStops: [{
+                                            offset: 0, color: '#44f8d5' // 0% 处的颜色
+                                        }, {
+                                            offset: 1, color: '#2182f5' // 100% 处的颜色
+                                        }],
+                                        globalCoord: false // 缺省为 false
+                                         }
+                                }
+                            },
+                            data: this.data[1]
+                        },
+
                     ]
                 };
 
