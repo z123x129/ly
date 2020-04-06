@@ -435,7 +435,7 @@
                         },
                         itemStyle: {
                             normal: {
-                                areaColor: "#3a7fd5",
+                                areaColor: '#0050b3',
                                     // {
                             //         type: 'linear',
                             //         x: 0,
@@ -449,12 +449,12 @@
                             //         }],
                             //         global: false // 缺省为 false
                             //     },
-                                borderColor: '#0a53e9',//线
-                                shadowColor: '#092f8f',//外发光
-                                shadowBlur: 20
+                            //     borderColor: '#0a53e9',//线
+                            //     shadowColor: '#092f8f',//外发光
+                            //     shadowBlur: 20
                             },
                             emphasis: {
-                                areaColor: "#3a7fd5"
+                                areaColor: '#0050b3'
                                 //     {
                                 //     type: 'linear',
                                 //     x: 0,
