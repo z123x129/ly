@@ -1,7 +1,7 @@
 <template>
     <div class="body">
         <div class="header">
-            <div style="display: flex;justify-content: space-between;padding-right: 80px">
+            <div style="display: flex;justify-content: space-between;padding-right: 80px;padding-top: 10px">
                 <p>学校被拍陌生人数量排列柱状图</p>
                 <div style="display: flex;justify-content: space-between;">
                     <el-select style="margin-right: 10px" @change="getData" size="small" v-model="code" placeholder="请选择">
@@ -15,9 +15,8 @@
                     </el-radio-group>
                 </div>
             </div>
-            <Dataset @getDataset="getDataset" ref="Dataset" :data="data" style="width: 100%;height: 100%"></Dataset>
+            <Dataset @getDataset="getDataset" ref="Dataset" :data="data" style="width: 95%;height: 95%"></Dataset>
         </div>
-        <div style="width: 100%;height: 16px;background: #f0f2f5"></div>
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
             <el-form-item label="选择区域:">
                 <el-select @change="getSchool" size="small" filterable clearable v-model="formInline.indexCode">
@@ -43,16 +42,17 @@
                         :picker-options="pickerOptions">
                 </el-date-picker>
             </el-form-item>
-            <el-form-item style="margin-top: 9px">
+            <el-form-item>
                 <el-button size="small" type="primary" @click="search">搜索</el-button>
                 <el-button size="small" type="primary" @click="exports">导出excel</el-button>
 <!--                <el-button size="small" type="primary">生成报表至网格员</el-button>-->
             </el-form-item>
         </el-form>
-        <div style="width: 100%;height: 16px;background: #f0f2f5"></div>
         <el-table
                 :data="tableData"
                 border
+                stripe
+                header-row-class-name="headerRow"
                 style="width: 100%;">
             <el-table-column
                     align="center"
@@ -87,7 +87,7 @@
                     <el-image
                             style="width: 35px; height: 35px"
                             :src="scope.row.faceUrl[0]"
-                            :preview-src-list="scope.row.bkgUrl.concat(scope.row.faceUrl)">
+                            :preview-src-list="scope.row.faceUrl">
                     </el-image>
                 </template>
             </el-table-column>
@@ -126,6 +126,7 @@
                     label="操作"
                     width="100">
                 <template slot-scope="scope">
+                    <el-button v-if="scope.row.stranger_status==0" @click="imgshowBtn(scope.row.bkgUrl)" type="text" size="small">查看原图</el-button>
                     <el-button v-if="scope.row.stranger_status==0" @click="remind(scope.row.id)" type="text" size="small">提醒</el-button>
                     <el-popconfirm v-if="scope.row.stranger_status==0"
                             title="是否确定忽略？"
@@ -162,6 +163,9 @@
                 </el-image>
             </div>
         </el-dialog>
+        <el-dialog width="80%" title="抓拍原图" :visible.sync="imgshow">
+            <img width="100%" :src="img" />
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -189,6 +193,8 @@
         },
         data(){
             return{
+                imgshow:false,
+                img:'',
                 formInline: {
                     indexCode: '',
                     dir_id: '',
@@ -243,6 +249,10 @@
             this.getAddress();
         },
         methods: {
+            imgshowBtn(img){
+                this.img = img[0];
+                this.imgshow = true;
+            },
             search(){
                 this.page = 1;
                 this.getList();
@@ -385,7 +395,7 @@
 .el-image /deep/ .el-icon-circle-close{
     color: #fff;
 }
-.body >.demo-form-inline {
-    margin: 10px 0;
-}
+/*.body >.demo-form-inline {*/
+/*    margin: 10px 0;*/
+/*}*/
 </style>

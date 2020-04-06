@@ -31,10 +31,11 @@
                         <el-button size="small" type="primary" @click="search2">搜索</el-button>
                     </el-form-item>
                 </el-form>
-                <div style="width: 100%;height: 16px;background: #f0f2f5"></div>
                 <el-table
                         :data="tableData2"
                         border
+                        stripe
+                        header-row-class-name="headerRow"
                         style="width: 100%">
                     <el-table-column
                             align="center"
@@ -125,10 +126,11 @@
                         <el-button size="small" type="primary" @click="delAll">批量删除</el-button>
                     </el-form-item>
                 </el-form>
-                <div style="width: 100%;height: 16px;background: #f0f2f5"></div>
                 <el-table
                         :data="tableData"
                         border
+                        stripe
+                        header-row-class-name="headerRow"
                         style="width: 100%"
                         @selection-change="getSelect">
                     <el-table-column

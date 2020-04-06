@@ -12,11 +12,13 @@
                     <el-button @click="getList" slot="append" icon="el-icon-search"></el-button>
                 </el-input>
             </div>
-            
+
         </div>
         <el-table
                 :data="tableData"
+                border
                 stripe
+                header-row-class-name="headerRow"
                 style="width: 100%">
             <el-table-column
                     label="学校Logo"
@@ -133,8 +135,8 @@
 <style scoped lang="less">
     .headerSearch{
         background-color: #fff;
-        padding: 10px;
-        margin-bottom: 10px;
+        padding: 20px 0 5px;
+        /*margin-bottom: 10px;*/
         >div{
             width: 40%;
             margin: auto;

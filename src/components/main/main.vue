@@ -97,7 +97,7 @@
                             <tags-nav :value="$route" @input="handleClick" :list="tagsNav" @on-close="closeClick"/>
                         </div>
                         <Content class="content-wrapper" >
-                            <div id='i2'>
+                            <div id='i2' :style="(router_name == 'home'|| router_name =='Map_conmand' || router_name == 'showVideo'|| router_name == 'reVideo')?'padding:0 !important': 'padding: 15px 0 15px 15px; overflow-x: hidden;  overflow-y: auto;'">
                            <keep-alive :include="cacheList">
                                     <router-view></router-view>
                            </keep-alive>
@@ -133,7 +133,8 @@
                 collapsed:false,
                 img:headImg,
                 isFullscreen:false,
-                ws:new WebSocket("ws://"+"js2.300c.cn"+":7272")
+                ws:new WebSocket("ws://"+"js2.300c.cn"+":7272"),
+                router_name : this.$route.name
                 // ws:new WebSocket("ws://"+"192.168.0.2"+":7272")
             }
         },
@@ -286,18 +287,6 @@
             this.ws.onmessage = function(e){
                 let data = eval("("+e.data+")");
                 let type = data.type || '';
-                let age = {
-                    "unknown":"未知",
-                    "infant":"婴幼儿",
-                    "kid":"儿童",
-                    "child":"少年",
-                    "teenager":"青少年",
-                    "young":"青年",
-                    "frime":"壮年",
-                    "middle":"中年",
-                    "middleaged":"中老年",
-                    "old":"老年",
-                };
                 switch(type){
                     case 'init':
                         var params_1 ={'uid':that.$store.state.user.uid,'client_id':data.client_id};
@@ -311,7 +300,7 @@
                         bus.$emit("outmes",data);
                         break;
                     case 'stranger':
-                        that.open(data.describe,data.content.gender+','+age[data.content.ageGroup],type);
+                        that.open(data.describe,data.content.gender+','+data.content.ageGroup,type);
                         that.$store.commit("getMessage", data);
                         bus.$emit("outmes",data);
                         break;
@@ -360,7 +349,7 @@
                 }
 
                 let route = newRoute;
-
+                this.router_name = newRoute.name;
                 this.setBreadCrumb(newRoute)
                 this.addTag({route});
             }
@@ -372,14 +361,13 @@
         display: flex;
     }
     #i1{
-        background-color:#f0f2f5;
+        background-color:#f0f0f0;
     }
     #i2{
-        background-color: #f0f2f5;
+        background-color: #f0f0f0;
         height: 100%;
         padding: 15px 0 15px 15px;
-        overflow-x: hidden;
-        overflow-y: auto;
+
     }
     .main .main-layout-con{background: #f0f0f0;}
 

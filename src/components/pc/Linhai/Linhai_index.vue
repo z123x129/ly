@@ -6,22 +6,22 @@
         <div class="content">
             <div class="cont_flex">
                 <div class="cont1">
-                    <dv-border-box-13 style="height: 42%" class="box1" ref="box1">
-                        <h2>数据概览</h2>
+                    <dv-border-box-11 title="数据概览" style="height: 42%" class="box1" ref="box1" :titleWidth=150>
+                        <h2></h2>
                         <ul style="font-size: 12px;padding: 20px;">
                             <li v-for="(item,index) in list.general" :key="index">{{item.title}} {{item.value}}</li>
                         </ul>
-                    </dv-border-box-13>
-                    <dv-border-box-13 style="height: 58%;padding: 15px 10px 20px 5px" class="box1" ref="box2">
-                        <h2 style="text-indent: 15px">健康证情况</h2>
+                    </dv-border-box-11>
+                    <dv-border-box-11 title="健康证情况" style="height: 58%;padding: 15px 10px 20px 5px" class="box1" ref="box2" :titleWidth=160>
+                        <h2 style="text-indent: 15px"></h2>
                         <Mixed :data="list.area_health" ref="Mixed" style="width: 100%;height: 100%"></Mixed>
-                    </dv-border-box-13>
+                    </dv-border-box-11>
                 </div>
                 <div style="position: relative" class="cont2">
                     <div @click="back" v-if="showBack">
                         <dv-decoration-9 ref="button_1" style="z-index:999;cursor: pointer;width:50px;height:50px;position: absolute;top: 20px;left: 20px;color: #7ec699;text-shadow: 0 0 3px #7acaec;">返回</dv-decoration-9>
                     </div>
-                    <Map style="width: 100%;height: 100%" :address_info="address_info" ref="map" @showButton="showButton"  @getAreaInfo="getAreaInfo"></Map>
+                    <Map style="width: 100%;height: 100%" :address_info="address_info" :town_name="city_name" ref="map" @showButton="showButton"  @getAreaInfo="getAreaInfo"></Map>
                     <ul>
                         <li>学校个数: <span>{{regions_chart.school_general.all_school}}</span></li>
                         <li>没有异常的学校: <span>{{regions_chart.school_general.normal_school}}</span></li>
@@ -29,31 +29,31 @@
                     </ul>
                 </div>
                 <div class="cont1">
-                    <dv-border-box-13 class="box1" ref="box3">
-                        <h2>健康证图表</h2>
+                    <dv-border-box-11 title="健康证图表" class="box1" ref="box3" :titleWidth=160>
+                        <h2></h2>
                         <Customized :data="regions_chart.area_chart" ref="Customized" style="width: 100%;height: 100%"></Customized>
-                    </dv-border-box-13>
-                    <dv-border-box-13 class="box1" ref="box4">
-                        <h2>学校异常情况</h2>
+                    </dv-border-box-11>
+                    <dv-border-box-11 title="学校异常情况" class="box1" ref="box4" :titleWidth=160>
+                        <h2></h2>
                         <dv-scroll-board ref="srroll_1" @click="getWeigui" :config="config2" style="width:94%;height:82%;margin: 3%" />
-                    </dv-border-box-13>
+                    </dv-border-box-11>
                 </div>
             </div>
             <div class="cont_flex2">
                 <div class="cont3">
-                    <dv-border-box-13 class="box2" ref="box5">
+                    <dv-border-box-11 title="当月重点人员陌生人员情况" class="box2" ref="box5"  :titleWidth=280>
                         <div style="display: flex;justify-content:flex-start">
-                            <h2>当月重点人员陌生人员情况</h2>
-                            <span style="margin-left: 20px;color: #95f204;font-size: 15px">{{city_name}}</span>
+                            <h2></h2>
+                            <!--                            <span style="margin-left: 20px;color: #95f204;font-size: 15px">{{city_name}}</span>-->
                         </div>
-                        <Dataset :data="regions_chart.stat_people" ref="Dataset" style="width: 100%;height: 100%"></Dataset>
-                    </dv-border-box-13>
+                        <Dataset :data="regions_chart.stat_people" :type="1" ref="Dataset" style="width: 100%;height: 100%"></Dataset>
+                    </dv-border-box-11>
                 </div>
                 <div class="cont1">
-                    <dv-border-box-13 class="box2" ref="box6">
-                        <h2>实时警报数据</h2>
+                    <dv-border-box-11 title="实时警报数据" class="box2" ref="box6"  :titleWidth=160>
+                        <h2></h2>
                         <dv-scroll-board @click="gotoStock" ref="srroll_2" :config="config" style="width:94%;height:82%;margin: 3%" />
-                    </dv-border-box-13>
+                    </dv-border-box-11>
                 </div>
             </div>
         </div>
@@ -65,57 +65,58 @@
     export default {
         name:'home',
         components:{
-            Mixed:()=>import('./Linhai_mixed'),
+            Mixed:()=>import('./New_mixed'),
             Map:()=>import('./component/Map'),
-            Dataset:()=>import('./New_dataset'),
-            Customized:()=>import('./New_editor'),
+            Dataset:()=>import('./Linhai_dataset'),
+            Customized:()=>import('./Customized'),
             [Select.name]:Select,
             [Option.name]:Option,
         },
         data(){
-                return{
-                    list:{
-                        general:{},
-                        area_health:[],
+            return{
+                list:{
+                    general:{},
+                    area_health:[],
+                },
+                city_name:"临海市",
+                regions_chart:{
+                    area_chart:{
+                        all_health:0,
+                        anomaly_health:0,
+                        normal_health:0,
                     },
-                    city_name:"临海市",
-                    regions_chart:{
-                        area_chart:{
-                            all_health:0,
-                            anomaly_health:0,
-                            normal_health:0,
-                        },
-                        school_general:{
-                            all_school:0,
-                            anomaly_school:0,
-                            normal_school:0,
-                        },
-                        stat_people:[],
+                    school_general:{
+                        all_school:0,
+                        anomaly_school:0,
+                        normal_school:0,
                     },
-                    indexCode:'',
-                    options:'',
-                    normal:[''],
-                    anomaly:[''],
-                    showBack:false,
+                    stat_people:[],
+                },
+                indexCode:'',
+                options:'',
+                normal:[''],
+                anomaly:[''],
+                showBack:false,
                 address_info:[],
                 config:{},
                 config2:{},
                 data:[],
                 data2:[],
+                town_name:"临海市"
             }
         },
         methods:{
             getAddress(){
                 let that = this;
                 this.$https.fetchGet("/plugin/statistics/api_index/getAbbrArea", []).then(function(data){
-                   that.address_info = data;
-                   that.$nextTick(()=>{
-                       setTimeout(()=> {
-                           // that.$refs.map.init("LinHai");
-                           that.init_child("map");
-                       },800);
+                    that.address_info = data;
+                    that.$nextTick(()=>{
+                        setTimeout(()=> {
+                            // that.$refs.map.init("LinHai");
+                            that.init_child("map");
+                        },800);
 
-                   })
+                    })
                 })
             },
             back(){
@@ -245,7 +246,8 @@
                 };
             },
             gotoStock(row){
-                if(row.ceil=='发现陌生人'){
+                console.log(row);
+                if(row.row[2]=='发现陌生人'){
                     this.$router.push('/Intelligence/Strange_people')
                 }else{
                     this.$router.push('/Intelligence/Key_personnel')
@@ -280,10 +282,10 @@
         activated() {
             if(this.$refs.hasOwnProperty("map"))
             {
-                this.$refs.srroll_1.autoResizeMixinInit();
-                this.$refs.srroll_2.autoResizeMixinInit();
+                this.$refs.srroll_1.initWH();
+                this.$refs.srroll_2.initWH();
                 this.$refs.map.map_resize();
-                this.$refs.Editor.Editor_resize();
+                this.$refs.Customized.Customized_resize();
                 this.$refs.Dataset.Dataset_resize();
                 this.$refs.Mixed.Mixed_resize();
                 for(let i = 1; i<=6; i++)
@@ -379,8 +381,8 @@
     .cont2 ul{
         position: absolute;
         right: 5%;
-        bottom: 2%;
-        color: #1989fa;
+        bottom: 0%;
+        color: #0DB2B2;
     }
     .cont2 ul li{
         line-height: 28px;
@@ -405,6 +407,7 @@
         height: 100%;
     }
     h2{
+        height: 30px;
         font-size: 16px;
         color: #07e2ff;
     }
