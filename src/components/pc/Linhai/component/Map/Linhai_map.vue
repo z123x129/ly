@@ -160,36 +160,86 @@
                             saveAsImage: {}
                         }
                     },
+                    visualMap: {
+                        type: 'continuous',
+                        text: ['', ''],
+                        showLabel: false,
+                        seriesIndex: [0],
+                        min: 0,
+                        max: 7,
+                        inRange: {
+                            color: ['#002766', '#003a8c', '#0050b3', '#096dd9', '#1890ff', ]
+                        },
+                        textStyle: {
+                            color: '#000'
+                        },
+                        bottom: 30,
+                        left: 'left',
+                        show :false
+                    },
                     geo: {
                         map:initData,
-                        zoom: 1.2,   //地图初始大小，这里是关键，一定要放在 series中  因为geo在series中会加载，所以zoom放在此处
-                        show: true,
+                        zoom: 1,   //地图初始大小，这里是关键，一定要放在 series中  因为geo在series中会加载，所以zoom放在此处
+                        // show: true,
                         // roam: true,
-                        label: {
-                            normal: {
-                                show: true,
-                                color:'white'
-                            },
-                            emphasis: {
-                                show: true,
-                                color:'white'
-                            },
-
-                        },
-                        itemStyle: {
-                            normal: {
-                                areaColor: '#3a7fd5',
-                                borderColor: '#0a53e9',//线
-                                shadowColor: '#092f8f',//外发光
-                                shadowBlur: 20
-                            },
-                            emphasis: {
-                                areaColor: '#0a2dae',//悬浮区背景
-                            }
-                        },
+                        
 
                     },
                     series: [
+                        {
+                            name: initData,
+                            type: 'map',
+                            // coordinateSystem: 'geo',
+                            map: initData,
+                    
+                            data:this.address_info.map((item, index)=>{
+                                return{
+                                    name:item.name,
+                                    value:[index%5],
+                                    py:item.abbr,
+                                    indexCode:item.indexCode,
+                                    label:{
+                                        normal: {
+                                            show: true,
+                                            color:'#f2f2f2',
+                                            textStyle:{
+                                                fontSize:11
+                                            }
+                                        },
+                                        emphasis: {
+                                            show:true,
+                                            textStyle: {
+                                                color: '#fff',
+                                                fontSize:11
+                                            }
+                                        },
+                                    },
+                                    itemStyle: {
+                                        normal: {
+                                            borderColor: '#ffffff', //区域边框颜色
+                                            areaColor: '#2648aa', //区域填充颜色
+                                            color: {
+                                                type: 'linear',
+                                                x: 0,
+                                                y: 0,
+                                                x2: 0,
+                                                y2: 1,
+                                                colorStops: [{
+                                                    offset: 0, color: '#096dd9' // 0% 处的颜色
+                                                }, {
+                                                    offset: 1, color: '#003a8c' // 100% 处的颜色
+                                                }],
+                                                global: false // 缺省为 false
+                                            },
+                                        },
+                                        emphasis: {
+                                            areaColor: '#1890ff',
+                                            borderWidth: 0,
+                                        }
+                                    }
+                                }
+                            })
+                        },
                         {
                             name: initData,
                             type: 'scatter',
