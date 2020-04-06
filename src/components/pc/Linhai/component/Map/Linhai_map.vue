@@ -130,8 +130,8 @@
                     tooltip: {
                         trigger: 'item',
                         formatter: function (params) {
-                            //console.log(params);
-                            return '存在异常学校'+params.data.stranger_num+"个";
+                            if(typeof(params.data.value)== "object")
+                                return '存在异常学校'+params.data.value[2]+"个";
 
                             // return params.name+"的摄像头个数："+params.value[2];
                         }
@@ -169,10 +169,6 @@
                         max: 7,
                         inRange: {
                             color: ['#002766', '#003a8c', '#0050b3', '#096dd9', '#1890ff', ]
-                            // color: ['#00467F', '#A5CC82'],
-                            // color: ['#23074d', '#cc5333']
-                            // color: ['#1488CC', '#2B32B2']
-                            // color: ['#3B5077', '#031525']
                         },
                         textStyle: {
                             color: '#000'
@@ -186,15 +182,7 @@
                         zoom: 1,   //地图初始大小，这里是关键，一定要放在 series中  因为geo在series中会加载，所以zoom放在此处
                         // show: true,
                         // roam: true,
-                        itemStyle: {
-                            normal: {
-                                areaColor: '#031525',
-                                borderColor: '#3B5077',
-                            },
-                            emphasis: {
-                                areaColor: '#2B91B7',
-                            }
-                        }
+                        
 
                     },
                     series: [
@@ -203,14 +191,13 @@
                             type: 'map',
                             // coordinateSystem: 'geo',
                             map: initData,
-                            showLegendSymbol: false,
+                    
                             data:this.address_info.map((item, index)=>{
                                 return{
                                     name:item.name,
                                     value:[index%5],
                                     py:item.abbr,
                                     indexCode:item.indexCode,
-                                    stranger_num:item.stranger_num,
                                     label:{
                                         normal: {
                                             show: true,
@@ -253,7 +240,41 @@
                                 }
                             })
                         },
-
+                        {
+                            name: initData,
+                            type: 'scatter',
+                            coordinateSystem: 'geo',
+                            data:this.address_info.map((item)=>{
+                                return{
+                                    name:item.name,
+                                    value:item.abbr,
+                                    py:item.abbr,
+                                    indexCode:item.indexCode,
+                                    itemStyle: {
+                                        normal: {
+                                            borderColor: '#ffffff', //区域边框颜色
+                                            areaColor: '#253752', //区域填充颜色
+                                            color: {
+                                                type: 'linear',
+                                                x: 0,
+                                                y: 0,
+                                                x2: 0,
+                                                y2: 1,
+                                                colorStops: [{
+                                                    offset: 0, color: '#096dd9' // 0% 处的颜色
+                                                }, {
+                                                    offset: 1, color: '#002766' // 100% 处的颜色
+                                                }],
+                                                global: false // 缺省为 false
+                                            }
+                                        },
+                                        emphasis: {
+                                            areaColor: '#0a2dae',//悬浮区背景
+                                        }
+                                    },
+                                }
+                            })
+                        },
                         {
                             name:"正常",
                             type: 'scatter',
@@ -275,7 +296,6 @@
                                         itemOpt.latitude,
                                         itemOpt.stranger_num,
                                     ],
-                                    stranger_num:itemOpt.stranger_num,
                                     py:itemOpt.abbr,
                                     indexCode:itemOpt.indexCode,
                                     itemStyle: {
@@ -307,7 +327,6 @@
                                         itemOpt.latitude,
                                         itemOpt.stranger_num
                                     ],
-                                    stranger_num:itemOpt.stranger_num,
                                     py:itemOpt.abbr,
                                     indexCode:itemOpt.indexCode,
                                     itemStyle: {
@@ -389,7 +408,7 @@
                         },
                         itemStyle: {
                             normal: {
-                                areaColor: '#003a8c',
+                                areaColor: "#3a7fd5",
                                     // {
                             //         type: 'linear',
                             //         x: 0,
@@ -403,12 +422,12 @@
                             //         }],
                             //         global: false // 缺省为 false
                             //     },
-                            //     borderColor: '#0a53e9',//线
-                            //     shadowColor: '#092f8f',//外发光
-                            //     shadowBlur: 20
+                                borderColor: '#0a53e9',//线
+                                shadowColor: '#092f8f',//外发光
+                                shadowBlur: 20
                             },
                             emphasis: {
-                                areaColor: '#003a8c'
+                                areaColor: "#3a7fd5"
                                 //     {
                                 //     type: 'linear',
                                 //     x: 0,
