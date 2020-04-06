@@ -315,7 +315,7 @@
                                 // 图标取图偏移量
                                 imageOffset: new AMap.Pixel(0,0)
                             }),
-                            offset: new AMap.Pixel(-14, 0),
+                            offset: new AMap.Pixel(-15, -25),
                             
                             // map: _this.map,
                             // offset: new AMap.Pixel(-13, -30)
@@ -343,7 +343,8 @@
                                 // 图标取图偏移量
                                 imageOffset: new AMap.Pixel(0,0)
                             }),
-                            offset: new AMap.Pixel(-14, 0),
+                           offset: new AMap.Pixel(-15, -25),
+                            
                             
                             // map: _this.map,
                             // offset: new AMap.Pixel(-13, -30)
