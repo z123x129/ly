@@ -133,7 +133,7 @@
 <style scoped lang="less">
     .headerSearch{
         background-color: #fff;
-        padding: 10px;
+        padding: 20px 0 5px;
         /*margin-bottom: 10px;*/
         >div{
             width: 40%;
