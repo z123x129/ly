@@ -27,6 +27,9 @@
         </el-form>
         <div style="width: 100%;height: 16px;background: #f0f2f5"></div>
         <el-table
+                border
+                stripe
+                header-row-class-name="headerRow"
                 :data="tableData"
                 style="width: 100%">
             <el-table-column

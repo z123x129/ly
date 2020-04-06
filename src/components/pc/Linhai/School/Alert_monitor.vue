@@ -75,7 +75,9 @@
         </div>
         <el-table v-if="show == true"
                   :data="tableData"
+                  border
                   stripe
+                  header-row-class-name="headerRow"
                   style="width: 100%">
             <el-table-column
                     align="center"

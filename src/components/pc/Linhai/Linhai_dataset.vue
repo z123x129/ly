@@ -93,15 +93,29 @@
                             {type: 'bar',
                                 itemStyle: {
                                     normal: {
-                                        color: "#2AA956"
+                                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                                            offset: 0,
+                                            color: '#008cff'
+                                        }, {
+                                            offset: 1,
+                                            color: '#005193'
+                                        }]),
+                                        opacity: 1,
                                     }
-                                },},
+                                }},
                             {type: 'bar',
                                 itemStyle: {
                                     normal: {
-                                        color: "#167FE1"
+                                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                                            offset: 0,
+                                            color: '#00da9c'
+                                        }, {
+                                            offset: 1,
+                                            color: '#007a55'
+                                        }]),
+                                        opacity: 1,
                                     }
-                                },},
+                                }},
                         ],
                         dataZoom: [
                             {

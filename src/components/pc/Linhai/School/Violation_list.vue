@@ -33,6 +33,9 @@
             </el-form-item>
         </el-form>
         <el-table
+                border
+                stripe
+                header-row-class-name="headerRow"
                 :data="tableData"
                 style="width: 100%">
             <el-table-column type="expand">

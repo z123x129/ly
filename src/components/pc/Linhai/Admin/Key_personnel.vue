@@ -34,6 +34,8 @@
                 <el-table
                         :data="tableData2"
                         border
+                        stripe
+                        header-row-class-name="headerRow"
                         style="width: 100%">
                     <el-table-column
                             align="center"
@@ -127,6 +129,8 @@
                 <el-table
                         :data="tableData"
                         border
+                        stripe
+                        header-row-class-name="headerRow"
                         style="width: 100%"
                         @selection-change="getSelect">
                     <el-table-column

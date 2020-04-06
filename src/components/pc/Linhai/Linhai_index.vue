@@ -44,7 +44,7 @@
                     <dv-border-box-11 title="当月重点人员陌生人员情况" class="box2" ref="box5"  :titleWidth=280>
                         <div style="display: flex;justify-content:flex-start">
                             <h2></h2>
-<!--                            <span style="margin-left: 20px;color: #95f204;font-size: 15px">{{city_name}}</span>-->
+                            <!--                            <span style="margin-left: 20px;color: #95f204;font-size: 15px">{{city_name}}</span>-->
                         </div>
                         <Dataset :data="regions_chart.stat_people" :type="1" ref="Dataset" style="width: 100%;height: 100%"></Dataset>
                     </dv-border-box-11>
@@ -73,30 +73,30 @@
             [Option.name]:Option,
         },
         data(){
-                return{
-                    list:{
-                        general:{},
-                        area_health:[],
+            return{
+                list:{
+                    general:{},
+                    area_health:[],
+                },
+                city_name:"临海市",
+                regions_chart:{
+                    area_chart:{
+                        all_health:0,
+                        anomaly_health:0,
+                        normal_health:0,
                     },
-                    city_name:"临海市",
-                    regions_chart:{
-                        area_chart:{
-                            all_health:0,
-                            anomaly_health:0,
-                            normal_health:0,
-                        },
-                        school_general:{
-                            all_school:0,
-                            anomaly_school:0,
-                            normal_school:0,
-                        },
-                        stat_people:[],
+                    school_general:{
+                        all_school:0,
+                        anomaly_school:0,
+                        normal_school:0,
                     },
-                    indexCode:'',
-                    options:'',
-                    normal:[''],
-                    anomaly:[''],
-                    showBack:false,
+                    stat_people:[],
+                },
+                indexCode:'',
+                options:'',
+                normal:[''],
+                anomaly:[''],
+                showBack:false,
                 address_info:[],
                 config:{},
                 config2:{},
@@ -109,14 +109,14 @@
             getAddress(){
                 let that = this;
                 this.$https.fetchGet("/plugin/statistics/api_index/getAbbrArea", []).then(function(data){
-                   that.address_info = data;
-                   that.$nextTick(()=>{
-                       setTimeout(()=> {
-                           // that.$refs.map.init("LinHai");
-                           that.init_child("map");
-                       },800);
+                    that.address_info = data;
+                    that.$nextTick(()=>{
+                        setTimeout(()=> {
+                            // that.$refs.map.init("LinHai");
+                            that.init_child("map");
+                        },800);
 
-                   })
+                    })
                 })
             },
             back(){
