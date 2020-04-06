@@ -41,6 +41,7 @@
                                 color: "#fff",
                                 fontSize: 13,
                             },
+                            top:'7%',
                         },
                         tooltip: {},
                         dataset: {
@@ -318,7 +319,7 @@
                 }else{
                     option = {
                         legend: {
-                            top:'7%',
+                            top:'5%',
                         },
                         tooltip: {},
                         dataset: {

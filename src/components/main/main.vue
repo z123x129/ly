@@ -97,7 +97,7 @@
                             <tags-nav :value="$route" @input="handleClick" :list="tagsNav" @on-close="closeClick"/>
                         </div>
                         <Content class="content-wrapper" >
-                            <div id='i2' :style="(router_name == 'home'|| router_name =='Map_conmand' || router_name == 'showVideo'|| router_name == 'reVideo')?'padding:0 !important': 'padding: 15px 0 15px 15px;'">
+                            <div id='i2' :style="(router_name == 'home'|| router_name =='Map_conmand' || router_name == 'showVideo'|| router_name == 'reVideo')?'padding:0 !important': 'padding: 15px 0 15px 15px; overflow-x: hidden;  overflow-y: auto;'">
                            <keep-alive :include="cacheList">
                                     <router-view></router-view>
                            </keep-alive>
@@ -379,8 +379,7 @@
         background-color: #f0f0f0;
         height: 100%;
         padding: 15px 0 15px 15px;
-        overflow-x: hidden;
-        overflow-y: auto;
+
     }
     .main .main-layout-con{background: #f0f0f0;}
 
