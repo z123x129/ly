@@ -310,7 +310,10 @@
                         arr = []
                     }
                     this.$nextTick(function () {
-                        this.$refs.Dataset.init();
+                        let that = this;
+                        setTimeout(()=>{
+                            that.$refs.Dataset.init();
+                        },500)
                     })
                 })
             },
