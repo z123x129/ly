@@ -126,7 +126,8 @@
         mounted: function () {
             this.startMap();//地图
             this.winresize()//监听窗口大小变化
-           
+            if(this.data.length == 0)
+                this.getList();//获取地区列表
         },
         methods:{
             dianji(e){
@@ -230,18 +231,18 @@
                     }else{
                         this.addsite(2)
                     }
-                    
+
                 }else if(val.indexOf('单兵') == -1){
                     this.delsite(2)
                 }
-                
+
                 if(val.indexOf('学校') > -1){
                     if(this.schoolmarkers.length >0){
                         this.map.setZoomAndCenter(11,this.tzSite);
                     }else{
                         this.addsite(1)
                     }
-                    
+
                 }else if(val.indexOf('学校') == -1){
                     this.delsite(1)
                 }
@@ -252,11 +253,11 @@
                     }else{
                         this.addsite(3)
                     }
-                    
+
                 }else if(val.indexOf('车载') == -1){
                     this.delsite(3)
                 }
-                
+
             },
             //添加点标记,
             addsite(type) {
@@ -316,7 +317,7 @@
                                 imageOffset: new AMap.Pixel(0,0)
                             }),
                             offset: new AMap.Pixel(-15, -25),
-                            
+
                             // map: _this.map,
                             // offset: new AMap.Pixel(-13, -30)
                         });
@@ -344,8 +345,8 @@
                                 imageOffset: new AMap.Pixel(0,0)
                             }),
                            offset: new AMap.Pixel(-15, -25),
-                            
-                            
+
+
                             // map: _this.map,
                             // offset: new AMap.Pixel(-13, -30)
                         });
@@ -498,8 +499,7 @@
                     this.app[this.ddd].JS_ShowWnd();
             }
 
-           if(this.data.length == 0)
-               this.getList();//获取地区列表
+
             else if(  this.$route.params.name)
            {
                var data = this.filterdata(this.$route.params.name)
