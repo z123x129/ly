@@ -29,77 +29,205 @@
             init(){
                 // 指定图表的配置项和数据
                 var option = {
-                    tooltip: {
-                        trigger: 'item',
-                        formatter: '{a} <br/>{b}: {c} ({d}%)'
-                    },
-                    legend: {
-                        orient: 'vertical',
-                        left: 10,
-                        data: ['健康证总数', '重点人员告警总数', '陌生人员抓拍总数', '健康证未过期数', '健康证过期数', '重点人员告警总数', '陌生人脸及时处理数', '陌生人脸未及时处理数']
-                    },
                     series: [
                         {
-                            name: this.data.dirName,
+                            name: this.data.data2[1].name,
                             type: 'pie',
-                            selectedMode: 'single',
-                            radius: [0, '30%'],
-
-                            label: {
-                                position: 'inner'
-                            },
+                            radius: ['60%', '80%'],
+                            center: ['15%', '50%'],
+                            startAngle: 225,
+                            color: [new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                                offset: 0,
+                                color: '#FDFF5C'
+                            }, {
+                                offset: 1,
+                                color: '#FFDB5C'
+                            }]), "transparent"],
                             labelLine: {
-                                show: false
+                                normal: {
+                                    show: false
+                                }
                             },
-                            data: this.data.data1
-                        },
-                        {
-                            name: this.data.dirName,
-                            type: 'pie',
-                            radius: ['40%', '55%'],
                             label: {
-                                formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}  {per|{d}%}  ',
-                                backgroundColor: '#eee',
-                                borderColor: '#aaa',
-                                borderWidth: 1,
-                                borderRadius: 4,
-                                // shadowBlur:3,
-                                // shadowOffsetX: 2,
-                                // shadowOffsetY: 2,
-                                // shadowColor: '#999',
-                                // padding: [0, 7],
-                                rich: {
-                                    a: {
-                                        color: '#999',
-                                        lineHeight: 22,
-                                        align: 'center'
-                                    },
-                                    // abg: {
-                                    //     backgroundColor: '#333',
-                                    //     width: '100%',
-                                    //     align: 'right',
-                                    //     height: 22,
-                                    //     borderRadius: [4, 4, 0, 0]
-                                    // },
-                                    hr: {
-                                        borderColor: '#aaa',
-                                        width: '100%',
-                                        borderWidth: 0.5,
-                                        height: 0
-                                    },
-                                    b: {
-                                        fontSize: 16,
-                                        lineHeight: 33
-                                    },
-                                    per: {
-                                        color: '#eee',
-                                        backgroundColor: '#334455',
-                                        padding: [2, 4],
-                                        borderRadius: 2
+                                normal: {
+                                    position: 'center'
+                                }
+                            },
+                            data: [{
+                                value: 75,
+                                name: this.data.data2[1].name,
+                                label: {
+                                    normal: {
+                                        formatter: this.data.data2[1].name,
+                                        textStyle: {
+                                            color: '#555',
+                                            fontSize: 16
+
+                                        }
+                                    }
+                                }
+                            }, {
+                                value: 25,
+                                name: '%',
+                                label: {
+                                    normal: {
+                                        formatter: '\n\n'+this.data.data2[1].value,
+                                        textStyle: {
+                                            color: '#007ac6',
+                                            fontSize: 30
+
+                                        }
                                     }
                                 }
                             },
-                            data: this.data.data2
+                                {
+                                    value: 0,
+                                    name: '%',
+                                    label: {
+                                        normal: {
+                                            formatter: '',
+                                            textStyle: {
+                                                color: '#fff',
+                                                fontSize: 16
+
+                                            }
+                                        }
+                                    }
+                                }]
+                        },
+                        {
+                            name: this.data.data1[1].name,
+                            type: 'pie',
+                            radius: ['60%', '80%'],
+                            center: ['50%', '50%'],
+                            startAngle: 225,
+                            color: [new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                                offset: 0,
+                                color: '#9FE6B8'
+                            }, {
+                                offset: 1,
+                                color: '#32C5E9'
+                            }]), "transparent"],
+                            labelLine: {
+                                normal: {
+                                    show: false
+                                }
+                            },
+                            label: {
+                                normal: {
+                                    position: 'center'
+                                }
+                            },
+                            data: [{
+                                value: 75,
+                                name: this.data.data1[1].name,
+                                label: {
+                                    normal: {
+                                        formatter: this.data.data1[1].name,
+                                        textStyle: {
+                                            color: '#555',
+                                            fontSize: 16
+
+                                        }
+                                    }
+                                }
+                            }, {
+                                value: 25,
+                                name: '%',
+                                label: {
+                                    normal: {
+                                        formatter: '\n\n'+this.data.data1[1].value,
+                                        textStyle: {
+                                            color: '#007ac6',
+                                            fontSize: 30
+
+                                        }
+                                    }
+                                }
+                            },
+                                {
+                                    value: 0,
+                                    name: '%',
+                                    label: {
+                                        normal: {
+                                            formatter: '',
+                                            textStyle: {
+                                                color: '#fff',
+                                                fontSize: 16
+
+                                            }
+                                        }
+                                    }
+                                }]
+                        },
+                        {
+                            name: this.data.data2[3].name,
+                            type: 'pie',
+                            radius: ['60%', '80%'],
+                            center: ['85%', '50%'],
+                            startAngle: 225,
+                            labelLine: {
+                                normal: {
+                                    show: false
+                                }
+                            },
+                            label: {
+                                normal: {
+                                    position: 'center'
+                                }
+                            },
+                            data: [{
+                                value: 75,
+                                "itemStyle": {
+                                    "normal": {
+                                        "color": new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                                            "offset": 0,
+                                            "color": '#FF9F7F'
+                                        }, {
+                                            "offset": 1,
+                                            "color": '#FB7293'
+                                        }]),
+                                    }
+                                },
+                                name: this.data.data2[3].name,
+                                label: {
+                                    normal: {
+                                        formatter: this.data.data2[3].name,
+                                        textStyle: {
+                                            color: '#555',
+                                            fontSize: 16
+
+                                        }
+                                    }
+                                }
+                            }, {
+                                value: 25,
+                                name: '%',
+                                label: {
+                                    normal: {
+                                        formatter: '\n\n'+this.data.data2[3].value,
+                                        textStyle: {
+                                            color: '#f125ff',
+                                            fontSize: 30
+
+                                        }
+                                    }
+                                }
+                            },
+                                {
+                                    value: 0,
+                                    name: '%',
+                                    label: {
+                                        normal: {
+                                            formatter: '',
+                                            textStyle: {
+                                                color: '#fff',
+                                                fontSize: 16
+
+                                            }
+                                        }
+                                    }
+                                }]
                         }
                     ]
                 };
