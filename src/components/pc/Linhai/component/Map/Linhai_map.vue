@@ -142,7 +142,7 @@
                                 {
                                     // return params.data.name+'检测到异常数:'+params.data.value[2]+"个";
                                     var tipHtml = '';
-                                    tipHtml = '<div style="display: inline-block;background:rgba(255,255,255,0.85);padding:20px 15px;box-shadow:0 0 10px #666">'+
+                                    tipHtml = '<div style="display: inline-block;background:rgba(255,255,255,0.85);padding:15px;box-shadow:0 0 10px #666">'+
                                                 '<div style="font-size:18px;line-height:20px;padding-bottom: 10px;color:#333">' + params.data.name + '</div>'+
                                                 '<p style="font-size: 15px;color: #666;line-height: 25px;">异常人数：<span style="color: red;font-size:16px">' + params.data.value2[0] + '</span></p>'+
                                                 '<p style="font-size: 15px;color: #666;line-height: 25px;">后厨人数：<span style="font-size: 16px;color:#555">' + params.data.value2[1] + '</span></p>'+
@@ -383,7 +383,7 @@
                             {
                                 // return params.data.name+'检测到异常数:'+params.data.value[2]+"个";
                                 var tipHtml = '';
-                                tipHtml = '<div style="display: inline-block;background:rgba(255,255,255,0.85);padding:20px 15px;box-shadow:0 0 10px #666">'+
+                                tipHtml = '<div style="display: inline-block;background:rgba(255,255,255,0.85);padding:15px;box-shadow:0 0 10px #666">'+
                                             '<div style="font-size:18px;line-height:20px;padding-bottom: 10px;color:#333">' + params.data.name + '</div>'+
                                             '<p style="font-size: 15px;color: #666;line-height: 25px;">异常人数：<span style="color: red;font-size:16px">' + params.data.value[2] + '</span></p>'+
                                             '<p style="font-size: 15px;color: #666;line-height: 25px;">后厨人数：<span style="font-size: 16px;color:#555">' + params.data.value[3] + '</span></p>'+
