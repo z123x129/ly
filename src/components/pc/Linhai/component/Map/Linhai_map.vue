@@ -144,7 +144,7 @@
                                     var tipHtml = '';
                                     tipHtml = '<div style="display: inline-block;background:#fff;border-radius:15px;padding:20px 15px;box-shadow:0 0 10px #666">'+
                                                 '<div style="font-size:18px;line-height:20px;padding-bottom: 10px;color:#333">' + params.data.name + '</div>'+
-                                                '<p style="font-size: 15px;color: #666;line-height: 25px;">异常人数：<span style="color: red;font-size:16px">' + params.data.value2[0] + '</span></p>'+
+                                                '<p style="font-size: 15px;color: #666;line-height: 25px;">异常学校数：<span style="color: red;font-size:16px">' + params.data.value2[0] + '</span></p>'+
                                                 '<p style="font-size: 15px;color: #666;line-height: 25px;">后厨人数：<span style="font-size: 16px;color:#555">' + params.data.value2[1] + '</span></p>'+
                                                 '<p style="font-size: 15px;color: #666;line-height: 25px;">食品安全员人数：<span style="font-size: 16px;color:#555">' + params.data.value2[2] + '</span></p>'+
                                                 '<p style="font-size: 15px;color: #666;line-height: 25px;">超市人数：<span style="font-size: 16px;color:#555;">' + params.data.value2[3] + '</span></p>'+
@@ -200,8 +200,6 @@
                         zoom: 1,   //地图初始大小，这里是关键，一定要放在 series中  因为geo在series中会加载，所以zoom放在此处
                         // show: true,
                         // roam: true,
-                        
-
                     },
                     series: [
                         {
@@ -209,9 +207,8 @@
                             type: 'map',
                             // coordinateSystem: 'geo',
                             map: initData,
-                    
+                            showLegendSymbol: false,
                             data:this.address_info.map((item, index)=>{
-                                console.log(item.damp_people,)
                                 return{
                                     name:item.name,
                                     value:[index%5],
@@ -438,7 +435,7 @@
                         },
                         itemStyle: {
                             normal: {
-                                areaColor: "#3a7fd5",
+                                areaColor: '#0050b3',
                                     // {
                             //         type: 'linear',
                             //         x: 0,
@@ -452,12 +449,12 @@
                             //         }],
                             //         global: false // 缺省为 false
                             //     },
-                                borderColor: '#0a53e9',//线
-                                shadowColor: '#092f8f',//外发光
-                                shadowBlur: 20
+                            //     borderColor: '#0a53e9',//线
+                            //     shadowColor: '#092f8f',//外发光
+                            //     shadowBlur: 20
                             },
                             emphasis: {
-                                areaColor: "#3a7fd5"
+                                areaColor: '#0050b3'
                                 //     {
                                 //     type: 'linear',
                                 //     x: 0,
