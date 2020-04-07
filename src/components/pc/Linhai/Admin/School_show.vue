@@ -22,7 +22,6 @@
                         <el-button size="small" type="primary" @click="search2">搜索</el-button>
                     </el-form-item>
                 </el-form>
-                <div style="width: 100%;height: 16px;background: #f0f2f5"></div>
                 <el-table
                         :data="tableData2"
                         border
@@ -59,7 +58,7 @@
                             label="图片信息">
                         <template slot-scope="scope">
                             <el-image
-                                    style="width: 100px; height: 100px"
+                                    style="width: 35px; height: 35px"
                                     :src="scope.row.enclosure[0]"
                                     :preview-src-list="scope.row.enclosure">
                             </el-image>

@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-tabs v-model="activeName">
-            <el-tab-pane label="被抓拍到的重点人员" name="first">
+            <el-tab-pane label="被抓拍清单" name="first">
                 <el-form :inline="true" :model="formInline2" class="demo-form-inline">
                     <el-form-item label="选择区域:">
                         <el-select @change="getSchool" size="small" filterable clearable v-model="formInline2.indexCode">
@@ -98,7 +98,7 @@
                     </el-pagination>
                 </div>
             </el-tab-pane>
-            <el-tab-pane label="重点人员列表" name="second">
+            <el-tab-pane label="添加重点人员" name="second">
                 <el-form :inline="true" :model="formInline" class="demo-form-inline">
                     <el-form-item label="姓名:">
                         <el-input size="small" v-model="formInline.user_name"></el-input>
