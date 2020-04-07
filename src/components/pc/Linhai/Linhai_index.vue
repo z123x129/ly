@@ -6,13 +6,13 @@
         <div class="content">
             <div class="cont_flex">
                 <div class="cont1">
-                    <dv-border-box-11 title="数据概览" style="height: 42%" class="box1" ref="box1" :titleWidth=150>
+                    <dv-border-box-11 title="全市总览" style="height: 42%" class="box1" ref="box1" :titleWidth=150>
                         <h2></h2>
                         <ul style="font-size: 12px;padding: 20px;">
                             <li v-for="(item,index) in list.general" :key="index">{{item.title}} {{item.value}}</li>
                         </ul>
                     </dv-border-box-11>
-                    <dv-border-box-11 title="健康证情况" style="height: 58%;padding: 15px 10px 20px 5px" class="box1" ref="box2" :titleWidth=160>
+                    <dv-border-box-11 title="健康证排行榜" style="height: 58%;padding: 15px 10px 20px 5px" class="box1" ref="box2" :titleWidth=160>
                         <h2 style="text-indent: 15px"></h2>
                         <Mixed :data="list.area_health" ref="Mixed" style="width: 100%;height: 100%"></Mixed>
                     </dv-border-box-11>
@@ -33,7 +33,7 @@
                         <h2></h2>
                         <Customized :data="regions_chart.area_chart" ref="Customized" style="width: 100%;height: 100%"></Customized>
                     </dv-border-box-11>
-                    <dv-border-box-11 title="学校异常情况" class="box1" ref="box4" :titleWidth=160>
+                    <dv-border-box-11 title="学校违规情况" class="box1" ref="box4" :titleWidth=160>
                         <h2></h2>
                         <dv-scroll-board ref="srroll_1" @click="getWeigui" :config="config2" style="width:94%;height:82%;margin: 3%" />
                     </dv-border-box-11>
@@ -41,7 +41,7 @@
             </div>
             <div class="cont_flex2">
                 <div class="cont3">
-                    <dv-border-box-11 title="当月重点人员陌生人员情况" class="box2" ref="box5"  :titleWidth=280>
+                    <dv-border-box-11 title="当月后厨违规进入情况" class="box2" ref="box5"  :titleWidth=280>
                         <div style="display: flex;justify-content:flex-start">
                             <h2></h2>
                             <!--                            <span style="margin-left: 20px;color: #95f204;font-size: 15px">{{city_name}}</span>-->
@@ -50,7 +50,7 @@
                     </dv-border-box-11>
                 </div>
                 <div class="cont1">
-                    <dv-border-box-11 title="实时警报数据" class="box2" ref="box6"  :titleWidth=160>
+                    <dv-border-box-11 title="实时抓拍数据" class="box2" ref="box6"  :titleWidth=160>
                         <h2></h2>
                         <dv-scroll-board @click="gotoStock" ref="srroll_2" :config="config" style="width:94%;height:82%;margin: 3%" />
                     </dv-border-box-11>

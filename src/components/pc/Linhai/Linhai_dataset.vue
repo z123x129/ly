@@ -36,18 +36,14 @@
                 var option = {};
                 if(this.type===1){
                     option = {
-                        legend: {
-                            textStyle: {
-                                color: "#fff",
-                                fontSize: 13,
-                            },
-                            top:'7%',
-                        },
                         tooltip: {},
                         dataset: {
                             source: [
-                                ['product', '重点人员', '陌生人员'],
+                                ['陌生人员'],
                             ],
+                        },
+                        grid:{
+                            top:'10%',
                         },
                         xAxis: {type: 'category',
                             axisLabel: {
@@ -74,20 +70,6 @@
                                     show: false
                                 },
                             },
-                            {
-                                type: 'value',
-                                axisLabel: {
-                                    formatter: '{value}',
-                                    show: true,
-                                    textStyle: {
-                                        color: '#fff',  //更改坐标轴文字颜色
-                                        fontSize : 10      //更改坐标轴文字大小
-                                    }
-                                },
-                                axisTick: {
-                                    show: false
-                                },
-                            }
                         ],
                         series: [
                             {type: 'bar',
@@ -95,27 +77,12 @@
                                     normal: {
                                         color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                                             offset: 0,
-                                            color: '#008cff'
-                                        }, {
-                                            offset: 1,
-                                            color: '#005193'
+                                            color: '#2AA956'
                                         }]),
                                         opacity: 1,
                                     }
-                                }},
-                            {type: 'bar',
-                                itemStyle: {
-                                    normal: {
-                                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                                            offset: 0,
-                                            color: '#00da9c'
-                                        }, {
-                                            offset: 1,
-                                            color: '#007a55'
-                                        }]),
-                                        opacity: 1,
-                                    }
-                                }},
+                                }
+                            },
                         ],
                         dataZoom: [
                             {
