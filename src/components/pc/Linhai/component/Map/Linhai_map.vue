@@ -129,12 +129,30 @@
                 this.chart.setOption(option = {
                     tooltip: {
                         trigger: 'item',
-                        formatter: function (params) {
-                            if(typeof(params.data.value)== "object")
-                                return '存在异常学校'+params.data.value[2]+"个";
+                        backgroundColor : 'transparent',
+                        // formatter: function (params) {
+                        //     if(typeof(params.data.value)== "object")
+                        //     console.log(params)
+                        //         return '存在异常学校'+params.data.value[2]+"个";
 
-                            // return params.name+"的摄像头个数："+params.value[2];
-                        }
+                        //     // return params.name+"的摄像头个数："+params.value[2];
+                        // }
+                            formatter: function (params) {
+                                if(typeof(params.data.value)== "object")
+                                {
+                                    // return params.data.name+'检测到异常数:'+params.data.value[2]+"个";
+                                    var tipHtml = '';
+                                    tipHtml = '<div style="display: inline-block;background:#fff;border-radius:15px;padding:20px 15px;box-shadow:0 0 10px #666">'+
+                                                '<div style="font-size:18px;line-height:20px;padding-bottom: 10px;color:#333">' + params.data.name + '</div>'+
+                                                '<p style="font-size: 15px;color: #666;line-height: 25px;">异常学校数：<span style="color: red;font-size:16px">' + params.data.value2[0] + '</span></p>'+
+                                                '<p style="font-size: 15px;color: #666;line-height: 25px;">后厨人数：<span style="font-size: 16px;color:#555">' + params.data.value2[1] + '</span></p>'+
+                                                '<p style="font-size: 15px;color: #666;line-height: 25px;">食品安全员人数：<span style="font-size: 16px;color:#555">' + params.data.value2[2] + '</span></p>'+
+                                                '<p style="font-size: 15px;color: #666;line-height: 25px;">超市人数：<span style="font-size: 16px;color:#555;">' + params.data.value2[3] + '</span></p>'+
+                                                '<p style="font-size: 15px;color: #666;line-height: 25px;">健康证数量：<span style="font-size: 16px;color:#555">' + params.data.value2[4] + '</span></p>'+
+                                                '</div>'
+                                    return tipHtml;
+                                }
+                            }
                     },
                     legend: {
                         orient: 'vertical',
@@ -160,36 +178,91 @@
                             saveAsImage: {}
                         }
                     },
+                    visualMap: {
+                        type: 'continuous',
+                        text: ['', ''],
+                        showLabel: false,
+                        seriesIndex: [0],
+                        min: 0,
+                        max: 7,
+                        inRange: {
+                            color: ['#002766', '#003a8c', '#0050b3', '#096dd9', '#1890ff', ]
+                        },
+                        textStyle: {
+                            color: '#000'
+                        },
+                        bottom: 30,
+                        left: 'left',
+                        show :false
+                    },
                     geo: {
                         map:initData,
-                        zoom: 1.2,   //地图初始大小，这里是关键，一定要放在 series中  因为geo在series中会加载，所以zoom放在此处
-                        show: true,
+                        zoom: 1,   //地图初始大小，这里是关键，一定要放在 series中  因为geo在series中会加载，所以zoom放在此处
+                        // show: true,
                         // roam: true,
-                        label: {
-                            normal: {
-                                show: true,
-                                color:'white'
-                            },
-                            emphasis: {
-                                show: true,
-                                color:'white'
-                            },
-
-                        },
-                        itemStyle: {
-                            normal: {
-                                areaColor: '#3a7fd5',
-                                borderColor: '#0a53e9',//线
-                                shadowColor: '#092f8f',//外发光
-                                shadowBlur: 20
-                            },
-                            emphasis: {
-                                areaColor: '#0a2dae',//悬浮区背景
-                            }
-                        },
-
                     },
                     series: [
+                        {
+                            name: initData,
+                            type: 'map',
+                            // coordinateSystem: 'geo',
+                            map: initData,
+                            showLegendSymbol: false,
+                            data:this.address_info.map((item, index)=>{
+                                return{
+                                    name:item.name,
+                                    value:[index%5],
+                                    value2: [
+                                        item.stranger_num,//异常人数
+                                        item.chef_people,//后厨人数
+                                        item.food_people,//食品安全员人数
+                                        item.damp_people,//超市人数
+                                        item.health,//健康证数量
+                                    ],
+                                    py:item.abbr,
+                                    indexCode:item.indexCode,
+                                    label:{
+                                        normal: {
+                                            show: true,
+                                            color:'#f2f2f2',
+                                            textStyle:{
+                                                fontSize:11
+                                            }
+                                        },
+                                        emphasis: {
+                                            show:true,
+                                            textStyle: {
+                                                color: '#fff',
+                                                fontSize:11
+                                            }
+                                        },
+                                    },
+                                    itemStyle: {
+                                        normal: {
+                                            borderColor: '#ffffff', //区域边框颜色
+                                            areaColor: '#2648aa', //区域填充颜色
+                                            color: {
+                                                type: 'linear',
+                                                x: 0,
+                                                y: 0,
+                                                x2: 0,
+                                                y2: 1,
+                                                colorStops: [{
+                                                    offset: 0, color: '#096dd9' // 0% 处的颜色
+                                                }, {
+                                                    offset: 1, color: '#003a8c' // 100% 处的颜色
+                                                }],
+                                                global: false // 缺省为 false
+                                            },
+                                        },
+                                        emphasis: {
+                                            areaColor: '#1890ff',
+                                            borderWidth: 0,
+                                        }
+                                    }
+                                }
+                            })
+                        },
                         {
                             name: initData,
                             type: 'scatter',
@@ -301,16 +374,20 @@
                 this.chart.setOption(option = {
                     tooltip: {
                         trigger: 'item',
+                        backgroundColor : 'transparent',
                         formatter: function (params) {
                             if(typeof(params.data.value)== "object")
                             {
                                 // return params.data.name+'检测到异常数:'+params.data.value[2]+"个";
                                 var tipHtml = '';
-                                tipHtml = '<div style="background:#fff;border-radius:10px;padding-top:10px;box-shadow:0 0 10px #666">' +
-                                    '<div style="color:#fff;height:20px;border-radius:6px;font-size:12px;line-height:20px;background-color:#5861a2;text-align:center;margin:0 2px;">' + params.data.name + '</div>' +
-                                    '<div style="text-align:center;color:#494949;padding:8px 6px">' +
-                                    '<span style="font-size:18px;font-weight:bold;">' + params.data.value[2] + ' ' + '</span>' +
-                                    '</div>' + '</div>';
+                                tipHtml = '<div style="display: inline-block;background:#fff;border-radius:15px;padding:20px 15px;box-shadow:0 0 10px #666">'+
+                                            '<div style="font-size:18px;line-height:20px;padding-bottom: 10px;color:#333">' + params.data.name + '</div>'+
+                                            '<p style="font-size: 15px;color: #666;line-height: 25px;">异常人数：<span style="color: red;font-size:16px">' + params.data.value[2] + '</span></p>'+
+                                            '<p style="font-size: 15px;color: #666;line-height: 25px;">后厨人数：<span style="font-size: 16px;color:#555">' + params.data.value[3] + '</span></p>'+
+                                            '<p style="font-size: 15px;color: #666;line-height: 25px;">食品安全员人数：<span style="font-size: 16px;color:#555">' + params.data.value[4] + '</span></p>'+
+                                            '<p style="font-size: 15px;color: #666;line-height: 25px;">超市人数：<span style="font-size: 16px;color:#555;">' + params.data.value[5] + '</span></p>'+
+                                            '<p style="font-size: 15px;color: #666;line-height: 25px;">健康证数量：<span style="font-size: 16px;color:#555">' + params.data.value[6] + '</span></p>'+
+                                            '</div>'
                                 return tipHtml;
                             }
 
@@ -358,7 +435,7 @@
                         },
                         itemStyle: {
                             normal: {
-                                areaColor: "#3a7fd5",
+                                areaColor: '#0050b3',
                                     // {
                             //         type: 'linear',
                             //         x: 0,
@@ -372,12 +449,12 @@
                             //         }],
                             //         global: false // 缺省为 false
                             //     },
-                                borderColor: '#0a53e9',//线
-                                shadowColor: '#092f8f',//外发光
-                                shadowBlur: 20
+                            //     borderColor: '#0a53e9',//线
+                            //     shadowColor: '#092f8f',//外发光
+                            //     shadowBlur: 20
                             },
                             emphasis: {
-                                areaColor: "#3a7fd5"
+                                areaColor: '#0050b3'
                                 //     {
                                 //     type: 'linear',
                                 //     x: 0,
@@ -465,13 +542,17 @@
                                     value: [
                                         itemOpt.longitude,
                                         itemOpt.latitude,
-                                        itemOpt.stranger_num,
+                                        itemOpt.stranger_num,//异常人数
+                                        itemOpt.chef_people,//后厨人数
+                                        itemOpt.food_people,//食品安全员人数
+                                        itemOpt.damp_people,//超市人数
+                                        itemOpt.health,//健康证数量
                                     ],
-                                    itemStyle: {
-                                        normal: {
-                                            color: '#4caf50'
-                                        }
-                                    }
+                                    // itemStyle: {
+                                    //     normal: {
+                                    //         color: '#4caf50'
+                                    //     }
+                                    // }
                                 };
                             })
                         },

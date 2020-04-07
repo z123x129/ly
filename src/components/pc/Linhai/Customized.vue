@@ -143,7 +143,9 @@
                                         echartData.forEach(function(value, index, array) {
                                             total += value.value;
                                         });
-                                        percent = ((params.value / total) * 100).toFixed(1);
+
+                                        if(total  != 0)
+                                            percent = ((params.value / total) * 100).toFixed(1);
                                         return '{yellow|' + params.value + '}\n{blue|' + percent + '%}';
                                     },
                                     rich: rich
