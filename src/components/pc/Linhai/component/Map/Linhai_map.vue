@@ -186,7 +186,8 @@
                         min: 0,
                         max: 7,
                         inRange: {
-                            color: ['#002766', '#003a8c', '#0050b3', '#096dd9', '#1890ff', ]
+                            // color: ['#002766', '#003a8c', '#0050b3', '#096dd9', '#1890ff', ]
+                            color: ['#ff7875', '#ffc069', '#fff566', '#95de64', '#5cdbd3', '#69c0ff','#b37feb',]
                         },
                         textStyle: {
                             color: '#000'
@@ -211,7 +212,7 @@
                             data:this.address_info.map((item, index)=>{
                                 return{
                                     name:item.name,
-                                    value:[index%5],
+                                    value:[index%7],
                                     value2: [
                                         item.stranger_num,//异常人数
                                         item.chef_people,//后厨人数
