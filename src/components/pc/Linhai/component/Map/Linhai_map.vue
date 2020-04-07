@@ -212,7 +212,6 @@
                             map: initData,
                             showLegendSymbol: false,
                             data:this.address_info.map((item, index)=>{
-                                console.log(item.damp_people,)
                                 return{
                                     name:item.name,
                                     value:[index%7],
