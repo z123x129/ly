@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div id="playWnd" style="height:100%;width:100%"></div>
+        <div id="playWnd_2" style="height:100%;width:100%;"></div>
     </div>
 </template>
 
@@ -68,7 +68,7 @@
                     return;
                 }
                 this.app[this.openOWebName] = new WebControl({
-                    szPluginContainer: "playWnd",
+                    szPluginContainer: "playWnd_2",
                     iServicePortStart: 15900,
                     iServicePortEnd: 15909,
                     cbConnectSuccess: function () {
@@ -77,9 +77,13 @@
                             dllPath: "./VideoPluginConnect.dll"
                             //dllPath: "./DllForTest-Win32.dll"
                         }).then(function () {
-                            that.app[that.openOWebName].JS_CreateWnd("playWnd", that.width, that.height).then(function () {
-                                window.console.log("JS_CreateWnd success");
-                                callback();
+                            that.app[that.openOWebName].JS_SetWindowControlCallback({   // 设置消息回调
+                                cbIntegrationCallBack: that.cbIntegrationCallBack
+                            });
+                            that.app[that.openOWebName].JS_CreateWnd("playWnd_2", that.width, that.height).then(function () {
+
+                                 callback();
+
                             });
                         }, function () {
 
@@ -100,6 +104,9 @@
                     },
                 });
                 window.console.log(that.app[that.openOWebName]);
+            },
+            cbIntegrationCallBack(){
+                console.log('连接成功');
             },
             initVideo(layoutm = "2x2"){//snapDir = "SnapDir", videoDir = "VideoDir",
                 if(!this.checkWebC())
@@ -162,7 +169,7 @@
                 // this.dHeight = height;
                 this.app[this.openOWebName].JS_Resize(width, height);
             },
-            videoPlay(cameraIndexCode, callback = ()=>{}, wndId = 0, streamMode = 0, transMode = 1, gpuMode= 0){
+            videoPlay(cameraIndexCode, callback = ()=>{}, wndId = -1, streamMode = 0, transMode = 1, gpuMode= 0){
                 if(!this.checkWebC())
                     return;
                 this.app[this.openOWebName].JS_RequestInterface({
