@@ -77,6 +77,9 @@
                             dllPath: "./VideoPluginConnect.dll"
                             //dllPath: "./DllForTest-Win32.dll"
                         }).then(function () {
+                            that.app[that.openOWebName].JS_SetWindowControlCallback({   // 设置消息回调
+                                cbIntegrationCallBack: that.cbIntegrationCallBack
+                            });
                             that.app[that.openOWebName].JS_CreateWnd("playWnd", that.width, that.height).then(function () {
                                 window.console.log("JS_CreateWnd success");
                                 callback();
@@ -149,10 +152,9 @@
                 // this.dHeight = height;
                 this.app[this.openOWebName].JS_Resize(width, height);
             },
-            videoPlay(cameraIndexCode, callback = ()=>{}, wndId = 0, streamMode = 0, transMode = 1, gpuMode= 0,startTime,endTime){
+            videoPlay(cameraIndexCode, callback = ()=>{}, wndId = -1 , streamMode = 0, transMode = 1, gpuMode= 0,startTime,endTime){
                 if(!this.checkWebC())
                     return;
-                console.log(startTime)
                 // if(arguments.length == 3){
                 //     cameraIndexCode = arguments[0]
                 //     startTime = arguments[1]
@@ -175,6 +177,9 @@
                 })
 
 
+            },
+            cbIntegrationCallBack(){
+                console.log('连接成功');
             },
             //获取公钥  callback去初始化
             getPubKey (callback) {

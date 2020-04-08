@@ -166,7 +166,8 @@
                     <el-table-column
                             align="center"
                             prop="dirName"
-                            label="所属学校">
+                            label="所属学校"
+                           >
                     </el-table-column>
                     <el-table-column
                             align="center"
