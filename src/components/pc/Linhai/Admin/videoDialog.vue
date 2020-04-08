@@ -36,6 +36,7 @@
                             return
                         }
                         // console.log('点击拖动框')
+                        that.hidevideo()
 
                         // (clientX, clientY)点击位置距离当前可视区域的坐标(x，y)
                         // offsetLeft, offsetTop 距离上层或父级的左边距和上边距
@@ -76,6 +77,7 @@
                         })
                         document.onmouseup = (() => {
                             // console.log('离开拖动框')
+                            that.showvideo()
 
                             document.onmousemove = document.onmouseup = null
                         })
@@ -95,6 +97,12 @@
             },
             resize(){
                 this.$emit("resize")
+            },
+            hidevideo(){
+                this.$emit("cancel")
+            },
+            showvideo(){
+                this.$emit("showvideo")
             }
         }
     }

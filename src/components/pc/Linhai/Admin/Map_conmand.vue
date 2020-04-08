@@ -27,7 +27,7 @@
                 <div id="container" class="map"></div>
             </div>
         </div>
-        <videoDialog class="dialog" :visible.sync="videoVisible" @resize="resize" @cancel="hideVideo" >
+        <videoDialog class="dialog" :visible.sync="videoVisible" @resize="resize" @cancel="hideVideo" @showvideo="showvideo">
             <div class="videobox">
                 <div class="demo">
                     <p>摄像点选择:</p>
@@ -157,6 +157,10 @@
             },
             hideVideo(){//隐藏视频插件
                 this.app[this.ddd].JS_HideWnd();
+            },
+            showvideo(){//显示视频插件
+                this.app[this.ddd].JS_ShowWnd();
+                // console.log('1111')
             },
             resize(){//拖动窗口时视频插件跟随移动
                 this.$refs.H1.resizeWindow(this.$refs.H1.$el.offsetHeight,this.$refs.H1.$el.offsetWidth);
