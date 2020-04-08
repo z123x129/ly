@@ -25,6 +25,7 @@
             return{
                 chart: null,
                 mapInfo:json,
+                mapcolor:'#85a5ff'
             }
         },
         mounted() {
@@ -122,7 +123,7 @@
                 // ];
                 this.chart.showLoading();
                 var result = this.mapInfo[initData]["mapInfo"];
-
+                var that = this
                 echarts.registerMap(initData, result); //加载地图数据
                 this.chart.hideLoading();
                 let option = null;
@@ -138,6 +139,9 @@
                         //     // return params.name+"的摄像头个数："+params.value[2];
                         // }
                             formatter: function (params) {
+                                if(params.color){
+                                    that.mapcolor = params.color
+                                }
                                 if(typeof(params.data.value)== "object")
                                 {
                                     // return params.data.name+'检测到异常数:'+params.data.value[2]+"个";
@@ -368,7 +372,7 @@
             {
                 this.chart.showLoading();
                 var result = this.mapInfo[city]["mapInfo"];
-
+                var mcolor = this.mapcolor
                 echarts.registerMap(city, result); //加载地图数据
                 this.chart.hideLoading();
                 let option = null;
@@ -436,7 +440,7 @@
                         },
                         itemStyle: {
                             normal: {
-                                areaColor: '#0050b3',
+                                areaColor: mcolor,
                                     // {
                             //         type: 'linear',
                             //         x: 0,
@@ -455,7 +459,7 @@
                             //     shadowBlur: 20
                             },
                             emphasis: {
-                                areaColor: '#0050b3'
+                                areaColor: mcolor
                                 //     {
                                 //     type: 'linear',
                                 //     x: 0,
