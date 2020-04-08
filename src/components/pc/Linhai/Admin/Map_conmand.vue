@@ -300,6 +300,7 @@
                                 '</div>'+
                             '</div>'
                             schoolMarker.on('click', this.dianji);
+                            schoolMarker.on('mousemove', this.dianji);
                             schoolMarker.setMap(this.map);
                             this.schoolmarkers.push(schoolMarker)
                         }
