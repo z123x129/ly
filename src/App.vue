@@ -63,4 +63,7 @@
         margin-bottom: 0;
       }
 }
+  .headerRow{
+    color: #333;
+  }
 </style>

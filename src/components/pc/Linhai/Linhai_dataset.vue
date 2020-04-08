@@ -36,17 +36,14 @@
                 var option = {};
                 if(this.type===1){
                     option = {
-                        legend: {
-                            textStyle: {
-                                color: "#fff",
-                                fontSize: 13,
-                            },
-                        },
                         tooltip: {},
                         dataset: {
                             source: [
-                                ['product', '重点人员', '陌生人员'],
+                                ['陌生人员'],
                             ],
+                        },
+                        grid:{
+                            top:'10%',
                         },
                         xAxis: {type: 'category',
                             axisLabel: {
@@ -73,34 +70,19 @@
                                     show: false
                                 },
                             },
-                            {
-                                type: 'value',
-                                axisLabel: {
-                                    formatter: '{value}',
-                                    show: true,
-                                    textStyle: {
-                                        color: '#fff',  //更改坐标轴文字颜色
-                                        fontSize : 10      //更改坐标轴文字大小
-                                    }
-                                },
-                                axisTick: {
-                                    show: false
-                                },
-                            }
                         ],
                         series: [
                             {type: 'bar',
                                 itemStyle: {
                                     normal: {
-                                        color: "#2AA956"
+                                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                                            offset: 0,
+                                            color: '#2AA956'
+                                        }]),
+                                        opacity: 1,
                                     }
-                                },},
-                            {type: 'bar',
-                                itemStyle: {
-                                    normal: {
-                                        color: "#167FE1"
-                                    }
-                                },},
+                                }
+                            },
                         ],
                         dataZoom: [
                             {
@@ -130,28 +112,49 @@
                             ],
                         },
                         xAxis: {type: 'category'},
-                        yAxis:{},
+                        yAxis:[
+
+                            {
+                                type: 'value',
+                                name: '单位：%',
+                                min: 0,
+                                max: 100,
+                                interval: 10,
+                                axisLabel: {
+                                    formatter: '{value}'
+                                }
+                            },
+                            {
+                            type: 'value',
+                            name: '单位：次',
+                            min: 0,
+                            max: 100,
+                            interval: 10,
+                            axisLabel: {
+                                formatter: '{value}'
+                            }
+                        },],
                         // Declare several bar series, each will be mapped
                         // to a column of dataset.source by default.
                         series: [
                             {type: 'bar',
                                 itemStyle: {
                                     normal: {
-                                        color: "#2AA956"
+                                        color: "#D87C7C"
                                     }
                                 },
                             },
                             {type: 'bar',
                                 itemStyle: {
                                     normal: {
-                                        color: "#167FE1"
+                                        color: "#919E8B"
                                     }
                                 },
                             },
                             {type: 'bar',
                                 itemStyle: {
                                     normal: {
-                                        color: "#F9D337"
+                                        color: "#D7AB82"
                                     }
                                 },
                             },
@@ -318,7 +321,7 @@
                 }else{
                     option = {
                         legend: {
-                            top:'7%',
+                            top:'5%',
                         },
                         tooltip: {},
                         dataset: {
@@ -327,28 +330,28 @@
                             ],
                         },
                         xAxis: {type: 'category',name:'学校'},
-                        yAxis:{name:'数量(个)'},
+                        yAxis:{name:'数量(人)'},
                         // Declare several bar series, each will be mapped
                         // to a column of dataset.source by default.
                         series: [
                             {type: 'bar',
                                 itemStyle: {
                                     normal: {
-                                        color: "#2AA956"
+                                        color: "#D87C7C"
                                     }
                                 },
                             },
                             {type: 'bar',
                                 itemStyle: {
                                     normal: {
-                                        color: "#167FE1"
+                                        color: "#919E8B"
                                     }
                                 },
                             },
                             {type: 'bar',
                                 itemStyle: {
                                     normal: {
-                                        color: "#F9D337"
+                                        color: "#D7AB82"
                                     }
                                 },
                             },

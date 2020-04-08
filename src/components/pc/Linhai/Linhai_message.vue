@@ -10,7 +10,7 @@
                         <div style="float: left">
                             <h4 style="font-weight: 400;color: #1f2f3d;">{{item.describe}}</h4>
                             <p v-if="item.type=='emphasis'" style="font-size: 14px;color: #5e6d82;margin-top: 8px">{{item.content.faceInfoName}} {{item.content.faceGroupName}}</p>
-                            <p v-if="item.type=='stranger'" style="font-size: 14px;color: #5e6d82;margin-top: 8px">{{item.content.ageGroup}} {{item.content.cn}}</p>
+                            <p v-if="item.type=='stranger'" style="font-size: 14px;color: #5e6d82;margin-top: 8px">{{item.content.gender}} {{item.content.ageGroup}}</p>
                             <p v-if="item.type=='school_violation'" style="font-size: 14px;color: #5e6d82;margin-top: 8px">{{item.content.user_login}} {{item.content.title}}</p>
                             <p v-if="item.type=='wgy_upload'" style="font-size: 14px;color: #5e6d82;margin-top: 8px">{{item.content.name}}</p>
                             <p v-if="item.type=='examine_stranger'" style="font-size: 14px;color: #5e6d82;margin-top: 8px">{{item.content.user_login}}</p>

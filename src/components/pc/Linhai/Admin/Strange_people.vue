@@ -2,7 +2,7 @@
     <div class="body">
         <div class="header">
             <div style="display: flex;justify-content: space-between;padding-right: 80px;padding-top: 10px">
-                <p>学校被拍陌生人数量排列柱状图</p>
+                <p>后厨违规进入数量图表</p>
                 <div style="display: flex;justify-content: space-between;">
                     <el-select style="margin-right: 10px" @change="getData" size="small" v-model="code" placeholder="请选择">
                         <el-option label="今天" value="day"></el-option>
@@ -51,6 +51,8 @@
         <el-table
                 :data="tableData"
                 border
+                stripe
+                header-row-class-name="headerRow"
                 style="width: 100%;">
             <el-table-column
                     align="center"
@@ -308,7 +310,10 @@
                         arr = []
                     }
                     this.$nextTick(function () {
-                        this.$refs.Dataset.init();
+                        let that = this;
+                        setTimeout(()=>{
+                            that.$refs.Dataset.init();
+                        },500)
                     })
                 })
             },

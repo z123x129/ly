@@ -25,30 +25,24 @@
             </div>
         </div>
         <div style="height: 10px"></div>
-        <div style="padding: 15px 20px;background-color: #fff;display: flex;justify-content: space-between">
+<!--        <div style="padding: 15px 20px;background-color: #fff;display: flex;justify-content: space-between;border: 1px solid #f0f2f5;">-->
+<!--        <div style="width: 10%"></div>-->
+<!--        <p v-if="value2" style="font-size: 16px;">{{data1.dirName}}当月统计数据</p>-->
+<!--        <el-switch-->
+<!--                v-model="value2"-->
+<!--                @change="getDataset"-->
+<!--                active-color="#13ce66"-->
+<!--                inactive-color="#ff4949"-->
+<!--                active-text="图表"-->
+<!--                inactive-text="列表">-->
+<!--        </el-switch>-->
 
-            <div v-if="value2" style="padding: 0 10px;background-color: #fff;">
-                <el-radio-group @change="getDataset" v-model="code" size="small">
-                    <el-radio-button label="当月"></el-radio-button>
-                    <el-radio-button label="上月"></el-radio-button>
-                </el-radio-group>
-            </div>
-            <div></div>
-        <el-switch
-                v-model="value2"
-                @change="getDataset"
-                active-color="#13ce66"
-                inactive-color="#ff4949"
-                active-text="图表"
-                inactive-text="列表">
-        </el-switch>
-
-        </div>
-        <div style="clear: both"></div>
-        <div v-if="value2" style="width:100%;height: 40vh;background: #fff;">
-            <Nested ref="Nested" :data="data1" style="width: 100%;height: 100%"></Nested>
-        </div>
-        <div v-if="!value2" style="width:100%;height: 40vh;background: #fff;">
+<!--        </div>-->
+<!--        <div style="clear: both"></div>-->
+<!--        <div v-if="value2" style="width:100%;height: 40vh;background: #fff;">-->
+<!--            <Nested ref="Nested" :data="data1" style="width: 100%;height: 100%"></Nested>-->
+<!--        </div>-->
+<!--        <div v-if="!value2" style="width:100%;height: 40vh;background: #fff;">-->
             <el-table
                     :data="tableData"
                     border
@@ -62,12 +56,12 @@
                 </el-table-column>
                 <el-table-column
                         prop="nor_ratio"
-                        label="当月健康证未过期比例"
+                        label="当月健康证未过期比例(%)"
                         align="center">
                 </el-table-column>
                 <el-table-column
                         prop="last_ratio"
-                        label="上月健康证未过期比例"
+                        label="上月健康证未过期比例(%)"
                         align="center">
                 </el-table-column>
                 <el-table-column
@@ -82,16 +76,16 @@
                 </el-table-column>
                 <el-table-column
                         prop="dis_pro"
-                        label="当月事件处理及时率"
+                        label="当月事件处理及时率(%)"
                         align="center">
                 </el-table-column>
                 <el-table-column
                         prop="last_dis_pro"
-                        label="上月事件处理及时率"
+                        label="上月事件处理及时率(%)"
                         align="center">
                 </el-table-column>
             </el-table>
-        </div>
+<!--        </div>-->
 <!--        <div style="width: 100%;height: 40vh;display: flex;justify-content: space-between;background: #f0f2f5">-->
 <!--            <div style="width: calc( 50% - 8px );background: #fff;height: 100%;overflow: hidden">-->
 <!--                <p style="padding:20px;border-bottom: 1px solid #f0f2f5;">各学校当月数据表</p>-->
@@ -151,7 +145,7 @@
     export default {
         components:{
             Dataset:()=>import('../Linhai_dataset'),
-            Nested:()=>import('../Nested'),
+            // Nested:()=>import('../Nested'),
             [Form.name]:Form,
             [FormItem.name]:FormItem,
             [Select.name]:Select,
@@ -234,43 +228,47 @@
                 }
             },
             getDataset(){
-                var codeid = '1';
-                if(this.code === '上月'){
-                    codeid = '2';
-                }
-                if(this.value1 === true){
-
-                    let params ={'dir_id':this.ids,'uid':this.$store.state.user.uid,code:codeid};
-                    this.$https.fetchPost('/plugin/statistics/api_index/getSchoolHealth',params).then((res) => {
-                        this.data1 = res;
-                        this.$nextTick(function () {
-                            let that = this;
-                            setTimeout(()=>{
-                                that.$refs.Nested.init();
-                            },500)
-                        })
+                if(this.value1 === false) {
+                    let paramss = {'indexCode': this.ids, 'uid': this.$store.state.user.uid,};
+                    this.$https.fetchPost('/plugin/statistics/api_index/dataContrast', paramss).then((res) => {
+                        this.tableData = res.dir;
                     })
-                }else{
-                    if(this.value2 === true){
-
-                        let params ={'indexCode':this.ids,'uid':this.$store.state.user.uid,'code':codeid};
-                        this.$https.fetchPost('/plugin/statistics/api_index/getRegionsHealth',params).then((res) => {
-                            this.data1 = res;
-                            this.$nextTick(function () {
-                                let that = this;
-                                setTimeout(()=>{
-                                    that.$refs.Nested.init();
-                                },500)
-                            })
-                        });
-                    }else{
-
-                        let paramss ={'indexCode':this.ids,'uid':this.$store.state.user.uid,};
-                        this.$https.fetchPost('/plugin/statistics/api_index/dataContrast',paramss).then((res) => {
-                            this.tableData = res.dir;
-                        })
-                    }
                 }
+                // var codeid = '1';
+                // if(this.code === '上月'){
+                //     codeid = '2';
+                // }
+                // if(this.value1 === true){
+                //     let params ={'dir_id':this.ids,'uid':this.$store.state.user.uid,code:codeid};
+                //     this.$https.fetchPost('/plugin/statistics/api_index/getSchoolHealth',params).then((res) => {
+                //         this.data1 = res;
+                //         this.$nextTick(function () {
+                //             let that = this;
+                //             setTimeout(()=>{
+                //                 that.$refs.Nested.init();
+                //             },500)
+                //         })
+                //     })
+                // }else{
+                //     if(this.value2 === true){
+                //
+                //         let params ={'indexCode':this.ids,'uid':this.$store.state.user.uid,'code':codeid};
+                //         this.$https.fetchPost('/plugin/statistics/api_index/getRegionsHealth',params).then((res) => {
+                //             this.data1 = res;
+                //             this.$nextTick(function () {
+                //                 let that = this;
+                //                 setTimeout(()=>{
+                //                     that.$refs.Nested.init();
+                //                 },500)
+                //             })
+                //         });
+                //     }else{
+                //         let paramss ={'indexCode':this.ids,'uid':this.$store.state.user.uid,};
+                //         this.$https.fetchPost('/plugin/statistics/api_index/dataContrast',paramss).then((res) => {
+                //             this.tableData = res.dir;
+                //         })
+                //     }
+                // }
             }
         },
     }

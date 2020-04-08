@@ -186,7 +186,7 @@ export const asyncRouterMap = [
                 name: 'Strange_people',
                 meta: {
                     icon: 'ios-contact',
-                    title: '陌生人员监控',
+                    title: '后厨违规监控',
                     role: [1],
                 },
                 component: Strange_people

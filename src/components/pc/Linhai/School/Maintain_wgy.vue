@@ -37,6 +37,9 @@
         <div style="width: 100%;height: 16px;background: #f0f2f5"></div>
         <el-table
                 :data="tableData"
+                border
+                stripe
+                header-row-class-name="headerRow"
                 :row-class-name="tableRowClassName"
                 style="width: 100%">
             <el-table-column

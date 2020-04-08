@@ -1,7 +1,116 @@
 <template>
     <div>
         <el-tabs v-model="activeName">
-            <el-tab-pane label="健康证清单" name="first">
+            <el-tab-pane label="抽查违规清单" name="first">
+                <el-form :inline="true" :model="formInline" class="demo-form-inline">
+                    <el-form-item label="选择区域:">
+                        <el-select @change="getSchool2" size="small" filterable clearable v-model="formInline2.indexCode">
+                            <el-option v-for="(item,index) in regions2" :label="item.name" :value="item.indexCode" :key="index"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="选择学校:">
+                        <el-select @change="getWgy" size="small" filterable clearable v-model="formInline2.dir_id">
+                            <el-option v-for="(item,index) in dir2" :label="item.dirName" :value="item.id" :key="index"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="选择网格员:">
+                        <el-select size="small" v-model="formInline2.user" placeholder="请优先选择学校">
+                            <el-option v-for="(item,index) in user" :label="item.user_login" :value="item.user_id" :key="index"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item style="margin-top: -2px">
+                        <el-button size="small" type="primary" @click="search2">搜索</el-button>
+                    </el-form-item>
+                </el-form>
+                <el-table
+                        :data="tableData2"
+                        border
+                        stripe
+                        header-row-class-name="headerRow"
+                        style="width: 100%">
+                    <el-table-column
+                            align="center"
+                            prop="id"
+                            label="ID">
+                    </el-table-column>
+                    <el-table-column
+                            align="center"
+                            prop="user_login"
+                            label="网格员">
+                    </el-table-column>
+                    <el-table-column
+                            align="center"
+                            prop="name"
+                            label="地区">
+                    </el-table-column>
+                    <el-table-column
+                            align="center"
+                            prop="dirName"
+                            label="学校">
+                    </el-table-column>
+                    <el-table-column
+                            align="center"
+                            prop="violation"
+                            label="违规选项">
+                    </el-table-column>
+                    <el-table-column
+                            align="center"
+                            label="图片信息">
+                        <template slot-scope="scope">
+                            <el-image
+                                    style="width: 35px; height: 35px"
+                                    :src="scope.row.enclosure[0]"
+                                    :preview-src-list="scope.row.enclosure">
+                            </el-image>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            align="center"
+                            prop="time"
+                            label="日期">
+                    </el-table-column>
+                    <el-table-column
+                            align="center"
+                            label="上报信息">
+                        <template slot-scope="scope">
+                            <el-button @click="look(scope.row.title,scope.row.content)" type="text" size="small">查看</el-button>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            align="center"
+                            label="处理结果">
+                        <template slot-scope="scope">
+                            <el-button v-if="scope.row.status==1" @click="look('处理结果',scope.row.describe,scope.row.re_path)" type="text" size="small">已处理</el-button>
+                            <span v-else>未处理</span>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <div style="padding: 15px;display: flex;justify-content: flex-end;">
+                    <el-pagination
+                            @size-change="handleSizeChange2"
+                            @current-change="handleCurrentChange2"
+                            :current-page="currentPage2"
+                            :page-sizes="[paginates, paginates*2, paginates*3, paginates*4]"
+                            :page-size="paginate2"
+                            background
+                            layout="total, sizes, prev, pager, next, jumper"
+                            :total="total2">
+                    </el-pagination>
+                </div>
+                <el-dialog
+                        :title=title
+                        :visible.sync="dialogFormVisible">
+                    <span v-html="content"></span>
+                    <div class="demo-image__preview">
+                        <el-image v-if="img"
+                                  style="width: 100px; height: 100px"
+                                  :src="img[0]"
+                                  :preview-src-list="img">
+                        </el-image>
+                    </div>
+                </el-dialog>
+            </el-tab-pane>
+            <el-tab-pane label="健康证清单" name="second">
                 <el-form :inline="true" :model="formInline" class="demo-form-inline">
                     <el-form-item label="选择区域:">
                         <el-select @change="getSchool" size="small" filterable clearable v-model="formInline.indexCode">
@@ -35,6 +144,8 @@
                 <el-table
                         :data="tableData"
                         border
+                        stripe
+                        header-row-class-name="headerRow"
                         :row-class-name="tableRowClassName"
                         style="width: 100%">
                     <el-table-column
@@ -108,114 +219,7 @@
                     </el-pagination>
                 </div>
             </el-tab-pane>
-            <el-tab-pane label="抽查违规清单" name="second">
-                <el-form :inline="true" :model="formInline" class="demo-form-inline">
-                    <el-form-item label="选择区域:">
-                        <el-select @change="getSchool2" size="small" filterable clearable v-model="formInline2.indexCode">
-                            <el-option v-for="(item,index) in regions2" :label="item.name" :value="item.indexCode" :key="index"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="选择学校:">
-                        <el-select @change="getWgy" size="small" filterable clearable v-model="formInline2.dir_id">
-                            <el-option v-for="(item,index) in dir2" :label="item.dirName" :value="item.id" :key="index"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="选择网格员:">
-                        <el-select size="small" v-model="formInline2.user" placeholder="请优先选择学校">
-                            <el-option v-for="(item,index) in user" :label="item.user_login" :value="item.user_id" :key="index"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item style="margin-top: -2px">
-                        <el-button size="small" type="primary" @click="search2">搜索</el-button>
-                    </el-form-item>
-                </el-form>
-                <div style="width: 100%;height: 16px;background: #f0f2f5"></div>
-                <el-table
-                        :data="tableData2"
-                        border
-                        style="width: 100%">
-                    <el-table-column
-                            align="center"
-                            prop="id"
-                            label="ID">
-                    </el-table-column>
-                    <el-table-column
-                            align="center"
-                            prop="user_login"
-                            label="网格员">
-                    </el-table-column>
-                    <el-table-column
-                            align="center"
-                            prop="name"
-                            label="地区">
-                    </el-table-column>
-                    <el-table-column
-                            align="center"
-                            prop="dirName"
-                            label="学校">
-                    </el-table-column>
-                    <el-table-column
-                            align="center"
-                            prop="violation"
-                            label="违规选项">
-                    </el-table-column>
-                    <el-table-column
-                            align="center"
-                            label="图片信息">
-                        <template slot-scope="scope">
-                            <el-image
-                                    style="width: 100px; height: 100px"
-                                    :src="scope.row.enclosure[0]"
-                                    :preview-src-list="scope.row.enclosure">
-                            </el-image>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                            align="center"
-                            prop="time"
-                            label="日期">
-                    </el-table-column>
-                    <el-table-column
-                            align="center"
-                            label="上报信息">
-                        <template slot-scope="scope">
-                            <el-button @click="look(scope.row.title,scope.row.content)" type="text" size="small">查看</el-button>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                            align="center"
-                            label="处理结果">
-                        <template slot-scope="scope">
-                            <el-button v-if="scope.row.status==1" @click="look('处理结果',scope.row.describe,scope.row.re_path)" type="text" size="small">已处理</el-button>
-                            <span v-else>未处理</span>
-                        </template>
-                    </el-table-column>
-                </el-table>
-                <div style="padding: 15px;display: flex;justify-content: flex-end;">
-                    <el-pagination
-                            @size-change="handleSizeChange2"
-                            @current-change="handleCurrentChange2"
-                            :current-page="currentPage2"
-                            :page-sizes="[paginates, paginates*2, paginates*3, paginates*4]"
-                            :page-size="paginate2"
-                            background
-                            layout="total, sizes, prev, pager, next, jumper"
-                            :total="total2">
-                    </el-pagination>
-                </div>
-                <el-dialog
-                        :title=title
-                        :visible.sync="dialogFormVisible">
-                    <span v-html="content"></span>
-                    <div class="demo-image__preview">
-                        <el-image v-if="img"
-                                style="width: 100px; height: 100px"
-                                :src="img[0]"
-                                :preview-src-list="img">
-                        </el-image>
-                    </div>
-                </el-dialog>
-            </el-tab-pane>
+
         </el-tabs>
     </div>
 </template>
