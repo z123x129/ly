@@ -72,7 +72,7 @@
 
                             vnode.style.left = left + 'px'
                             vnode.style.top = top + 'px'
-                            that.resize()
+                            that.resize_1()
 
                         })
                         document.onmouseup = (() => {
@@ -82,12 +82,15 @@
                             document.onmousemove = document.onmouseup = null
                         })
                     })
-                    window.onresize = (() => {
-                        vnode.style.left = "50%"
-                        vnode.style.top = "50%"
-                    })
+                    // window.onresize = (() => {
+                    //     vnode.style.left = "50%"
+                    //     vnode.style.top = "50%"
+                    // })
                 }
             }
+        },
+        mounted(){
+            this.resize();
         },
         methods: {
             cancel() {
@@ -103,6 +106,9 @@
             },
             showvideo(){
                 this.$emit("showvideo")
+            },
+            resize_1(){
+                this.$emit("resize_1")
             }
         }
     }
