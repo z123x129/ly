@@ -245,6 +245,7 @@
                                     itemStyle: {
                                         normal: {
                                             borderColor: '#ffffff', //区域边框颜色
+                                            borderWidth:3, //区域边框宽度
                                             areaColor: '#2648aa', //区域填充颜色
                                             color: {
                                                 type: 'linear',
