@@ -25,6 +25,7 @@
             return{
                 chart: null,
                 mapInfo:json,
+                mapcolor:'#85a5ff'
             }
         },
         mounted() {
@@ -122,7 +123,7 @@
                 // ];
                 this.chart.showLoading();
                 var result = this.mapInfo[initData]["mapInfo"];
-
+                var that = this
                 echarts.registerMap(initData, result); //加载地图数据
                 this.chart.hideLoading();
                 let option = null;
@@ -138,11 +139,14 @@
                         //     // return params.name+"的摄像头个数："+params.value[2];
                         // }
                             formatter: function (params) {
+                                if(params.color){
+                                    that.mapcolor = params.color
+                                }
                                 if(typeof(params.data.value)== "object")
                                 {
                                     // return params.data.name+'检测到异常数:'+params.data.value[2]+"个";
                                     var tipHtml = '';
-                                    tipHtml = '<div style="display: inline-block;background:#fff;border-radius:15px;padding:20px 15px;box-shadow:0 0 10px #666">'+
+                                    tipHtml = '<div style="display: inline-block;border-radius:3px;background:rgba(255,255,255,0.85);padding:15px;box-shadow:0 0 10px #666">'+
                                                 '<div style="font-size:18px;line-height:20px;padding-bottom: 10px;color:#333">' + params.data.name + '</div>'+
                                                 '<p style="font-size: 15px;color: #666;line-height: 25px;">异常学校数：<span style="color: red;font-size:16px">' + params.data.value2[0] + '</span></p>'+
                                                 '<p style="font-size: 15px;color: #666;line-height: 25px;">后厨人数：<span style="font-size: 16px;color:#555">' + params.data.value2[1] + '</span></p>'+
@@ -186,8 +190,8 @@
                         min: 0,
                         max: 7,
                         inRange: {
-                            // color: ['#002766', '#003a8c', '#0050b3', '#096dd9', '#1890ff', ]
-                            color: ['#ff7875', '#ffc069', '#fff566', '#95de64', '#5cdbd3', '#69c0ff','#b37feb',]
+                            // color: ['#ff7875', '#ffc069', '#fff566', '#95de64', '#5cdbd3', '#69c0ff','#b37feb',]
+                            color: ['rgba(255, 77, 79,0.75)', 'rgba(255, 192, 105,0.75)', 'rgba(255, 245, 102,0.75)', 'rgba(149,222,100,0.75)', 'rgba(92,219,211,0.75)', 'rgba(105,192,255,0.75)','rgba(179,127,235,0.75)',]
                         },
                         textStyle: {
                             color: '#000'
@@ -199,6 +203,9 @@
                     geo: {
                         map:initData,
                         zoom: 1,   //地图初始大小，这里是关键，一定要放在 series中  因为geo在series中会加载，所以zoom放在此处
+                        itemStyle:{
+                            areaColor:'transparent'
+                        }
                         // show: true,
                         // roam: true,
                     },
@@ -241,6 +248,7 @@
                                     itemStyle: {
                                         normal: {
                                             borderColor: '#ffffff', //区域边框颜色
+                                            borderWidth:3, //区域边框宽度
                                             areaColor: '#2648aa', //区域填充颜色
                                             color: {
                                                 type: 'linear',
@@ -257,7 +265,7 @@
                                             },
                                         },
                                         emphasis: {
-                                            areaColor: '#1890ff',
+                                            areaColor: 'rgba(24, 144, 255,0.7)',
                                             borderWidth: 0,
                                         }
                                     }
@@ -368,7 +376,7 @@
             {
                 this.chart.showLoading();
                 var result = this.mapInfo[city]["mapInfo"];
-
+                var mcolor = this.mapcolor
                 echarts.registerMap(city, result); //加载地图数据
                 this.chart.hideLoading();
                 let option = null;
@@ -381,7 +389,7 @@
                             {
                                 // return params.data.name+'检测到异常数:'+params.data.value[2]+"个";
                                 var tipHtml = '';
-                                tipHtml = '<div style="display: inline-block;background:#fff;border-radius:15px;padding:20px 15px;box-shadow:0 0 10px #666">'+
+                                tipHtml = '<div style="display: inline-block;border-radius:3px;background:rgba(255,255,255,0.85);padding:15px;box-shadow:0 0 10px #666">'+
                                             '<div style="font-size:18px;line-height:20px;padding-bottom: 10px;color:#333">' + params.data.name + '</div>'+
                                             '<p style="font-size: 15px;color: #666;line-height: 25px;">异常人数：<span style="color: red;font-size:16px">' + params.data.value[2] + '</span></p>'+
                                             '<p style="font-size: 15px;color: #666;line-height: 25px;">后厨人数：<span style="font-size: 16px;color:#555">' + params.data.value[3] + '</span></p>'+
@@ -436,7 +444,7 @@
                         },
                         itemStyle: {
                             normal: {
-                                areaColor: '#0050b3',
+                                areaColor: mcolor,
                                     // {
                             //         type: 'linear',
                             //         x: 0,
@@ -455,7 +463,7 @@
                             //     shadowBlur: 20
                             },
                             emphasis: {
-                                areaColor: '#0050b3'
+                                areaColor: mcolor
                                 //     {
                                 //     type: 'linear',
                                 //     x: 0,

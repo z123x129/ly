@@ -27,7 +27,9 @@
                 <div id="container" class="map"></div>
             </div>
         </div>
-        <videoDialog class="dialog" :visible.sync="videoVisible" @resize="resize" @resize_1="resize_1" @cancel="hideVideo" >
+
+        <videoDialog class="dialog" :visible.sync="videoVisible" @resize="resize" @resize_1="resize_1" @showvideo="showvideo" @cancel="hideVideo" >
+
             <div class="videobox">
                 <div class="demo">
                     <p>摄像点选择:</p>
@@ -160,6 +162,10 @@
             },
             hideVideo(){//隐藏视频插件
                 this.app[this.ddd].JS_HideWnd();
+            },
+            showvideo(){//显示视频插件
+                this.app[this.ddd].JS_ShowWnd();
+                // console.log('1111')
             },
             resize_1(){//拖动窗口时视频插件跟随移动
                 this.$refs.H1.resizeWindow(this.$refs.H1.$el.offsetHeight,this.$refs.H1.$el.offsetWidth);
@@ -295,6 +301,7 @@
                                 '</div>'+
                             '</div>'
                             schoolMarker.on('click', this.dianji);
+                            schoolMarker.on('mousemove', this.dianji);
                             schoolMarker.setMap(this.map);
                             this.schoolmarkers.push(schoolMarker)
                         }
