@@ -191,7 +191,7 @@
                         max: 7,
                         inRange: {
                             // color: ['#ff7875', '#ffc069', '#fff566', '#95de64', '#5cdbd3', '#69c0ff','#b37feb',]
-                            color: ['rgba(255, 77, 79,0.6)', 'rgba(255, 192, 105,0.6)', 'rgba(255, 245, 102,0.6)', 'rgba(149,222,100,0.6)', 'rgba(92,219,211,0.6)', 'rgba(105,192,255,0.6)','rgba(179,127,235,0.6)',]
+                            color: ['rgba(255, 77, 79,0.75)', 'rgba(255, 192, 105,0.75)', 'rgba(255, 245, 102,0.75)', 'rgba(149,222,100,0.75)', 'rgba(92,219,211,0.75)', 'rgba(105,192,255,0.75)','rgba(179,127,235,0.75)',]
                         },
                         textStyle: {
                             color: '#000'
@@ -203,6 +203,9 @@
                     geo: {
                         map:initData,
                         zoom: 1,   //地图初始大小，这里是关键，一定要放在 series中  因为geo在series中会加载，所以zoom放在此处
+                        itemStyle:{
+                            areaColor:'transparent'
+                        }
                         // show: true,
                         // roam: true,
                     },
@@ -262,7 +265,7 @@
                                             },
                                         },
                                         emphasis: {
-                                            areaColor: '#1890ff',
+                                            areaColor: 'rgba(24, 144, 255,0.7)',
                                             borderWidth: 0,
                                         }
                                     }
