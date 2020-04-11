@@ -57,17 +57,20 @@
             <el-table-column
                     align="center"
                     prop="id"
-                    label="ID">
+                    label="ID"
+                    width="80">
             </el-table-column>
             <el-table-column
                     align="center"
                     prop="name"
-                    label="抓拍区域">
+                    label="抓拍区域"
+                    min-width="150">
             </el-table-column>
             <el-table-column
                     align="center"
                     prop="cameraName"
-                    label="抓拍地点">
+                    label="抓拍地点"
+                    min-width="150">
             </el-table-column>
 <!--            <el-table-column-->
 <!--                    align="center"-->
@@ -82,7 +85,8 @@
 <!--            </el-table-column>-->
             <el-table-column
                     align="center"
-                    label="抓拍图片">
+                    label="抓拍图片"
+                    width="100">
                 <template slot-scope="scope">
                     <el-image
                             style="width: 35px; height: 35px"
@@ -94,27 +98,32 @@
             <el-table-column
                     align="center"
                     prop="gender"
-                    label="性别">
+                    label="性别"
+                    width="100">
             </el-table-column>
             <el-table-column
                     align="center"
                     prop="ageGroup"
-                    label="年龄段">
+                    label="年龄段"
+                    width="100">
             </el-table-column>
             <el-table-column
                     align="center"
                     prop="glass"
-                    label="是否戴眼镜">
+                    label="是否戴眼镜"
+                    width="100">
             </el-table-column>
             <el-table-column
                     align="center"
                     prop="faceTime"
-                    label="抓拍时间">
+                    label="抓拍时间"
+                    width="200">
             </el-table-column>
             <el-table-column
                     align="center"
                     prop="stranger_status"
-                    label="当前状态">
+                    label="当前状态"
+                    width="100">
                 <template slot-scope="scope">
                     <span v-if="scope.row.stranger_status==0">未处理</span>
                     <span v-if="scope.row.stranger_status==1">已处理</span>
@@ -124,7 +133,7 @@
                     align="center"
                     fixed="right"
                     label="操作"
-                    width="100">
+                    width="200">
                 <template slot-scope="scope">
                     <el-button v-if="scope.row.stranger_status==0" @click="imgshowBtn(scope.row.bkgUrl)" type="text" size="small">查看原图</el-button>
                     <el-button v-if="scope.row.stranger_status==0" @click="remind(scope.row.id)" type="text" size="small">提醒</el-button>

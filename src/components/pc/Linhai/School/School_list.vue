@@ -27,7 +27,8 @@
             <el-table-column
                     align="center"
                     prop="id"
-                    label="学校编号">
+                    label="学校编号"
+                    width="100">
             </el-table-column>
             <el-table-column
                     align="center"
@@ -57,7 +58,8 @@
             <el-table-column
                     align="center"
                     fixed="right"
-                    label="操作">
+                    label="操作"
+                    width="200">
                 <template slot-scope="scope">
                     <el-button @click="dialogShow(2,scope.row)" type="text" size="small">上传报告</el-button>
                     <el-button @click="goViolation(scope.row.id)" type="text" size="small">查看违规</el-button>
