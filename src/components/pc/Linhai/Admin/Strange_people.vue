@@ -351,9 +351,9 @@
                         'stranger_status': text,
                     })
                 }
-                let params ={'xlsName':'陌生人员列表','isImg':'3,4','out_img':'3,4','xlsCell':xlsCell,'xlsData':xlsData,};
+                let params ={'uid':this.$store.state.user.uid};
                 params = this.$secret_key.func(this.$store.state.on_off, params);
-                this.$https.fetchPost('/plugin/statistics/api_index/out_excel',params).then((res) => {
+                this.$https.fetchPost('/plugin/statistics/excel/out_manageStranger',params).then((res) => {
                     window.location.href=res;
                 })
             },

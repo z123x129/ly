@@ -1,7 +1,8 @@
 <template>
-    <div style="padding: 20px;background: #fff">
-        <div class="block">
-            <el-timeline>
+    <div style="position: relative;width: 100%;height: 100%;">
+        <img v-if="tableData == ''" style="width: 40%;position: absolute;top: 0;bottom: 0;left: 0;right: 0;margin: auto" src="./images/nothing.png" />
+        <div v-if="tableData" class="block">
+            <el-timeline style="width: 60%">
                 <el-timeline-item v-for="(item,index) in tableData" :key="index" :timestamp="item.content.faceTime?item.content.faceTime:item.content.timeStr" placement="top">
                     <el-card>
                         <img v-if="item.content.re_path" style="float: left;width: 50px;height: 50px;margin-right: 10px;border-radius: 8px" :src="item.content.re_path[0]" />
@@ -41,6 +42,7 @@
         },
         mounted() {
             this.tableData = this.$store.state.route.messageList;
+            this.$store.commit("msgStart");
         },
         methods:{
             gotocont(type){

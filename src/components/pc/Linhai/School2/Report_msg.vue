@@ -25,7 +25,6 @@
                 <el-button size="small" type="primary" @click="search">搜索</el-button>
             </el-form-item>
         </el-form>
-        <div style="width: 100%;height: 16px;background: #f0f2f5"></div>
         <el-table
                 border
                 stripe
@@ -53,7 +52,7 @@
                     min-width="80">
                 <template slot-scope="scope">
                     <el-image v-if="scope.row.path&&scope.row.path.length>0"
-                            style="width: 60px; height: 60px;"
+                            style="width: 35px; height: 35px;"
                             :src="scope.row.path[0]"
                             :preview-src-list="scope.row.path">
                     </el-image>
