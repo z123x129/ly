@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <chartcard style="background: #fff;padding: 20px 0" :list="list" ref="child"></chartcard>
+    <div style="padding: 15px 0 15px 15px;">
+        <chartcard style="background: #fff;padding: 20px" :list="list" ref="child"></chartcard>
         <div class="cont">
             <Doughnut ref="Doughnut" :data="config1" style="width: 40%;height: 100%"></Doughnut>
             <Basic :data="config1" style="width: 60%;height: 100%"></Basic>
@@ -61,6 +61,5 @@
     display: flex;
     justify-content: space-around;
     background: #fff;
-    margin: 15px 0;
 }
 </style>

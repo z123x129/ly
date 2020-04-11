@@ -14,6 +14,7 @@ import notfount from '@/components/error-page/404.vue'
 import Key_personnel from '@/components/pc/Linhai/Admin/Key_personnel.vue'
 import Strange_people from '@/components/pc/Linhai/Admin/Strange_people.vue'
 import Contrast from '@/components/pc/Linhai/Admin/Contrast.vue'
+import Contrast_month from '@/components/pc/Linhai/Admin/Contrast_month.vue'
 import School_show from '@/components/pc/Linhai/Admin/School_show.vue'
 import showVideo from '@/components/pc/Linhai/Admin/showVideo.vue'
 import reVideo from '@/components/pc/Linhai/Admin/reVideo.vue'
@@ -97,7 +98,7 @@ export const asyncRouterMap = [
                 path: '/Setting',
                 name: 'Setting',
                 meta: {
-                    icon: 'md-arrow-dropdown-circle',
+                    icon: 'logo-buffer',
                     title: '设置',
                     role: [1,2,3],
                     hideInMenu: true,
@@ -200,6 +201,16 @@ export const asyncRouterMap = [
                     role: [1],
                 },
                 component: Contrast
+            },
+            {
+                path: 'Contrast_month',
+                name: 'Contrast_month',
+                meta: {
+                    icon: 'md-trending-up',
+                    title: '月数据对比',
+                    role: [1],
+                },
+                component: Contrast_month
             },
             {
                 path: 'School_show',

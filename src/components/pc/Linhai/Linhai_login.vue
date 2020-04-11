@@ -80,10 +80,12 @@
                     this.$store.commit('getUid',res_data.id);
                     this.$store.commit('getJurisdiction',res_data.user_type);
                     this.$store.commit("setJurisdiction",res_data.user_type);
+                    this.$store.commit("getImg",res_data.avatar);
                     Message.success('登录成功');
-                    router.addRoutes(getRouterByOrder(asyncRouterMap, Number(Base64.decode(res_data.user_type))))
+                    router.addRoutes(getRouterByOrder(asyncRouterMap, Number(Base64.decode(res_data.user_type))));
                     this.$store.commit("setRouteInfo", asyncRouterMap);
-                    this.$router.push('/')
+                    this.$router.push('/');
+                    this.$router.go(0);
                 })
             },
         }

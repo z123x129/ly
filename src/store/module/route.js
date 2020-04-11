@@ -15,6 +15,7 @@ export default {
     state:{
         routeInfo:[],
         messageList:[],
+        msgNum: 0,
         jurisdiction:"",
         http:"http://js2.300c.cn/lhyd/"
     },
@@ -24,6 +25,10 @@ export default {
         },
         getMessage:function (state, data) {
             state.messageList.unshift(data);
+            state.msgNum = state.messageList.length;
+        },
+        msgStart:function (state) {
+            state.msgNum = 0
         },
         setJurisdiction:function(state, data)
         {

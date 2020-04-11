@@ -7,7 +7,7 @@
 <script>
     import echarts from 'echarts'
     export default {
-        props:['data'],
+        props:['data','type'],
         data(){
             return{
                 chart: null
@@ -64,65 +64,178 @@
                 total = total / 10000;
 
                 // 指定图表的配置项和数据
-                var option = {
-                    title: {
-                        zlevel: 0,
-                        x: 'center',
-                        y: 'center',
-                        text: [
-                            '{value|' + total + '}',
-                            '{name|总数}',
-                        ].join('\n'),
-                        textStyle: {
-                            rich: {
-                                value: {
-                                    color: '#333',
-                                    fontSize: 22,
-                                    fontWeight: 'bold',
-                                    lineHeight: 25,
-                                },
-                                name: {
-                                    fontSize: 16,
-                                    color: '#999',
-                                    lineHeight: 25
+                var option = {};
+                if(this.type==1){
+                    option = {
+                        title: {
+                            zlevel: 0,
+                            x: 'center',
+                            y: 'center',
+                            text: [
+                                '{value|' + total + '}',
+                                '{name|健康证总数}',
+                            ].join('\n'),
+                            textStyle: {
+                                rich: {
+                                    value: {
+                                        color: '#fff',
+                                        fontSize: 22,
+                                        fontWeight: 'bold',
+                                        lineHeight: 25,
+                                    },
+                                    name: {
+                                        fontSize: 16,
+                                        color: '#d4d4d4',
+                                        lineHeight: 25
+                                    },
                                 },
                             },
                         },
-                    },
-                    color: ['#ff4d4f','#ffa940','#ffec3d', '#73d13d','#40a9ff','#9254de'],
-                    tooltip: {
-                        trigger: 'item',
-                        formatter: '{a} <br/>{b}: {c} ({d}%)'
-                    },
-                    legend: {
-                        orient: 'vertical',
-                        right: 10,
-                        data: ["健康证过期数", "健康证未到期数"]
-                    },
-                    series: [
-                        {
-                            name: '健康证信息',
-                            type: 'pie',
-                            radius: ['50%', '70%'],
-                            avoidLabelOverlap: false,
-                            zlevel: 1,
-                            label: {
-                                normal: {
-                                    padding: [30, 30, 30, 30],
-                                    backgroundColor: '#fff',
-                                    show: false,
-                                    position: 'center'
+                        color: ['#95bb42','#23adb0'],
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: '{a} <br/>{b}: {c} ({d}%)'
+                        },
+                        series: [
+                            {
+                                name: '健康证信息',
+                                type: 'pie',
+                                radius: ['50%', '70%'],
+                                avoidLabelOverlap: false,
+                                zlevel: 1,
+                                label: {
+                                    normal: {
+                                        padding: [30, 30, 30, 30],
+                                        backgroundColor: '#fff',
+                                        show: false,
+                                        position: 'center'
+                                    },
+                                },
+                                labelLine: {
+                                    normal: {
+                                        show: false
+                                    }
+                                },
+                                data: this.data
+                            }
+                        ]
+                    };
+                }else if(this.type==2){
+                    option = {
+                        title: {
+                            zlevel: 0,
+                            x: 'center',
+                            y: 'center',
+                            text: [
+                                '{value|' + total + '}',
+                                '{name|学校个数}',
+                            ].join('\n'),
+                            textStyle: {
+                                rich: {
+                                    value: {
+                                        color: '#fff',
+                                        fontSize: 22,
+                                        fontWeight: 'bold',
+                                        lineHeight: 25,
+                                    },
+                                    name: {
+                                        fontSize: 16,
+                                        color: '#d4d4d4',
+                                        lineHeight: 25
+                                    },
                                 },
                             },
-                            labelLine: {
-                                normal: {
-                                    show: false
-                                }
+                        },
+                        color: ['#de5d3d','#fab847'],
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: '{a} <br/>{b}: {c} ({d}%)'
+                        },
+                        series: [
+                            {
+                                name: '学校信息',
+                                type: 'pie',
+                                radius: ['50%', '70%'],
+                                avoidLabelOverlap: false,
+                                zlevel: 1,
+                                label: {
+                                    normal: {
+                                        padding: [30, 30, 30, 30],
+                                        backgroundColor: '#fff',
+                                        show: false,
+                                        position: 'center'
+                                    },
+                                },
+                                labelLine: {
+                                    normal: {
+                                        show: false
+                                    }
+                                },
+                                data: this.data
+                            }
+                        ]
+                    };
+                }else{
+                    option = {
+                        title: {
+                            zlevel: 0,
+                            x: 'center',
+                            y: 'center',
+                            text: [
+                                '{value|' + total + '}',
+                                '{name|总数}',
+                            ].join('\n'),
+                            textStyle: {
+                                rich: {
+                                    value: {
+                                        color: '#333',
+                                        fontSize: 22,
+                                        fontWeight: 'bold',
+                                        lineHeight: 25,
+                                    },
+                                    name: {
+                                        fontSize: 16,
+                                        color: '#999',
+                                        lineHeight: 25
+                                    },
+                                },
                             },
-                            data: this.data
-                        }
-                    ]
-                };
+                        },
+                        color: ['#ff4d4f','#ffa940','#ffec3d', '#73d13d','#40a9ff','#9254de'],
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: '{a} <br/>{b}: {c} ({d}%)'
+                        },
+                        legend: {
+                            orient: 'vertical',
+                            right: 10,
+                            data: ["健康证过期数", "健康证未到期数"]
+                        },
+                        series: [
+                            {
+                                name: '健康证信息',
+                                type: 'pie',
+                                radius: ['50%', '70%'],
+                                avoidLabelOverlap: false,
+                                zlevel: 1,
+                                label: {
+                                    normal: {
+                                        padding: [30, 30, 30, 30],
+                                        backgroundColor: '#fff',
+                                        show: false,
+                                        position: 'center'
+                                    },
+                                },
+                                labelLine: {
+                                    normal: {
+                                        show: false
+                                    }
+                                },
+                                data: this.data
+                            }
+                        ]
+                    };
+                }
                 // 使用刚指定的配置项和数据显示图表。
                 this.chart.setOption(option);
             }

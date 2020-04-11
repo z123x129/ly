@@ -2,58 +2,63 @@
     <div class="box">
         <div class="logo">
             <h1 class="border1">市场监督局指挥实时数据大屏</h1>
+            <div class="tianqi"><div id="he-plugin-simple"></div></div>
+            <div class="Newdata"><i class="el-icon-time"></i>{{ ' ' + nowDate + ' ' + nowTime + ' ' + nowWeek }}</div>
         </div>
         <div class="content">
             <div class="cont_flex">
                 <div class="cont1">
-                    <dv-border-box-11 title="全市总览" style="height: 42%" class="box1" ref="box1" :titleWidth=150>
-                        <h2></h2>
+                    <dv-border-box-7 title="全市总览" style="height: 42%" class="box1" ref="box1" :titleWidth=150>
+                        <h2>全市总览</h2>
                         <ul style="font-size: 12px;padding: 20px;">
                             <li v-for="(item,index) in list.general" :key="index">{{item.title}} {{item.value}}</li>
                         </ul>
-                    </dv-border-box-11>
-                    <dv-border-box-11 title="健康证排行榜" style="height: 58%;padding: 15px 10px 20px 5px" class="box1" ref="box2" :titleWidth=160>
-                        <h2 style="text-indent: 15px"></h2>
+                    </dv-border-box-7>
+                    <dv-border-box-7 title="健康证排行榜" style="height: 58%;padding: 15px 10px 20px 5px" class="box1" ref="box2" :titleWidth=160>
+                        <h2 style="text-indent: 15px">健康证排行榜</h2>
                         <Mixed :data="list.area_health" ref="Mixed" style="width: 100%;height: 100%"></Mixed>
-                    </dv-border-box-11>
+                    </dv-border-box-7>
                 </div>
                 <div style="position: relative" class="cont2">
                     <div @click="back" v-if="showBack">
                         <dv-decoration-9 ref="button_1" style="z-index:999;cursor: pointer;width:50px;height:50px;position: absolute;top: 20px;left: 20px;color: #7ec699;text-shadow: 0 0 3px #7acaec;">返回</dv-decoration-9>
                     </div>
                     <Map style="width: 100%;height: 100%" :address_info="address_info" :town_name="city_name" ref="map" @showButton="showButton"  @getAreaInfo="getAreaInfo"></Map>
-                    <ul>
-                        <li>学校个数: <span>{{regions_chart.school_general.all_school}}</span></li>
-                        <li>没有异常的学校: <span>{{regions_chart.school_general.normal_school}}</span></li>
-                        <li>有异常的学校: <span>{{regions_chart.school_general.anomaly_school}}</span></li>
-                    </ul>
+<!--                    <ul>-->
+<!--                        <li>学校个数: <span>{{regions_chart.school_general.all_school}}</span></li>-->
+<!--                        <li>没有异常的学校: <span>{{regions_chart.school_general.normal_school}}</span></li>-->
+<!--                        <li>有异常的学校: <span>{{regions_chart.school_general.anomaly_school}}</span></li>-->
+<!--                    </ul>-->
                 </div>
                 <div class="cont1">
-                    <dv-border-box-11 title="健康证图表" class="box1" ref="box3" :titleWidth=160>
-                        <h2></h2>
-                        <Customized :data="regions_chart.area_chart" ref="Customized" style="width: 100%;height: 100%"></Customized>
-                    </dv-border-box-11>
-                    <dv-border-box-11 title="学校违规情况" class="box1" ref="box4" :titleWidth=160>
-                        <h2></h2>
+                    <dv-border-box-7 title="健康证图表" class="box1" ref="box3" :titleWidth=160>
+                        <h2>健康证图表</h2>
+                        <div style="width: 100%;height: 100%;display: flex;justify-content: space-between;margin-top: -20px">
+                            <Customized :type="1" :data="regions_chart.area_chart" ref="Customized" style="width: 50%;height: 100%"></Customized>
+                            <Customized :type="2" :data="regions_chart.school_general" ref="Customized1" style="width: 50%;height: 100%"></Customized>
+                        </div>
+                    </dv-border-box-7>
+                    <dv-border-box-7 title="学校违规情况" class="box1" ref="box4" :titleWidth=160>
+                        <h2>学校违规情况</h2>
                         <dv-scroll-board ref="srroll_1" @click="getWeigui" :config="config2" style="width:94%;height:82%;margin: 3%" />
-                    </dv-border-box-11>
+                    </dv-border-box-7>
                 </div>
             </div>
             <div class="cont_flex2">
                 <div class="cont3">
-                    <dv-border-box-11 title="当月后厨违规进入情况" class="box2" ref="box5"  :titleWidth=280>
+                    <dv-border-box-7 title="当月后厨违规进入情况" class="box2" ref="box5"  :titleWidth=280>
                         <div style="display: flex;justify-content:flex-start">
-                            <h2></h2>
+                            <h2>当月后厨违规进入情况</h2>
                             <!--                            <span style="margin-left: 20px;color: #95f204;font-size: 15px">{{city_name}}</span>-->
                         </div>
                         <Dataset :data="regions_chart.stat_people" :type="1" ref="Dataset" style="width: 100%;height: 100%"></Dataset>
-                    </dv-border-box-11>
+                    </dv-border-box-7>
                 </div>
                 <div class="cont1">
-                    <dv-border-box-11 title="实时抓拍数据" class="box2" ref="box6"  :titleWidth=160>
-                        <h2></h2>
+                    <dv-border-box-7 title="实时抓拍数据" class="box2" ref="box6"  :titleWidth=160>
+                        <h2>实时抓拍数据</h2>
                         <dv-scroll-board @click="gotoStock" ref="srroll_2" :config="config" style="width:94%;height:82%;margin: 3%" />
-                    </dv-border-box-11>
+                    </dv-border-box-7>
                 </div>
             </div>
         </div>
@@ -68,7 +73,7 @@
             Mixed:()=>import('./New_mixed'),
             Map:()=>import('./component/Map'),
             Dataset:()=>import('./Linhai_dataset'),
-            Customized:()=>import('./Customized'),
+            Customized:()=>import('./Linhai_doughnut'),
             [Select.name]:Select,
             [Option.name]:Option,
         },
@@ -80,16 +85,8 @@
                 },
                 city_name:"临海市",
                 regions_chart:{
-                    area_chart:{
-                        all_health:0,
-                        anomaly_health:0,
-                        normal_health:0,
-                    },
-                    school_general:{
-                        all_school:0,
-                        anomaly_school:0,
-                        normal_school:0,
-                    },
+                    area_chart:[],
+                    school_general:[],
                     stat_people:[],
                 },
                 indexCode:'',
@@ -102,10 +99,45 @@
                 config2:{},
                 data:[],
                 data2:[],
-                town_name:"临海市"
+                town_name:"临海市",
+                nowDate: "",    // 当前日期
+                nowTime: "",    // 当前时间
+                nowWeek: ""     // 当前星期
             }
         },
         methods:{
+            currentTime() {
+                setInterval(this.getDate, 500);
+            },
+            getDate: function() {
+                var _this = this;
+                let yy = new Date().getFullYear();
+                let mm = new Date().getMonth() + 1;
+                let dd = new Date().getDate();
+                let week = new Date().getDay();
+                let hh = new Date().getHours();
+                let mf =
+                    new Date().getMinutes() < 10
+                        ? "0" + new Date().getMinutes()
+                        : new Date().getMinutes();
+                if (week == 1) {
+                    this.nowWeek = "星期一";
+                } else if (week == 2) {
+                    this.nowWeek = "星期二";
+                } else if (week == 3) {
+                    this.nowWeek = "星期三";
+                } else if (week == 4) {
+                    this.nowWeek = "星期四";
+                } else if (week == 5) {
+                    this.nowWeek = "星期五";
+                } else if (week == 6) {
+                    this.nowWeek = "星期六";
+                } else {
+                    this.nowWeek = "星期日";
+                }
+                _this.nowTime = hh + ":" + mf;
+                _this.nowDate = yy + "/" + mm + "/" + dd;
+            },
             getAddress(){
                 let that = this;
                 this.$https.fetchGet("/plugin/statistics/api_index/getAbbrArea", []).then(function(data){
@@ -165,6 +197,7 @@
                         setTimeout(()=>{
                             that.init_child("Dataset");
                             that.init_child("Customized");
+                            that.init_child("Customized1");
                         },500)
                     })
                 })
@@ -246,7 +279,6 @@
                 };
             },
             gotoStock(row){
-                console.log(row);
                 if(row.row[2]=='发现陌生人'){
                     this.$router.push('/Intelligence/Strange_people')
                 }else{
@@ -278,6 +310,7 @@
                 that.data2.unshift(arr);
                 that.getConfig2();
             });
+            this.currentTime();
         },
         activated() {
             if(this.$refs.hasOwnProperty("map"))
@@ -286,6 +319,7 @@
                 this.$refs.srroll_2.initWH();
                 this.$refs.map.map_resize();
                 this.$refs.Customized.Customized_resize();
+                this.$refs.Customized1.Customized_resize();
                 this.$refs.Dataset.Dataset_resize();
                 this.$refs.Mixed.Mixed_resize();
                 for(let i = 1; i<=6; i++)
@@ -293,15 +327,26 @@
                     this.$refs["box"+i].initWH();
                 }
             }
+        },
+        beforeDestroy: function() {
+            if (this.getDate) {
+                clearInterval(this.getDate); // 在Vue实例销毁前，清除时间定时器
+            }
         }
     }
 </script>
+<style>
+    #he-plugin-simple *{
+        z-index: 999;
+    }
+</style>
 <style scoped lang="less">
     .box{
         width: 100%;
         height: 100vh;
         background: url("./images/u10.png") no-repeat;
         background-size: 100% 100%;
+        position: relative;
     }
     .logo{
         display: flex;
@@ -310,6 +355,18 @@
         margin: 0 auto;
         padding-top: 10px;
         color: #fff;
+        position: relative;
+    }
+    .Newdata{
+        position: absolute;
+        right: 0;
+        bottom: 3vh;
+        font-size: 16px;
+    }
+    .tianqi{
+        position: absolute;
+        left: 0;
+        bottom: 2vh;
     }
     .border1{
         width: 100%;
@@ -407,7 +464,8 @@
         height: 100%;
     }
     h2{
-        height: 30px;
+        height: auto;
+        margin-top: 10px;
         font-size: 16px;
         color: #07e2ff;
     }

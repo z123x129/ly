@@ -36,7 +36,15 @@
                 var option = {};
                 if(this.type===1){
                     option = {
-                        tooltip: {},
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer:{
+                                type: 'shadow',
+                                label: {
+                                    show: true
+                                }
+                            }
+                        },
                         dataset: {
                             source: [
                                 ['陌生人员'],
@@ -47,13 +55,14 @@
                         },
                         xAxis: {type: 'category',
                             axisLabel: {
+                                rotate: 0, interval: 0,
                                 show: true,
                                 textStyle: {
                                     color: '#fff',  //更改坐标轴文字颜色
                                     fontSize : 10      //更改坐标轴文字大小
                                 }
                             },
-                            },
+                        },
                         yAxis:[
                             {
                                 type: 'value',
@@ -77,7 +86,7 @@
                                     normal: {
                                         color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                                             offset: 0,
-                                            color: '#2AA956'
+                                            color: '#3ca5e7'
                                         }]),
                                         opacity: 1,
                                     }
@@ -105,13 +114,21 @@
                 }else if(this.type===2){
                     option = {
                         legend: {},
-                        tooltip: {},
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer:{
+                                type: 'shadow',
+                                label: {
+                                    show: true
+                                }
+                            }
+                        },
                         dataset: {
                             source: [
-                                ['product','健康证过期比例','人脸抓拍告警次数','事件处理及时率'],
+                                ['product','健康证过期比例','事件处理及时率','人脸抓拍告警次数'],
                             ],
                         },
-                        xAxis: {type: 'category'},
+                        xAxis: {type: 'category',},
                         yAxis:[
 
                             {
@@ -120,6 +137,8 @@
                                 min: 0,
                                 max: 100,
                                 interval: 10,
+                                splitLine:{show: false},
+                                splitArea : {show : true},
                                 axisLabel: {
                                     formatter: '{value}'
                                 }
@@ -127,9 +146,8 @@
                             {
                             type: 'value',
                             name: '单位：次',
-                            min: 0,
-                            max: 100,
                             interval: 10,
+                            splitLine:{show: false},
                             axisLabel: {
                                 formatter: '{value}'
                             }
@@ -140,21 +158,22 @@
                             {type: 'bar',
                                 itemStyle: {
                                     normal: {
-                                        color: "#D87C7C"
+                                        color: "#d4414f"
                                     }
                                 },
                             },
                             {type: 'bar',
                                 itemStyle: {
                                     normal: {
-                                        color: "#919E8B"
+                                        color: "#feac5f"
                                     }
                                 },
                             },
                             {type: 'bar',
+                                yAxisIndex: 1,
                                 itemStyle: {
                                     normal: {
-                                        color: "#D7AB82"
+                                        color: "#f57051"
                                     }
                                 },
                             },

@@ -60,7 +60,6 @@
                 </el-radio-group>
             </el-form-item>
         </el-form>
-        <div style="width: 100%;height: 16px;background: #f0f2f5"></div>
         <div v-if="show == false" class="big_box">
             <div v-for="(item,index) in tableData" @click="openLoak(item)" :key="index" class="box">
                 <img :src="item.faceUrl[0]" />

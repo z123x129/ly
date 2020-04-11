@@ -374,8 +374,6 @@
     .demo-form-inline{
         background-color: #fff;
         padding:10px;
-        // padding: 20px 10px 0;
-        margin-bottom: 15px;
     }
     .demo-form-inline .el-form-item{
         margin-top: 0;
