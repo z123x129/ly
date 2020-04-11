@@ -128,9 +128,9 @@
         inject:["app"],
         data () {
             return {
-                isCollapsed: false,
+                isCollapsed: true,
                 minLogo,
-                collapsed:false,
+                collapsed:true,
                 img:headImg,
                 isFullscreen:false,
                 ws:new WebSocket("ws://"+"js2.300c.cn"+":7272"),

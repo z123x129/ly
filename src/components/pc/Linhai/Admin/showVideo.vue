@@ -16,13 +16,14 @@
                     ref="tree">
             </el-tree>
         </div>
-        <Hik class="videobox" ref="H1" :openOWebName="ddd"></Hik>
+            <Hik id="Hik" class="videobox" ref="H1" :openOWebName="ddd"></Hik>
     </div>
 </template>
 
 <script>
     import { Input,Tree } from 'element-ui'
     import Hik from "../component/Hik";
+    import elementResizeDetectorMaker from "element-resize-detector"
 
     export default {
         name: "showVideo",
@@ -33,7 +34,7 @@
         },
         data(){
             return{
-
+                erd :elementResizeDetectorMaker(),
                 filterText: '',
                 data: [],
                 defaultProps: {
@@ -52,9 +53,13 @@
         mounted: function () {
             this.videoinit()
             this.getList()//获取地区列表
-            this.resize()
+            // this.resize()
+            this.resize_window();
         },
         methods:{
+            ssd(){
+                this.videoinit();
+            },
             getList(){ //获取地区列表
                 let params ={};
                 params = this.$secret_key.func(this.$store.state.on_off, params);
@@ -97,10 +102,22 @@
                     }, 200);
                 }
             },
+            resize_window(){
+                let that = this;
+                this.erd.listenTo(document.getElementById("Hik"), function (element) {
+                    var width = element.offsetWidth
+                    var height = element.offsetHeight
+                    that.$nextTick(()=>{
+                        that.$refs.H1.resizeWindow(height,width);
+                    })
+
+                })
+            }
+
 
         },
         activated(){
-            this.resize();
+            // this.resize();
         }
 
     }

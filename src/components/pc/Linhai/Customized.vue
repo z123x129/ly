@@ -35,13 +35,14 @@
                     name: '正常健康证数',
                     itemStyle: {
                         normal: {//颜色渐变
-                            color: new echarts.graphic.LinearGradient(
-                                0, 0, 0, 1,
-                                [
-                                    {offset: 0, color: '#1C93ED'},
-                                    {offset: 1, color: '#4BF2D1'}
-                                ]
-                            )
+                            color: '#60D3E0'
+                            //     new echarts.graphic.LinearGradient(
+                            //     0, 0, 0, 1,
+                            //     [
+                            //         {offset: 0, color: '#1C93ED'},
+                            //         {offset: 1, color: '#4BF2D1'}
+                            //     ]
+                            // )
                         }
                     }
 
@@ -50,13 +51,14 @@
                     name: '异常健康证数',
                     itemStyle: {
                         normal: {//颜色渐变
-                            color: new echarts.graphic.LinearGradient(
-                                0, 0, 0, 1,
-                                [
-                                    {offset: 0, color: '#220CCE'},
-                                    {offset: 1, color: '#EF818E'}
-                                ]
-                            )
+                            color:'#fb850c' ,
+                            //     new echarts.graphic.LinearGradient(
+                            //     0, 0, 0, 1,
+                            //     [
+                            //         {offset: 0, color: '#220CCE'},
+                            //         {offset: 1, color: '#EF818E'}
+                            //     ]
+                            // )
                         }
                     }
 

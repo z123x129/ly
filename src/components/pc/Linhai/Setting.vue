@@ -1,6 +1,6 @@
 <template>
-    <div class="body">
-        <el-tabs style="padding: 0 10px" v-model="activeName">
+    <div class="body" style="background-color:#fff">
+        <el-tabs style="padding: 0 10px;background-color:#fff" v-model="activeName">
             <el-tab-pane label="修改密码" name='passwd'>
                 <div class="form passwd">
                     <div class="input">

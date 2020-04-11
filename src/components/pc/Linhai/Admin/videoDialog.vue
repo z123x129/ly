@@ -36,6 +36,7 @@
                             return
                         }
                         // console.log('点击拖动框')
+                        that.hidevideo()
 
                         // (clientX, clientY)点击位置距离当前可视区域的坐标(x，y)
                         // offsetLeft, offsetTop 距离上层或父级的左边距和上边距
@@ -71,21 +72,25 @@
 
                             vnode.style.left = left + 'px'
                             vnode.style.top = top + 'px'
-                            that.resize()
+                            that.resize_1()
 
                         })
                         document.onmouseup = (() => {
                             // console.log('离开拖动框')
+                            that.showvideo()
 
                             document.onmousemove = document.onmouseup = null
                         })
                     })
-                    window.onresize = (() => {
-                        vnode.style.left = "50%"
-                        vnode.style.top = "50%"
-                    })
+                    // window.onresize = (() => {
+                    //     vnode.style.left = "50%"
+                    //     vnode.style.top = "50%"
+                    // })
                 }
             }
+        },
+        mounted(){
+            this.resize();
         },
         methods: {
             cancel() {
@@ -95,6 +100,15 @@
             },
             resize(){
                 this.$emit("resize")
+            },
+            hidevideo(){
+                this.$emit("cancel")
+            },
+            showvideo(){
+                this.$emit("showvideo")
+            },
+            resize_1(){
+                this.$emit("resize_1")
             }
         }
     }

@@ -27,7 +27,9 @@
                 <div id="container" class="map"></div>
             </div>
         </div>
-        <videoDialog class="dialog" :visible.sync="videoVisible" @resize="resize" @cancel="hideVideo" >
+
+        <videoDialog class="dialog" :visible.sync="videoVisible" @resize="resize" @resize_1="resize_1" @showvideo="showvideo" @cancel="hideVideo" >
+
             <div class="videobox">
                 <div class="demo">
                     <p>摄像点选择:</p>
@@ -45,7 +47,7 @@
                             ref="tree2">
                     </el-tree>
                 </div>
-                <Hikr class="videobox" ref="H1" :openOWebName="ddd"></Hikr>
+                <Hikr class="videobox" ref="H1" :openOWebName="ddd" id="Hik"></Hikr>
             </div>
         </videoDialog>
     </div>
@@ -59,6 +61,7 @@
     import marker1 from '@/assets/images/marker1.png'
     import marker2 from '@/assets/images/marker2.png'
     import marker3 from '@/assets/images/marker3.png'
+    import elementResizeDetectorMaker from "element-resize-detector"
     export default {
         name:"Map_conmand",
         inject:["app"],
@@ -70,6 +73,7 @@
         },
         data(){
             return{
+                erd :elementResizeDetectorMaker(),
                 marker1,
                 marker2,
                 marker3,
@@ -125,7 +129,7 @@
         },
         mounted: function () {
             this.startMap();//地图
-            this.winresize()//监听窗口大小变化
+
             if(this.data.length == 0)
                 this.getList();//获取地区列表
         },
@@ -159,23 +163,24 @@
             hideVideo(){//隐藏视频插件
                 this.app[this.ddd].JS_HideWnd();
             },
-            resize(){//拖动窗口时视频插件跟随移动
+            showvideo(){//显示视频插件
+                this.app[this.ddd].JS_ShowWnd();
+                // console.log('1111')
+            },
+            resize_1(){//拖动窗口时视频插件跟随移动
                 this.$refs.H1.resizeWindow(this.$refs.H1.$el.offsetHeight,this.$refs.H1.$el.offsetWidth);
             },
-            winresize(){//监听窗口大小变化改变视频插件窗口大小
-                if(this.$refs.H1.checkWebC()) return//如果插件未初始化
+            resize(){
+                let that = this;
+                console.log(12312);
+                this.erd.listenTo(document.getElementById("Hik"), function (element) {
+                    var width = element.offsetWidth
+                    var height = element.offsetHeight
+                    that.$nextTick(()=>{
+                        that.$refs.H1.resizeWindow(height,width);
+                    })
 
-                const that = this
-                window.onresize = () => {
-                    var target = this;
-                    if (target.resizeFlag) {
-                        clearTimeout(target.resizeFlag);
-                    }
-                    target.resizeFlag = setTimeout(function() {
-                        that.$refs.H1.resizeWindow(that.$refs.H1.$el.offsetHeight,that.$refs.H1.$el.offsetWidth);
-                        target.resizeFlag = null;
-                    }, 200);
-                }
+                })
             },
             getList:async function(){ //获取地区列表
                 let params ={};
@@ -296,6 +301,7 @@
                                 '</div>'+
                             '</div>'
                             schoolMarker.on('click', this.dianji);
+                            schoolMarker.on('mousemove', this.dianji);
                             schoolMarker.setMap(this.map);
                             this.schoolmarkers.push(schoolMarker)
                         }
@@ -610,6 +616,7 @@
     .videobox{
         width: 100%;
         height: 100%;
+
     }
     .map{height:100vh;width:100%;float:left;}
     .info-content img{float:left;margin:3px;}
@@ -654,4 +661,5 @@
             font-size: 12px;
         }
     }
+
 </style>
