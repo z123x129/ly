@@ -30,7 +30,6 @@
                 <el-button size="small" type="primary" @click="exports">导出excel</el-button>
             </el-form-item>
         </el-form>
-        <div style="width: 100%;height: 16px;background: #f0f2f5"></div>
         <el-table
                 border
                 stripe
@@ -74,7 +73,7 @@
                     min-width="80">
                 <template slot-scope="scope">
                     <el-image
-                            style="width: 60px; height: 60px;"
+                            style="width: 35px; height: 35px;"
                             :src="scope.row.faceThumbPath[0]"
                             :preview-src-list="scope.row.faceThumbPath">
                     </el-image>
@@ -86,7 +85,7 @@
                     min-width="80">
                 <template slot-scope="scope">
                     <el-image
-                            style="width: 60px; height: 60px"
+                            style="width: 35px; height: 35px"
                             :src="scope.row.healthCardPath[0]"
                             :preview-src-list="scope.row.healthCardPath">
                     </el-image>
@@ -347,7 +346,7 @@
                 params = this.$secret_key.func(this.$store.state.on_off, params);
                 this.$https.fetchPost('/plugin/school/api_index/out_health_list',params).then((res) => {
                     var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
-                    window.location.href=res_data;
+                    window.location.href=this.$store.state.route.http + res_data;
                 })
             },
             delList(id){

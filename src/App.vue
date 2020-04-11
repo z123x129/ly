@@ -6,8 +6,6 @@
 
 <script>
   import "./assets/css/reset.css"
-
-
   export default {
     provide(){
       return {
@@ -34,7 +32,6 @@
   font-size: 38px;
 }
 .el-tabs{
-  background-color: #f0f0f0;
   /deep/ .el-tabs__header{
     padding: 10px 20px;
     background-color: #fff;
@@ -54,8 +51,9 @@
 
   }
 }
+#i2{background-color: #fff}
 #i2 >div >.demo-form-inline {
-    margin-top: 10px;
+    /*margin-top: 10px;*/
     background-color: #fff;
     padding:15px 20px;
     .el-form-item{

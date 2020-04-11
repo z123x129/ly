@@ -34,7 +34,6 @@
                 <el-button size="small" type="primary" @click="exports">导出excel</el-button>
             </el-form-item>
         </el-form>
-        <div style="width: 100%;height: 16px;background: #f0f2f5"></div>
         <el-table
                 :data="tableData"
                 border
@@ -55,7 +54,8 @@
             <el-table-column
                     align="center"
                     prop="company"
-                    label="单位名称">
+                    label="单位名称"
+                    min-width="120">
             </el-table-column>
             <el-table-column
                     align="center"
@@ -65,12 +65,14 @@
             <el-table-column
                     align="center"
                     prop="id_card"
-                    label="身份证号">
+                    label="身份证号"
+                    min-width="120">
             </el-table-column>
             <el-table-column
                     align="center"
                     prop="health_id_card"
-                    label="健康证号">
+                    label="健康证号"
+                    min-width="120">
             </el-table-column>
             <el-table-column
                     align="center"
@@ -78,7 +80,7 @@
                     min-width="80">
                 <template slot-scope="scope">
                     <el-image
-                            style="width: 60px; height: 60px;"
+                            style="width: 35px; height: 35px;"
                             :src="scope.row.faceThumbPath[0]"
                             :preview-src-list="scope.row.faceThumbPath">
                     </el-image>
@@ -90,7 +92,7 @@
                     min-width="80">
                 <template slot-scope="scope">
                     <el-image
-                            style="width: 60px; height: 60px"
+                            style="width: 35px; height: 35px"
                             :src="scope.row.healthCardPath[0]"
                             :preview-src-list="scope.row.healthCardPath">
                     </el-image>
@@ -112,7 +114,7 @@
                     label="添加时间">
             </el-table-column>
         </el-table>
-        <div style="padding: 15px;display: flex;justify-content: flex-end;">
+        <div style="padding: 15px;display: flex;justify-content: flex-end;background: #fff">
                 <el-pagination
                         @size-change="handleSizeChange"
                         @current-change="handleCurrentChange"
@@ -244,7 +246,7 @@
                 params = this.$secret_key.func(this.$store.state.on_off, params);
                 this.$https.fetchPost('/plugin/school/api_index/out_health_list',params).then((res) => {
                     var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
-                    window.location.href=res_data;
+                    window.location.href=this.$store.state.route.http + res_data;
                 })
             },
             getSchool(){ //获取学校列表
