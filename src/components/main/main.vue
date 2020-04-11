@@ -80,7 +80,7 @@
             <Layout>
                 <Header class="layout-header-bar">
                     <div>
-                        <Icon @click.native="collapsedSider" :class="rotateIcon" :style="{margin: '20px'}" type="md-menu" size="24"></Icon>
+<!--                        <Icon @click.native="collapsedSider" :class="rotateIcon" :style="{margin: '20px'}" type="md-menu" size="24"></Icon>-->
                         <custom-bread-crumb show-icon style="margin-left: 30px;" :list="breadCrumbList"></custom-bread-crumb>
                     </div>
 
@@ -128,9 +128,9 @@
         inject:["app"],
         data () {
             return {
-                isCollapsed: true,
+                isCollapsed: false,
                 minLogo,
-                collapsed:true,
+                collapsed:false,
                 img:headImg,
                 isFullscreen:false,
                 ws:new WebSocket("ws://"+"js2.300c.cn"+":7272"),
