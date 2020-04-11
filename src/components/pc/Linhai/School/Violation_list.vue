@@ -76,7 +76,8 @@
             <el-table-column
                     align="center"
                     prop="id"
-                    label="违规序号">
+                    label="违规序号"
+                    width="100">
             </el-table-column>
             <el-table-column
                     align="center"

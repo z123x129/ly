@@ -31,7 +31,8 @@
                     <el-table-column
                             align="center"
                             prop="id"
-                            label="ID">
+                            label="ID"
+                            width="80">
                     </el-table-column>
                     <el-table-column
                             align="center"

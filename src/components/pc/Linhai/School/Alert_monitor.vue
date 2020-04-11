@@ -100,7 +100,8 @@
             <el-table-column
                     fixed="right"
                     label="操作"
-                    width="100">
+                    width="100"
+                    align="center">
                 <template slot-scope="scope">
                     <el-button @click="openLoak(scope.row)" type="text" size="small">详情</el-button>
                 </template>
