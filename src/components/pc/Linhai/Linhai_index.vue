@@ -23,13 +23,12 @@
                     <div @click="back" v-if="showBack">
                         <dv-decoration-9 ref="button_1" style="z-index:999;cursor: pointer;width:50px;height:50px;position: absolute;top: 20px;left: 20px;color: #7ec699;text-shadow: 0 0 3px #7acaec;">返回</dv-decoration-9>
                     </div>
-                    <Map style="width: 100%;height: 100%" :address_info="address_info" :town_name="city_name" ref="map" @showButton="showButton"  @getAreaInfo="getAreaInfo"></Map>
+                    <Map style="width: 100%;height: 100%;margin-top: 3vh" :address_info="address_info" :town_name="city_name" ref="map" @showButton="showButton"  @getAreaInfo="getAreaInfo"></Map>
                     <!-- <ul>
                         <li>学校个数: <span>{{regions_chart.school_general.all_school}}</span></li>
                         <li>没有异常的学校: <span>{{regions_chart.school_general.normal_school}}</span></li>
                         <li>有异常的学校: <span>{{regions_chart.school_general.anomaly_school}}</span></li>
                     </ul> -->
-
                 </div>
                 <div class="cont1">
                     <dv-border-box-7 title="健康证图表" class="box1" ref="box3" :titleWidth=160>

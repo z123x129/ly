@@ -73,6 +73,7 @@
             //that.init("LinHai");
             // 浏览器自适应
             window.addEventListener('resize', ()=> {
+                initCharts();
                 this.chart.resize();
             })
         },
@@ -166,7 +167,7 @@
                             color:'#ffffff',
                         },
                         icon:"pin",
-                        bottom:"20",
+                        bottom:"0",
 
                     },
                     toolbox: {
