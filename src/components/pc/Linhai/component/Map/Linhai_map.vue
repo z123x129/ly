@@ -73,6 +73,7 @@
             //that.init("LinHai");
             // 浏览器自适应
             window.addEventListener('resize', ()=> {
+                initCharts();
                 this.chart.resize();
             })
         },
@@ -166,7 +167,7 @@
                             color:'#ffffff',
                         },
                         icon:"pin",
-                        bottom:"20",
+                        bottom:"0",
 
                     },
                     toolbox: {
@@ -202,7 +203,7 @@
                     },
                     geo: {
                         map:initData,
-                        zoom: 1,   //地图初始大小，这里是关键，一定要放在 series中  因为geo在series中会加载，所以zoom放在此处
+                        zoom: 1.2,   //地图初始大小，这里是关键，一定要放在 series中  因为geo在series中会加载，所以zoom放在此处
                         itemStyle:{
                             areaColor:'transparent'
                         }
@@ -215,6 +216,7 @@
                             type: 'map',
                             // coordinateSystem: 'geo',
                             map: initData,
+                            zoom: 1.2,
                             showLegendSymbol: false,
                             data:this.address_info.map((item, index)=>{
                                 return{
