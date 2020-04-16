@@ -21,7 +21,7 @@
                         :picker-options="pickerOptions">
                 </el-date-picker>
             </el-form-item>
-            <el-form-item label="回复时间:">
+            <el-form-item label="最新回复时间:">
                 <el-date-picker
                         v-model="formInline.reply_time"
                         size="small"
@@ -60,14 +60,6 @@
             </el-table-column>
             <el-table-column
                     align="center"
-                    label="回复标题">
-                <template slot-scope="scope">
-                    <el-button v-if="scope.row.reply_title" @click="look(scope.row.reply_title,scope.row.reply_content,scope.row.reply_file)" type="text">{{scope.row.reply_title}}</el-button>
-                    <span v-else>暂无回复</span>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    align="center"
                     prop="user_login"
                     label="接收人">
             </el-table-column>
@@ -78,7 +70,7 @@
             </el-table-column>
             <el-table-column
                     align="center"
-                    label="(上次)回复时间">
+                    label="最新回复时间">
                 <template slot-scope="scope">
                     <span v-if="scope.row.reply_time">{{scope.row.reply_time}}</span>
                     <span v-else>暂无回复</span>
@@ -96,9 +88,9 @@
             <el-table-column
                     align="center"
                     fixed="right"
-                    label="操作"
-                    width="100">
+                    label="操作">
                 <template slot-scope="scope">
+                    <el-button @click="look(scope.row.id)" type="text" size="small">查看</el-button>
                     <el-button v-if="scope.row.status!==2" @click="showAdd('2',scope.row.id)" type="text" size="small">提问</el-button>
                     <el-popconfirm
                             v-if="scope.row.status!==2"
@@ -166,22 +158,30 @@
             </el-form>
         </el-dialog>
         <el-dialog
-                :title=title
-                :visible.sync="show">
-            <span v-html="content"></span>
-            <div class="demo-image__preview">
-                <el-image v-if="img"
-                          style="width: 100px; height: 100px"
-                          :src="img[0]"
-                          :preview-src-list="img">
-                </el-image>
-            </div>
+            title='工单回复'
+            :visible.sync="show">
+            <el-timeline>
+                <el-timeline-item v-for="(item,index) in list" :key="index" :timestamp="item.flow==0?item.msg_time+' '+item.send_name:item.msg_time +' '+ item.rec_name" placement="top">
+                    <el-card>
+                        <h4 style="text-align: center;font-size: 16px">{{item.title}}</h4>
+                        <p v-html="item.content"></p>
+                        <div class="demo-image__preview">
+                            <el-image v-if="item.file"
+                                      style="width: 80px; height: 80px;border-radius: 3px"
+                                      :src="item.file[0]"
+                                      :preview-src-list="item.file">
+                            </el-image>
+                        </div>
+                    </el-card>
+                </el-timeline-item>
+            </el-timeline>
         </el-dialog>
     </div>
 </template>
 <script>
     import { Form,FormItem,Select,Option,Button,DatePicker,Tabs,Popconfirm,Cascader,
-        TabPane,Table,TableColumn,Image,Pagination,Input,Dialog,Upload,Message } from 'element-ui'
+        TabPane,Table,TableColumn,Image,Pagination,Input,Dialog,Upload,Message,
+        Timeline,TimelineItem,Card} from 'element-ui'
     import 'element-ui/lib/theme-chalk/index.css'
     var layedit,index;
     export default {
@@ -204,6 +204,9 @@
             [Message.name]:Message,
             [Popconfirm.name]:Popconfirm,
             [Cascader.name]:Cascader,
+            [Timeline.name]:Timeline,
+            [TimelineItem.name]:TimelineItem,
+            [Card.name]:Card,
         },
         data(){
             return{
@@ -269,9 +272,7 @@
                 type: 1,
                 ids:[],
                 options: [],
-                title: '',
-                content: '',
-                img:'',
+                list:[],
                 show: false,
             }
         },
@@ -399,21 +400,18 @@
                     'end_create_time':end_create_time,
                     'star_reply_time':star_reply_time,
                     'end_reply_time':end_reply_time};
-                this.$https.fetchPost('/plugin/statistics/api_index/getQuestionList',params).then((res) => {
+                this.$https.fetchPost('/plugin/statistics/api_index/adminQuestionList',params).then((res) => {
                     this.tableData = res.data;
                     this.currentPage = res.current_page;
                     this.total = res.total;
                 })
             },//列表数据
-            look(title,content,img){//查看回复
-                this.title = title;
-                this.content = content;
-                if(img){
-                    this.img = img;
-                }else{
-                    this.img = '';
-                }
-                this.show = true;
+            look(id){//查看回复
+                let params ={'uid':this.$store.state.user.uid,'id':id};
+                this.$https.fetchPost('/plugin/statistics/api_index/getMsgList',params).then((res) => {
+                    this.list=res;
+                    this.show = true;
+                })
             },
             getSelect(val) {//多选获取id
                 this.ids = [];
@@ -466,5 +464,7 @@
     }
 </script>
 <style scoped>
-
+    .el-image /deep/ .el-icon-circle-close{
+        color: #fff;
+    }
 </style>

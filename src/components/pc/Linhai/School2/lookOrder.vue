@@ -47,26 +47,26 @@
                     prop="question_sn"
                     label="工单编号">
             </el-table-column>
-            <el-table-column
-                    align="center"
-                    label="工单标题">
-                <template slot-scope="scope">
-                    <el-button  @click="look(scope.row.title,scope.row.content,scope.row.file)" type="text">{{scope.row.title}}</el-button>
-                </template>
-            </el-table-column>
+<!--            <el-table-column-->
+<!--                    align="center"-->
+<!--                    label="工单标题">-->
+<!--                <template slot-scope="scope">-->
+<!--                    <el-button  @click="look(scope.row.title,scope.row.content,scope.row.file)" type="text">{{scope.row.title}}</el-button>-->
+<!--                </template>-->
+<!--            </el-table-column>-->
             <el-table-column
                     align="center"
                     prop="create_time"
                     label="添加时间">
             </el-table-column>
-<!--            <el-table-column-->
-<!--                    align="center"-->
-<!--                    label="(上次)审核时间">-->
-<!--                <template slot-scope="scope">-->
-<!--                    <span v-if="scope.row.reply_time">{{scope.row.reply_time}}</span>-->
-<!--                    <span v-else>暂无审核</span>-->
-<!--                </template>-->
-<!--            </el-table-column>-->
+            <el-table-column
+                    align="center"
+                    label="最新审核时间">
+                <template slot-scope="scope">
+                    <span v-if="scope.row.reply_time">{{scope.row.reply_time}}</span>
+                    <span v-else>暂无审核</span>
+                </template>
+            </el-table-column>
             <el-table-column
                     align="center"
                     label="状态">
@@ -79,9 +79,9 @@
             <el-table-column
                     align="center"
                     fixed="right"
-                    label="操作"
-                    width="100">
+                    label="操作">
                 <template slot-scope="scope">
+                    <el-button @click="look(scope.row.id)" type="text" size="small">查看</el-button>
                     <el-button v-if="scope.row.status!=2" @click="showAdd(scope.row.id)" type="text" size="small">回复</el-button>
                 </template>
             </el-table-column>
@@ -127,22 +127,30 @@
             </el-form>
         </el-dialog>
         <el-dialog
-                :title=title
-                :visible.sync="show">
-            <span v-html="content"></span>
-            <div class="demo-image__preview">
-                <el-image v-if="img"
-                          style="width: 100px; height: 100px"
-                          :src="img[0]"
-                          :preview-src-list="img">
-                </el-image>
-            </div>
+            title='工单审核'
+            :visible.sync="show">
+            <el-timeline>
+                <el-timeline-item v-for="(item,index) in list" :key="index" :timestamp="item.msg_time+' '+item.send_name" placement="top">
+                    <el-card>
+                        <h4 style="text-align: center;font-size: 16px">{{item.title}}</h4>
+                        <p v-html="item.content"></p>
+                        <div class="demo-image__preview">
+                            <el-image v-if="item.file"
+                                      style="width: 80px; height: 80px;border-radius: 3px"
+                                      :src="item.file[0]"
+                                      :preview-src-list="item.file">
+                            </el-image>
+                        </div>
+                    </el-card>
+                </el-timeline-item>
+            </el-timeline>
         </el-dialog>
     </div>
 </template>
 <script>
     import { Form,FormItem,Select,Option,Button,DatePicker,Tabs,Popconfirm,
-        TabPane,Table,TableColumn,Image,Pagination,Input,Dialog,Upload,Message } from 'element-ui'
+        TabPane,Table,TableColumn,Image,Pagination,Input,Dialog,Upload,Message,
+        Timeline,TimelineItem,Card} from 'element-ui'
     import 'element-ui/lib/theme-chalk/index.css'
     var layedit,index;
     export default {
@@ -164,6 +172,9 @@
             [Upload.name]:Upload,
             [Message.name]:Message,
             [Popconfirm.name]:Popconfirm,
+            [Timeline.name]:Timeline,
+            [TimelineItem.name]:TimelineItem,
+            [Card.name]:Card,
         },
         data(){
             return{
@@ -224,9 +235,7 @@
                 type: 1,
                 ids:[],
                 options: [],
-                title: '',
-                content: '',
-                img:'',
+                list:[],
                 show: false,
             }
         },
@@ -320,21 +329,18 @@
                     'question_sn':this.formInline.question_sn,
                     'star_create_time':star_create_time,
                     'end_create_time':end_create_time};
-                this.$https.fetchPost('/plugin/statistics/api_index/getQuestionList',params).then((res) => {
+                this.$https.fetchPost('/plugin/statistics/api_index/lowQuestionList',params).then((res) => {
                     this.tableData = res.data;
                     this.currentPage = res.current_page;
                     this.total = res.total;
                 })
             },//列表数据
-            look(title,content,img){
-                this.title = title;
-                this.content = content;
-                if(img){
-                    this.img = img;
-                }else{
-                    this.img = '';
-                }
-                this.show = true;
+            look(id){
+                let params ={'uid':this.$store.state.user.uid,'id':id};
+                this.$https.fetchPost('/plugin/statistics/api_index/getMsgList',params).then((res) => {
+                    this.list=res;
+                    this.show = true;
+                })
             },//查看回复
             handleSizeChange(val) {//分页器
                 this.paginate = val;
@@ -349,5 +355,7 @@
     }
 </script>
 <style scoped>
-
+    .el-image /deep/ .el-icon-circle-close{
+        color: #fff;
+    }
 </style>
