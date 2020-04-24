@@ -65,7 +65,7 @@
             </el-table-column>
             <el-table-column
                     align="center"
-                    prop="create_time"
+                    prop="add_time"
                     label="添加时间">
             </el-table-column>
             <el-table-column
@@ -383,10 +383,10 @@
                 this.getList();
             },//搜索
             getList(){
-                var star_create_time = '',end_create_time = '',star_reply_time = '',end_reply_time = '';
+                var star_add_time = '',end_add_time = '',star_reply_time = '',end_reply_time = '';
                 if(this.formInline.create_time){
-                    star_create_time = this.formInline.create_time[0];
-                    end_create_time = this.formInline.create_time[1];
+                    star_add_time = this.formInline.create_time[0];
+                    end_add_time = this.formInline.create_time[1];
                 }
                 if(this.formInline.reply_time){
                     star_reply_time = this.formInline.reply_time[0];
@@ -396,8 +396,8 @@
                     'page':this.page,'paginate':this.paginate,
                     'question_sn':this.formInline.question_sn,
                     'user_login':this.formInline.user_login,
-                    'star_create_time':star_create_time,
-                    'end_create_time':end_create_time,
+                    'star_add_time':star_add_time,
+                    'end_add_time':end_add_time,
                     'star_reply_time':star_reply_time,
                     'end_reply_time':end_reply_time};
                 this.$https.fetchPost('/plugin/statistics/api_index/adminQuestionList',params).then((res) => {

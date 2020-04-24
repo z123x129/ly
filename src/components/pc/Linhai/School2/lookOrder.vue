@@ -61,11 +61,8 @@
             </el-table-column>
             <el-table-column
                     align="center"
-                    label="最新审核时间">
-                <template slot-scope="scope">
-                    <span v-if="scope.row.reply_time">{{scope.row.reply_time}}</span>
-                    <span v-else>暂无审核</span>
-                </template>
+                    prop="create_time"
+                    label="最新提问时间">
             </el-table-column>
             <el-table-column
                     align="center"
