@@ -1,7 +1,7 @@
 <template>
     <div class="box">
         <div class="logo">
-            <h1 class="border1">市场监督局指挥实时数据大屏</h1>
+            <h1 class="border1">临海市市场监管局实时指挥系统</h1>
             <div class="tianqi"><div id="he-plugin-simple"></div></div>
             <div class="Newdata"><i class="el-icon-time"></i>{{ ' ' + nowDate + ' ' + nowTime + ' ' + nowWeek }}</div>
         </div>

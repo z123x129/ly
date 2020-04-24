@@ -20,11 +20,13 @@ import showVideo from '@/components/pc/Linhai/Admin/showVideo.vue'
 import reVideo from '@/components/pc/Linhai/Admin/reVideo.vue'
 import Map_conmand from '@/components/pc/Linhai/Admin/Map_conmand.vue'
 import School_message from '@/components/pc/Linhai/Admin/School_message.vue'
+import workOrder from '@/components/pc/Linhai/Admin/Work_order.vue'
 
 //学校路由
 import Maintain_list from '@/components/pc/Linhai/School2/Maintain_list.vue'
 import Message_edit from '@/components/pc/Linhai/School2/Message_edit.vue'
 import Report_msg from '@/components/pc/Linhai/School2/Report_msg.vue'
+import lookOrder from '@/components/pc/Linhai/School2/lookOrder.vue'
 
 //网格员路由
 import Wgy_home from '@/components/pc/Linhai/School/Wgy_home.vue'
@@ -107,7 +109,6 @@ export const asyncRouterMap = [
             },
         ]
     },
-
     {
         path: '/command',
         name: 'command',
@@ -234,6 +235,28 @@ export const asyncRouterMap = [
             },
         ]
     },
+    {
+        path: '/workOrder',
+        name: 'workOrder',
+        component: Main,
+        meta: {
+            icon: 'ios-cog',
+            title: '工单管理',
+            role: [1],
+        },
+        children:[
+            {
+                path: 'workOrder',
+                name: 'workOrder',
+                meta: {
+                    icon: 'ios-cog',
+                    title: '工单管理',
+                    role: [1],
+                },
+                component: workOrder
+            },
+        ]
+    },
     //学校后台路由
     {
         path: '/', //网格员通用
@@ -255,6 +278,28 @@ export const asyncRouterMap = [
                 },
                 component: Wgy_home
             }
+        ]
+    },
+    {
+        path: '/lookOrder',
+        name: 'lookOrder',
+        component: Main,
+        meta: {
+            icon: 'ios-cog',
+            title: '工单管理',
+            role: [2,3],
+        },
+        children:[
+            {
+                path: 'lookOrder',
+                name: 'lookOrder',
+                meta: {
+                    icon: 'ios-cog',
+                    title: '工单管理',
+                    role: [2,3],
+                },
+                component: lookOrder
+            },
         ]
     },
     {
@@ -329,7 +374,7 @@ export const asyncRouterMap = [
         name: 'school',
         component: Main,
         meta: {
-            icon: 'md-school',
+            icon: 'ios-clipboard-outline',
             title: '学校列表',
             role: [3]
         },

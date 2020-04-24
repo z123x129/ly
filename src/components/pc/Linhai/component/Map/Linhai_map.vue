@@ -72,8 +72,10 @@
             });
             //that.init("LinHai");
             // 浏览器自适应
-            window.addEventListener('resize', ()=> {
-                initCharts();
+            window.addEventListener('resize', (event)=> {
+                console.log(event);
+                echarts.init(option);
+                // initCharts();
                 this.chart.resize();
             })
         },
@@ -371,7 +373,11 @@
                                 };
                             })
                         }
-                    ]
+                    ],
+                    grid:{
+                        width:'100%',
+                        height:'100%'
+                    }
                 },true);
             },
             changeCityMap(city, data)
