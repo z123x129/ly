@@ -4,7 +4,7 @@
             <el-form-item label="学校Logo：">
                 <el-upload
                         class="avatar-uploader"
-                        :action='url+"/public/plugin/file_manage/api_index/upload_img"'
+                        :action='url+"/plugin/file_manage/api_index/upload_img"'
                         :show-file-list="false"
                         :on-success="handleAvatarSuccess"
                         :before-upload="beforeAvatarUpload">

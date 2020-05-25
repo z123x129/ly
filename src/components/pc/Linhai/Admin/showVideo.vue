@@ -10,6 +10,8 @@
             <el-tree
                     class="filter-tree"
                     :data="data"
+                    :load="loadNode"
+                    lazy
                     :props="defaultProps"
                     :filter-node-method="filterNode"
                     @node-click="getvideo"
@@ -21,15 +23,17 @@
 </template>
 
 <script>
-    import { Input,Tree } from 'element-ui'
+    import { Input,Tree,Message } from 'element-ui'
     import Hik from "../component/Hik";
     import elementResizeDetectorMaker from "element-resize-detector"
+
 
     export default {
         name: "showVideo",
         components:{
             [Input.name]:Input,
             [Tree.name]:Tree,
+            [Message.name]:Message,
             Hik
         },
         data(){
@@ -39,7 +43,8 @@
                 data: [],
                 defaultProps: {
                     children: 'children',
-                    label: 'label'
+                    label: 'label',
+                    isLeaf:"leaf"
                 },
                 ddd:'oWebControl',
 
@@ -57,6 +62,28 @@
             this.resize_window();
         },
         methods:{
+
+            loadNode(node, resolve) {
+                switch (node.level) {
+                    case 1:
+                        resolve(node.data.children);
+                        break;
+                    case 2:
+                        resolve(node.data.children);
+                        break;
+                    case 3:
+                        let params ={'indexCode':node.data.indexCode};
+                        params = this.$secret_key.func(this.$store.state.on_off, params);
+                        this.$https.fetchPost('/plugin/statistics/api_index/schoolOnline',params).then((res) => {
+                            var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
+                            resolve(res_data);
+                        })
+                        break;
+                    default:
+                        resolve([]);
+                        break;
+                }
+            },
             ssd(){
                 this.videoinit();
             },
@@ -71,8 +98,16 @@
             getvideo(data){//选择摄像头
                 let _this=this
                 if(!data.children){
-                    this.$refs.H1.videoPlay(data.cameraIndexCode);//传入摄像头编码
+                    // this.$refs.H1.videoPlay(data.cameraIndexCode);//传入摄像头编码
                     // console.log(data.cameraIndexCode)
+                    if (data.value == 1) {
+                        this.$refs.H1.videoPlay(data.cameraIndexCode);//传入摄像头编码
+                    }else{//如果摄像头离线
+                        Message.error({
+                            message:'该摄像头处于离线状态',
+                            duration:600
+                        });
+                    }
                 }
             },
             videoinit(){//初始化视频插件

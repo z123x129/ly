@@ -141,7 +141,7 @@
                     <el-upload ref="my-upload"
                                class="upload-demo"
                                drag
-                               :action='url+"/public/plugin/file_manage/api_index/upload_img"'
+                               :action='url+"/plugin/file_manage/api_index/upload_img"'
                                :on-success="handleAvatarSuccess"
                                :before-upload="beforeAvatarUpload"
                                :on-remove="removeFile"
@@ -311,7 +311,7 @@
             handleClose(){
                 this.$refs.form.resetFields();
             },
-            ds(){
+            ds(){//富文本初始化
                 layui.use('layedit', function () {
                     layedit = layui.layedit;
                     index = layedit.build('demo', {
@@ -322,7 +322,7 @@
                         ]
                     });
                 });
-            },//富文本初始化
+            },
             handleAvatarSuccess(res, file) {
                 this.form.file.push(res.data.filepath);
             },//附件上传

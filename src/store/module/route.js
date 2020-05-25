@@ -15,9 +15,11 @@ export default {
     state:{
         routeInfo:[],
         messageList:[],
+        CoordinateList:'',
         msgNum: 0,
         jurisdiction:"",
-        http:"http://js2.300c.cn/lhyd/"
+        http:"http://js2.300c.cn/lhyd/public"
+        // http:"http://10.22.116.249:10000"
     },
     mutations: {
         setRouteInfo: function (state, routeInfo) {
@@ -26,6 +28,9 @@ export default {
         getMessage:function (state, data) {
             state.messageList.unshift(data);
             state.msgNum = state.messageList.length;
+        },
+        getCoordinate:function(state, data){
+            state.CoordinateList = data.content;
         },
         msgStart:function (state) {
             state.msgNum = 0
