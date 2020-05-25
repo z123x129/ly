@@ -33,7 +33,6 @@
             this.chart = echarts.init(this.$refs.chart);
             var that = this;
             this.chart.on('click', function (params) {
-                console.log(params);
                 if(params.componentType === "geo")
                 {
                     let city = params.name;
@@ -44,7 +43,6 @@
                         if(that.address_info[i].name == city)
                         {
                             that.getAreaInfo(that.address_info[i].abbr, that.address_info[i].indexCode, params.name)
-                            console.log(that.address_info[i].abbr, that.address_info[i].indexCode, params.name)
                             break;
                         }
                     }
@@ -59,11 +57,10 @@
                     }
                     else if(typeof params.data.value == 'object')
                     {
-                        console.log(params.data.value[0], params.data.value[1]);
                         that.$router.push({
                             name:"Map_conmand",
                             params:{
-                                name:params.data.name
+                                name:params.data.name,
 
                             }
                         })
@@ -73,7 +70,6 @@
             //that.init("LinHai");
             // 浏览器自适应
             window.addEventListener('resize', (event)=> {
-                console.log(event);
                 echarts.init(option);
                 // initCharts();
                 this.chart.resize();
@@ -136,7 +132,6 @@
                         backgroundColor : 'transparent',
                         // formatter: function (params) {
                         //     if(typeof(params.data.value)== "object")
-                        //     console.log(params)
                         //         return '存在异常学校'+params.data.value[2]+"个";
 
                         //     // return params.name+"的摄像头个数："+params.value[2];
@@ -589,10 +584,15 @@
                                     return;
                                 return {
                                     name: itemOpt.dirName,
+
                                     value: [
                                         itemOpt.longitude,
                                         itemOpt.latitude,
-                                        itemOpt.stranger_num
+                                        itemOpt.stranger_num,//异常人数
+                                        itemOpt.chef_people,//后厨人数
+                                        itemOpt.food_people,//食品安全员人数
+                                        itemOpt.damp_people,//超市人数
+                                        itemOpt.health,//健康证数量
                                     ],
                                     py:itemOpt.abbr,
                                     itemStyle: {

@@ -107,7 +107,7 @@
                     <el-upload ref="my-upload"
                                class="upload-demo"
                                drag
-                               :action='url+"/public/plugin/file_manage/api_index/upload_img"'
+                               :action='url+"/plugin/file_manage/api_index/upload_img"'
                                :on-success="handleAvatarSuccess"
                                :before-upload="beforeAvatarUpload"
                                :on-remove="removeFile"

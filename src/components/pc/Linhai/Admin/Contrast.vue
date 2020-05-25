@@ -16,7 +16,10 @@
                                 <el-option v-for="(item,index) in regions" :label="item.name" :value="item.indexCode" :key="index"></el-option>
                             </el-select>
                         </el-form-item>
-                        <div v-if="!value1" style="height: 63px"></div>
+                        <el-form-item style="margin-top: 9px;z-index: 99">
+                            <el-button style="z-index: 99" size="small" type="primary" @click="exports">导出excel</el-button>
+                        </el-form-item>
+<!--                        <div v-if="!value1" style="height: 63px"></div>-->
                     </el-form>
                     <div class="header">
                         <p v-if="value1">各学校当月数据对比</p>
@@ -104,6 +107,7 @@
                 tableData:[],
                 code:'当月',
                 ids:'',
+                inx:'',
                 activeName:'first',
                 year:[],
             }
@@ -114,6 +118,7 @@
         methods: {
             getSet(id){
                 this.ids= id;
+                this.inx= id;
                 this.getDataset();
             },
             getAddress(){
@@ -137,6 +142,7 @@
                         this.data = res.top_chart;
 
                         this.ids = res.top_chart[0][4];
+                        this.inx = res.top_chart[0][5]
                         this.tableData = res.dir;
 
                         this.$nextTick(function () {
@@ -151,9 +157,7 @@
                     let params ={'uid':this.$store.state.user.uid,};
                     this.$https.fetchPost('/plugin/statistics/api_index/dataRegionsContrast',params).then((res) => {
                         this.data = res;
-
                         this.ids = res[0][4];
-
                         this.$nextTick(function () {
                             let that = this;
                             setTimeout(()=>{
@@ -172,6 +176,12 @@
                     })
                 }
             },
+            exports(){
+                let params = {'indexCode': this.inx, 'uid': this.$store.state.user.uid,};
+                this.$https.fetchPost('/plugin/statistics/excel/dataContrast', params).then((res) => {
+                    window.location.href=res;
+                })
+            }
         },
     }
 </script>
@@ -192,6 +202,7 @@
         padding-top: 10px;
     }
     .header p{
+        width: 200px;
         padding-bottom: 10px;
         font-size: 16px;
         text-align: center;
@@ -199,5 +210,6 @@
         top: 20px;
         left: 0;
         right: 0;
+        margin: 0 auto;
     }
 </style>

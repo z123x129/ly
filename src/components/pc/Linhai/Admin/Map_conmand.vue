@@ -26,6 +26,16 @@
             <div id="content" v-cloak>
                 <div id="container" class="map"></div>
             </div>
+            <div v-if="show" class="block_show">
+                <el-date-picker
+                        ref="input"
+                        v-model="time"
+                        type="date"
+                        @change="changeTime"
+                        value-format="yyyy-MM-dd"
+                        placeholder="选择日期">
+                </el-date-picker>
+            </div>
         </div>
 
         <videoDialog class="dialog" :visible.sync="videoVisible" @resize="resize" @resize_1="resize_1" @showvideo="showvideo" @cancel="hideVideo" >
@@ -41,6 +51,8 @@
                     <el-tree
                             class="filter-tree"
                             :data="data2"
+                            :load="loadNode"
+                            lazy
                             :props="defaultProps2"
                             :filter-node-method="filterNode2"
                             @node-click="playvideo"
@@ -50,10 +62,12 @@
                 <Hikr class="videobox" ref="H1" :openOWebName="ddd" id="Hik"></Hikr>
             </div>
         </videoDialog>
+
+
     </div>
 </template>
 <script>
-    import { Input,Tree} from 'element-ui'//,DatePicker
+    import { Input,Tree,Message,DatePicker } from 'element-ui'//,DatePicker
     import 'element-ui/lib/theme-chalk/index.css'
     import 'iview/dist/styles/iview.css'
     import Hikr from "../component/Hik/Hik_video"
@@ -67,6 +81,7 @@
         inject:["app"],
         components:{
             [Input.name]:Input,
+            [DatePicker.name]:DatePicker,
             [Tree.name]:Tree,
             Hikr,
             videoDialog,
@@ -83,13 +98,13 @@
                 data2: [],
                 defaultProps: {
                     children: 'children',
-                    label: 'label'
+                    label: 'label',
                 },
                 defaultProps2: {
                     children: 'last_child',
-                    label: 'label'
+                    label: 'label',
+                    isLeaf:"leaf"
                 },
-                lineArr:[[121.434756, 28.666385], [121.437235, 28.660603], [121.435004, 28.657439], [121.426592, 28.638458], [121.425734, 28.636499], [121.411658, 28.637253], [121.412001, 28.664971], [121.397067, 28.664218], [121.395865, 28.643882]],
                 tzSite:[121.15923,28.861499],//台州的坐标
                 map:"",//地图
                 markers:[],//点标记合集
@@ -97,11 +112,7 @@
                 carmarkers:[],//学习点标记合集
                 isPath:false,
                 plines:[],//轨迹合集
-                markerArr:[
-                    {id:1,isSign:false,unit:0,text:'单',xy:[121.156569,28.86646],line:[[121.156569,28.86646],[121.140984,28.853966],[121.106308,28.859078]]},
-                    {id:2,isSign:false,unit:0,text:'车',xy:[121.214848,28.871721],line:[[121.214848,28.871721],[121.193855,28.892148],[121.211365,28.921301]]},
-                    {id:3,isSign:false,unit:0,text:'车',xy:[121.150561,28.830675],line:[[121.150561,28.830675],[121.151798,28.810491],[121.131027,28.815605]]}
-                ],
+                markerArr:[],
                 markerArr2:[
                     {id:1,isSign:false,unit:0,text:'单',xy:[121.156147,28.856789]},
                     {id:2,isSign:false,unit:0,text:'车',xy:[121.214258,28.881456]},
@@ -110,6 +121,17 @@
                 videoVisible:false,
                 ddd:'aWebControl',
                 value: ['学校'],
+                time:'',
+                show:false,
+                cameraIndexCode:'',
+                historyArr:[],
+                showBtn:true,
+            }
+        },
+        computed: {
+            // 监听vuex中的CoordinateList
+            listenStoreMsg () {
+                return this.$store.state.route.CoordinateList
             }
         },
         watch: {
@@ -118,13 +140,33 @@
             },
             filterText2(val) {
                 this.$refs.tree2.filter(val);
-            }
+            },
+            listenStoreMsg () {
+                this.value.forEach(step=>{
+                    if(step == '单兵'){
+                        let res = this.$store.state.route.CoordinateList;
+
+                        this.markerArr.forEach((item,index)=>{
+                            if(item.cameraIndexCode == res.cameraIndexCode){
+                                this.map.remove(this.markers[index]);
+                                this.markerArr[index].xy.push(res.xy);
+                                this.getTouxiang(index);
+                                if(this.markerArr[index].start===false){
+                                    this.polylines(index);
+                                }return;
+                            }
+                        })
+                    }return;
+                })
+
+            },
         },
         created:function(){
             let _this=this
             window. markerHint= _this.markerHint
             window. opvideo= _this.opvideo
             window. polyline= _this.polyline
+            window. repolyline= _this.repolyline
             window.markerClick=_this.markerClick
         },
         mounted: function () {
@@ -132,8 +174,25 @@
 
             if(this.data.length == 0)
                 this.getList();//获取地区列表
+
+            this.getDanbing();
         },
         methods:{
+            loadNode(node, resolve) {
+                switch (node.level) {
+                    case 1:
+                        let params ={'indexCode':node.data.indexCode};
+                        params = this.$secret_key.func(this.$store.state.on_off, params);
+                        this.$https.fetchPost('/plugin/statistics/api_index/schoolOnline',params).then((res) => {
+                            var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
+                            resolve(res_data);
+                        })
+                        break;
+                    default:
+                        resolve([]);
+                        break;
+                }
+            },
             dianji(e){
                 let infoWindow = new AMap.InfoWindow();
                 infoWindow.setContent(e.target.content);
@@ -145,11 +204,12 @@
                 {
                     for(let child in this.data[key]["children"])
                     {
-                        if(this.data[key]["children"][child]["dirName"] == name)
-                            {
-                                x =  this.data[key]["children"][child];
+                        for(let child_1 in this.data[key]["children"][child]["children"]) {
+                            if (this.data[key]["children"][child]["children"][child_1]["label"] == name) {
+                                x = this.data[key]["children"][child]["children"][child_1];
                                 break;
                             }
+                        }
                     }
                 }
                 return x;
@@ -165,14 +225,12 @@
             },
             showvideo(){//显示视频插件
                 this.app[this.ddd].JS_ShowWnd();
-                // console.log('1111')
             },
             resize_1(){//拖动窗口时视频插件跟随移动
                 this.$refs.H1.resizeWindow(this.$refs.H1.$el.offsetHeight,this.$refs.H1.$el.offsetWidth);
             },
             resize(){
                 let that = this;
-                console.log(12312);
                 this.erd.listenTo(document.getElementById("Hik"), function (element) {
                     var width = element.offsetWidth
                     var height = element.offsetHeight
@@ -183,8 +241,6 @@
                 })
             },
             getList:async function(){ //获取地区列表
-                let params ={};
-                params = this.$secret_key.func(this.$store.state.on_off, params);
                 await this.$https.fetchPost('/plugin/statistics/api_index/getSchoolDir').then((res) => {
                     var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
                     this.data = res_data
@@ -198,6 +254,7 @@
 
             },
             gotoMap(data){//地图跳转
+
                 if(data.parentIndexCode){
                     this.map.setZoomAndCenter(12, [data.longitude,data.latitude]);
                 }else if(!data.children){
@@ -208,7 +265,14 @@
             playvideo(data){//地图跳转
                 let _this=this
                 if(!data.last_child){
-                    this.$refs.H1.videoPlay(data.cameraIndexCode)
+                    if (data.value == 1) {
+                        this.$refs.H1.videoPlay(data.cameraIndexCode);//传入摄像头编码
+                    }else{//如果摄像头离线
+                        Message.error({
+                            message:'该摄像头处于离线状态',
+                            duration:600
+                        });
+                    }
                 }
             },
             filterNode(value, data) {
@@ -228,6 +292,20 @@
                     zoom: 12,
                     isHotspot: true//是否开启地图热点和标注效果
                 });
+            },
+            getDanbing(){
+                let params ={'uid':this.$store.state.user.uid};
+                this.$https.fetchPost('/plugin/statistics/api_index/getDayCoordinate',params).then((res) => {
+                    this.markerArr = res;
+                    res.forEach(item=>{
+                        this.historyArr.push({
+                            'cameraIndexCode':item.cameraIndexCode,
+                            'xy':'',
+                            'pline':'',
+                            'start': false,
+                        });
+                    })
+                })
             },
             chageShow(val){
                 if(val.indexOf('单兵') > -1){
@@ -268,50 +346,58 @@
             addsite(type) {
                 if(type == 1){
                     for(let i in this.data){
-                        for(let y in this.data[i]["children"]){
-                            var schoolMarker = new AMap.Marker({
-                                position:[this.data[i]["children"][y]["longitude"],this.data[i]["children"][y]["latitude"]],
-                                icon: new AMap.Icon({
-                                // 图标尺寸
-                                size: new AMap.Size(35,35),
-                                // 图标的取图地址
-                                image: this.marker1,
-                                // 图标所用图片大小
-                                imageSize: new AMap.Size(35, 35),
-                                // 图标取图偏移量
-                                imageOffset: new AMap.Pixel(0,0)
-                                }),
-                                offset: new AMap.Pixel(-15, 0)
-                            });
-                            var info = JSON.stringify(this.data[i]["children"][y])
-                            var img = 'https://cdn.pixabay.com/photo/2016/08/18/23/04/yale-university-1604159_960_720.jpg'
-                            if(this.data[i]["children"][y].school_cover){
-                                var img = this.data[i]["children"][y].school_cover
-                            }
-                            schoolMarker.content ='<div class="mapBox">'+
-                                '<h3>'+this.data[i]["children"][y].dirName+'</h3>'+
-                                '<div class="flex">'+
+                        for(let x in this.data[i]["children"])
+                        {
+                            for(let y in this.data[i]["children"][x]["children"]){
+                                if(this.data[i]["children"][x]["children"][y]["longitude"] == null)
+                                    continue;
+                                var schoolMarker = new AMap.Marker({
+                                    position:[this.data[i]["children"][x]["children"][y]["longitude"],this.data[i]["children"][x]["children"][y]["latitude"]],
+                                    icon: new AMap.Icon({
+                                        // 图标尺寸
+                                        size: new AMap.Size(35,35),
+                                        // 图标的取图地址
+                                        image: this.marker1,
+                                        // 图标所用图片大小
+                                        imageSize: new AMap.Size(35, 35),
+                                        // 图标取图偏移量
+                                        imageOffset: new AMap.Pixel(0,0)
+                                    }),
+                                    offset: new AMap.Pixel(-15, 0)
+                                });
+                                var info = JSON.stringify(this.data[i]["children"][x]["children"][y])
+
+                                var img = 'https://cdn.pixabay.com/photo/2016/08/18/23/04/yale-university-1604159_960_720.jpg'
+                                // if(this.data[i]["children"][y].school_cover != null && this.data[i]["children"][y].school_cover){
+                                //     var img = this.data[i]["children"][x]["children"][y].school_cover
+                                // }
+                                schoolMarker.content ='<div class="mapBox">'+
+                                    '<h3>'+this.data[i]["children"][x]["children"][y].dirName+'</h3>'+
+                                    '<div class="flex">'+
                                     '<img src="'+img+'">'+
                                     '<div class="text">'+
-                                        '<p>联系人：'+this.data[i]["children"][y].personCharge+'</p>'+
-                                        '<p>联系电话：'+this.data[i]["children"][y].personChargePhone+'</p>'+
-                                        '<p>地址：'+this.data[i]["children"][y].street+'</p>'+
-                                        '<a onclick=\'opvideo('+info+')\'>查看视频</a>'+
+                                    '<p>联系人：'+this.data[i]["children"][x]["children"][y].personCharge+'</p>'+
+                                    '<p>联系电话：'+this.data[i]["children"][x]["children"][y].personChargePhone+'</p>'+
+                                    '<p>地址：'+this.data[i]["children"][x]["children"][y].street+'</p>'+
+                                    '<a onclick=\'opvideo('+info+')\'>查看视频</a>'+
                                     '</div>'+
-                                '</div>'+
-                            '</div>'
-                            schoolMarker.on('click', this.dianji);
-                            schoolMarker.on('mousemove', this.dianji);
-                            schoolMarker.setMap(this.map);
-                            this.schoolmarkers.push(schoolMarker)
+                                    '</div>'+
+                                    '</div>'
+                                schoolMarker.on('click', this.dianji);
+                                schoolMarker.on('mousemove', this.dianji);
+                                schoolMarker.setMap(this.map);
+                                this.schoolmarkers.push(schoolMarker);
+                            }
                         }
+
                     }
                 }else if(type == 2){
+                    var that = this;
                     this.markerArr.map((va,key) => {
-                        // console.log(key)
+                        let length = va.xy.length - 1;
                         let marker = new AMap.Marker({
-
-                            position: va.xy,
+                            isCustom:true,
+                            position: va.xy[length],
                             icon: new AMap.Icon({
                                 // 图标尺寸
                                 size: new AMap.Size(30,30),
@@ -327,16 +413,28 @@
                             // map: _this.map,
                             // offset: new AMap.Pixel(-13, -30)
                         });
-                        marker.content = '<div class="mapBox2"><div style="width: 200px">选择操作</div><a class=\'btn btn-info\' onclick=\'opvideo()\' style="margin-left: 12px;margin-top: 10px">查看监控</a><a class=\'btn btn-info\' onclick=\'polyline('+key+')\' style="margin-left: 12px;margin-top: 10px">查看轨迹</a></div>';
-                        marker.on('click', markerClick);
+                        var contextMenu = new AMap.ContextMenu();
+                        contextMenu.addItem("查看监控", function () {
+                            that.opvideo('',va);
+                        }, 0);
+                        contextMenu.addItem("实时轨迹", function () {
+                            that.polyline(key)
+                        }, 1);
+                        contextMenu.addItem("历史轨迹", function () {
+                            that.repolyline(key)
+                        }, 1);                        //绑定鼠标右击事件——弹出右键菜单
+                        marker.on('mousemove', function (e) {
+                            contextMenu.open(that.map, e.lnglat);
+                        });
+
+                        marker.content = '';
+                        // marker.on('click', markerClick);
                         marker.setMap(this.map);
-                        this.markers.push(marker)
+                        this.markers.push(marker);
                     })
                     this.map.setZoomAndCenter(11,this.tzSite);
                 }else if(type == 3){
-                    console.log('111')
                     this.markerArr2.map((va,key) => {
-                        // console.log(key)
                         let marker = new AMap.Marker({
 
                             position: va.xy,
@@ -365,6 +463,48 @@
                 }
 
             },
+            getTouxiang(key){
+                    var that = this;
+                    let va = this.markerArr[key];
+                    let length = va.xy.length - 1;
+                    console.log(va.xy[length])
+                    let marker = new AMap.Marker({
+                        position: va.xy[length],
+                        icon: new AMap.Icon({
+                            // 图标尺寸
+                            size: new AMap.Size(30,30),
+                            // 图标的取图地址
+                            image: this.marker2,
+                            // 图标所用图片大小
+                            imageSize: new AMap.Size(30, 30),
+                            // 图标取图偏移量
+                            imageOffset: new AMap.Pixel(0,0)
+                        }),
+                        offset: new AMap.Pixel(-15, -25),
+
+                        // map: _this.map,
+                        // offset: new AMap.Pixel(-13, -30)
+                    });
+                    var contextMenu = new AMap.ContextMenu();
+                    contextMenu.addItem("查看监控", function () {
+                        that.opvideo('',va);
+                    }, 0);
+                    contextMenu.addItem("实时轨迹", function () {
+                        that.polyline(key)
+                    }, 1);
+                    contextMenu.addItem("历史轨迹", function () {
+                        that.repolyline(key)
+                    }, 1);                        //绑定鼠标右击事件——弹出右键菜单
+                    marker.on('mousemove', function (e) {
+                        contextMenu.open(that.map, e.lnglat);
+                    });
+
+                    marker.content = '';
+                    // marker.on('click', markerClick);
+                    marker.setMap(this.map);
+                    this.markers[key] = marker;
+                // this.map.setZoomAndCenter(11,this.tzSite);
+            },
             //删除点标记
             delsite(type){
                 if(type == 1){
@@ -385,28 +525,99 @@
 
             },
             markerClick:function(e) {
+                this.showBtn = !this.showBtn;
                 let _this=this
                 _this.infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -30)});
                 _this.infoWindow.setContent(e.target.content);
                 _this.infoWindow.open(_this.map, e.target.getPosition());
+                _this.infoWindow.on('close',_this.showInfoClose)
             },
-            //轨迹
+            showInfoClose(){
+              this.show = false;
+            },
+            //实时轨迹
             polyline:function(key){
+                if(this.markerArr[key].start==undefined || this.markerArr[key].start==true){
+                    // let params ={'uid':this.$store.state.user.uid,'cameraIndexCode':this.markerArr[key].cameraIndexCode,'key':2};
+                    // this.$https.fetchPost('/plugin/statistics/api_index/switchCoordinate',params).then(() => {
+                        this.markerArr[key].start = false;
+                        this.polylines(key);
+                    // })
+                }else{
+                    // let params ={'uid':this.$store.state.user.uid,'cameraIndexCode':this.markerArr[key].cameraIndexCode,'key':1};
+                    // this.$https.fetchPost('/plugin/statistics/api_index/switchCoordinate',params).then(() => {
+                        this.markerArr[key].start = true;
+                        this.markerArr[key].pline.setMap(null);
+                    // })
+                }
+            },
+            //描绘实时轨迹
+            polylines:function(key){
+                if(this.markerArr[key].pline){
+                    this.markerArr[key].pline.setMap(null);
+                }
                 let _this=this
-                let line=_this.markerArr[key]
+                console.log(_this.markerArr[key].xy)
                 let pline=new AMap.Polyline({
                     map: _this.map,
-                    path: line.line,
+                    path: _this.markerArr[key].xy,
                     showDir: true,
                     strokeColor: "#28F",  //线颜色
                     // strokeOpacity: 1,     //线透明度
                     strokeWeight: 6,      //线宽
                     // strokeStyle: "solid"  //线样式
                 });
-                _this.plines.push(pline)
+                _this.markerArr[key].pline = pline;
+            },
+            //历史轨迹
+            repolyline:function(key){
+                if(this.historyArr[key].start==true && this.historyArr[key].pline.setMap){
+                    this.historyArr[key].start = false;
+                    this.historyArr[key].pline.setMap(null);
+                }else{
+                    this.time = '';
+                    this.show = true;
+                    this.$nextTick(x=>{
+                        this.$refs.input.focus();
+                    });
+                    this.cameraIndexCode = this.markerArr[key].cameraIndexCode;
+                    this.historyArr[key].start = true;
+                }
+            },
+            //描绘历史轨迹
+            hispolyline:function(index){
+                let _this=this
+                let pline=new AMap.Polyline({
+                    map: _this.map,
+                    path: _this.historyArr[index].xy,
+                    showDir: true,
+                    strokeColor: "#ff009c",  //线颜色
+                    // strokeOpacity: 1,     //线透明度
+                    strokeWeight: 6,      //线宽
+                    // strokeStyle: "solid"  //线样式
+                });
+                _this.historyArr[index].pline = pline;
+            },
+            //时间选择
+            changeTime(){
+                if(this.time){
+                let params ={'uid':this.$store.state.user.uid,'time':this.time,'cameraIndexCode':this.cameraIndexCode};
+                this.$https.fetchPost('/plugin/statistics/api_index/getHistoryCoordinate',params).then((res) => {
+                    if(res.xy){
+                        this.historyArr.forEach((item,index)=>{
+                            if(item.cameraIndexCode == res.cameraIndexCode){
+                                this.historyArr[index].xy = res.xy;
+                                this.hispolyline(index);
+                            }
+                        })
+                    }else{
+                        Message.error('该时间无轨迹');
+                    }
+                })
+                }
             },
             //查看监控
-            opvideo:function(data){
+            opvideo:function(data,step){
                 this.videoVisible = true
                 if(this.$refs.H1.checkWebC()){
                     this.app[this.ddd].JS_ShowWnd();
@@ -416,8 +627,25 @@
                     }, 100);
                 }
                 if(this.data2.length == 0){
+                    if(step){
+                        step.label = step.cameraName;
+                        step.leaf = true;
+                        this.data2 = this.data2.concat(step);
+                        return;
+                    }
                     this.data2 = this.data2.concat(data)
                 }else{
+                    if(step){
+                        step.label = step.cameraName;
+                        step.leaf = true;
+                        for(let i in this.data2)
+                        {
+                            if(this.data2[i].label == step.label)
+                                return;
+                        }
+                        this.data2 = this.data2.concat(step);
+                        return;
+                    }
                     for(let i in this.data2)
                     {
                         if(this.data2[i].label == data.label)
@@ -455,7 +683,6 @@
                 //             let poiArr = result.poiList.pois;
                 //             let location = poiArr[0].location;
                 //             let code=[];
-                //             console.log('lng:'+location.lng,'lat:'+location.lat)
                 //             code[0]=poiArr[0].name.indexOf("学校");
                 //             code[1]=poiArr[0].name.indexOf("幼儿园");
                 //             code[2]=poiArr[0].name.indexOf("中学");
@@ -489,10 +716,6 @@
             //             '</div>'
 
             // },
-            //绘制轨迹
-            addpath: function () {
-                marker.moveAlong(lineArr, 1000);
-            }
         },
         activated(){
             if(this.map == "")
@@ -517,6 +740,7 @@
 </script>
 <style scoped lang="less">
     #content /deep/ .mapBox{
+        background: #fff;
         h3{
             padding: 0 80px 0 20px;
             height: 42px;
@@ -549,13 +773,13 @@
                 }
             }
         }
-        // background: #000;
     }
     #content /deep/ .mapBox2{
         padding: 10px 18px 10px 10px;
     }
     #content /deep/ .amap-info{
         .amap-info-content{
+            background: transparent;
             padding: 0;
             .amap-info-close{top:14px}
         }
@@ -580,7 +804,6 @@
            padding-left: 10px;
            h3{
                font-size: 16px;
-               font-weight: ;
            }
            p{
                font-size: 15px;
@@ -607,6 +830,7 @@
         overflow: auto;
     }
     .map_box{
+        position: relative;
         // float: left;
         // width: 82%;
         flex: 1;
@@ -661,5 +885,87 @@
             font-size: 12px;
         }
     }
+    .block_show{
+        position: absolute;
+        top: 20px;
+        right: 20px;
+    }
+    .block_show /deep/ .el-input__inner{
+        background: rgba(255,255,255,0.8);
+    }
+
+    .reset{
+        width: 32px;
+        height: 32px;
+        position: relative;
+    }
+    /*.reset li {*/
+    /*    width: 32px;*/
+    /*    height: 32px;*/
+    /*    display: inline-block;*/
+    /*}*/
+    .li1{
+        z-index: 9;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    .li2{
+        position: absolute;
+        transition: 1s;
+        opacity: 0;
+        top: 0;
+        left: 0;
+    }
+    .li3{
+        position: absolute;
+        transition: 1s;
+        opacity: 0;
+        top: 0;
+        left: 0;
+    }
+    .li4{
+        position: absolute;
+        transition: 1s;
+        opacity: 0;
+        bottom: 0;
+        left: 0;
+    }
+    .li5{
+        position: absolute;
+        transition: 1s;
+        opacity: 0;
+        bottom: 0;
+        left: 0;
+    }
+    #li2hover{
+        transition: 1s;
+        position: absolute;
+        opacity: 1;
+        top: -40px;
+        left: 0;
+    }
+    #li3hover{
+        transition: 1s;
+        position: absolute;
+        opacity: 1;
+        top: -20px;
+        left: 40px;
+    }
+    #li4hover{
+        transition: 1s;
+        position: absolute;
+        opacity: 1;
+        bottom: -20px;
+        left: 40px;
+    }
+    .li5hover{
+        transition: 1s;
+        position: absolute;
+        opacity: 1;
+        bottom: -40px;
+        left: 0;
+    }
+
 
 </style>

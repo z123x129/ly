@@ -13,7 +13,7 @@ class HttpRequest {
   getInsideConfig () {
     const config = {
       baseURL: this.baseUrl,
-      timeout:4000,
+      timeout:8000,
       // withCredentials:true,//携带cookie
       headers: {
         //
