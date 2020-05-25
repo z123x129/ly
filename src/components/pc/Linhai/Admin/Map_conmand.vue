@@ -75,6 +75,7 @@
     import marker1 from '@/assets/images/marker1.png'
     import marker2 from '@/assets/images/marker2.png'
     import marker3 from '@/assets/images/marker3.png'
+    import marker4 from '@/assets/images/marker4.png'
     import elementResizeDetectorMaker from "element-resize-detector"
     export default {
         name:"Map_conmand",
@@ -92,6 +93,7 @@
                 marker1,
                 marker2,
                 marker3,
+                marker4,
                 filterText: '',
                 filterText2: '',
                 data: [],
@@ -303,6 +305,7 @@
                             'xy':'',
                             'pline':'',
                             'start': false,
+                            'today':true,
                         });
                     })
                 })
@@ -394,6 +397,10 @@
                 }else if(type == 2){
                     var that = this;
                     this.markerArr.map((va,key) => {
+                        let tubiao = this.marker4;
+                        if(va.today){
+                            tubiao = this.marker2;
+                        }
                         let length = va.xy.length - 1;
                         let marker = new AMap.Marker({
                             isCustom:true,
@@ -402,7 +409,7 @@
                                 // 图标尺寸
                                 size: new AMap.Size(30,30),
                                 // 图标的取图地址
-                                image: this.marker2,
+                                image: tubiao,
                                 // 图标所用图片大小
                                 imageSize: new AMap.Size(30, 30),
                                 // 图标取图偏移量
@@ -417,22 +424,24 @@
                         contextMenu.addItem("查看监控", function () {
                             that.opvideo('',va);
                         }, 0);
-                        contextMenu.addItem("实时轨迹", function () {
-                            that.polyline(key)
-                        }, 1);
+                        if(va.today) {
+                            contextMenu.addItem("实时轨迹", function () {
+                                that.polyline(key)
+                            }, 1);
+                        }
                         contextMenu.addItem("历史轨迹", function () {
                             that.repolyline(key)
-                        }, 1);                        //绑定鼠标右击事件——弹出右键菜单
-                        marker.on('mousemove', function (e) {
+                        }, 1);//绑定鼠标右击事件——弹出右键菜单
+                        marker.on('click', function (e) {
                             contextMenu.open(that.map, e.lnglat);
                         });
 
-                        marker.content = '';
+                        // marker.content = '';
                         // marker.on('click', markerClick);
-                        marker.setMap(this.map);
+                        marker.setMap(that.map);
                         this.markers.push(marker);
                     })
-                    this.map.setZoomAndCenter(11,this.tzSite);
+                    that.map.setZoomAndCenter(11,this.tzSite);
                 }else if(type == 3){
                     this.markerArr2.map((va,key) => {
                         let marker = new AMap.Marker({
@@ -466,15 +475,18 @@
             getTouxiang(key){
                     var that = this;
                     let va = this.markerArr[key];
+                    let tubiao = this.marker4;
+                    if(va.today){
+                        tubiao = this.marker2;
+                    }
                     let length = va.xy.length - 1;
-                    console.log(va.xy[length])
                     let marker = new AMap.Marker({
                         position: va.xy[length],
                         icon: new AMap.Icon({
                             // 图标尺寸
                             size: new AMap.Size(30,30),
                             // 图标的取图地址
-                            image: this.marker2,
+                            image: tubiao,
                             // 图标所用图片大小
                             imageSize: new AMap.Size(30, 30),
                             // 图标取图偏移量
@@ -489,17 +501,19 @@
                     contextMenu.addItem("查看监控", function () {
                         that.opvideo('',va);
                     }, 0);
-                    contextMenu.addItem("实时轨迹", function () {
-                        that.polyline(key)
-                    }, 1);
+                    if(va.today){
+                        contextMenu.addItem("实时轨迹", function () {
+                            that.polyline(key)
+                        }, 1);
+                    }
                     contextMenu.addItem("历史轨迹", function () {
                         that.repolyline(key)
                     }, 1);                        //绑定鼠标右击事件——弹出右键菜单
-                    marker.on('mousemove', function (e) {
+                    marker.on('click', function (e) {
                         contextMenu.open(that.map, e.lnglat);
                     });
 
-                    marker.content = '';
+                    // marker.content = '';
                     // marker.on('click', markerClick);
                     marker.setMap(this.map);
                     this.markers[key] = marker;
