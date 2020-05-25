@@ -8,11 +8,23 @@
     // import "_pl/js/Hik/jsWebControl-1.0.0.min.js";
     import Global from '../../js/Global'
     import {JSEncrypt} from 'encryptlong'
-    import {Message} from "element-ui"
+    import {Message,MessageBox} from "element-ui"
 
     export default {
         inject:["app"],
         props:{
+            // appkey:{
+            //     type:String,
+            //     default:'24387968'
+            // },
+            // secret:{
+            //     type:String,
+            //     default:"DDZd1gZIBoEvwUKx0vVx"
+            // },
+            // ip:{
+            //     type:String,
+            //     default:"10.22.113.85"
+            // },
             appkey:{
                 type:String,
                 default:'20307173'
@@ -23,8 +35,7 @@
             },
             ip:{
                 type:String,
-                default:"111.3.64.34"
-            },
+                default:"111.3.64.34"},
             port:{
                 type:String,
                 default:"446"
@@ -64,7 +75,6 @@
                 let that = this;
                 if(this.app[this.openOWebName] != '')
                 {
-                    window.console.log("窗口以初始化");
                     return;
                 }
                 this.app[this.openOWebName] = new WebControl({
@@ -98,15 +108,20 @@
                                 that.init();
                             }, 3000)
                         } else {
-
-                            Message.error("插件启动失败，请检查插件是否安装！")
+                            MessageBox.confirm('插件启动失败,是否下载插件?', '提示', {
+                                confirmButtonText: '确定',
+                                cancelButtonText: '取消',
+                                type: 'warning'
+                            }).then(() => {
+                                window.location.href="http://10.22.116.249:10000/VideoWebPlugin.exe"
+                            }).catch(() => {
+                                Message.error("插件启动失败！")
+                            });
                         }
                     },
                 });
-                window.console.log(that.app[that.openOWebName]);
             },
             cbIntegrationCallBack(){
-                console.log('连接成功');
             },
             initVideo(layoutm = "2x2"){//snapDir = "SnapDir", videoDir = "VideoDir",
                 if(!this.checkWebC())
@@ -145,7 +160,6 @@
                 else
                     this.app[this.openOWebName].JS_ShowWnd()
                 this.show = !this.show;
-                window.console.log(this.show);
             },
             showVideo(){
                 if(!this.checkWebC())
@@ -182,7 +196,6 @@
                         wndId: wndId    //窗口编号
                     })
                 }).then(function(oData){
-                    window.console.log(oData);
                     callback();
                 })
             },
@@ -197,7 +210,6 @@
                         keyLength: 1024
                     })
                 }).then(function (oData) {
-                    //window.console.log(oData);
                     if (oData.responseMsg.data) {
                         that.pubKey = oData.responseMsg.data;
                         callback()
@@ -214,7 +226,6 @@
 
                 if(this.app[this.openOWebName] == '')
                 {
-                    window.console.log("请先初始化视频插件");
                     return false;
                 }
                 return true;

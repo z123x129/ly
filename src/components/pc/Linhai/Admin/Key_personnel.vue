@@ -210,7 +210,7 @@
                         <el-form-item label="上传人物照片:" prop="face_img" :label-width="formLabelWidth">
                             <el-upload
                                     class="avatar-uploader"
-                                    :action='url+"/public/plugin/file_manage/api_index/upload_img"'
+                                    :action='url+"/plugin/file_manage/api_index/upload_img"'
                                     :show-file-list="false"
                                     :on-success="handleAvatarSuccess"
                                     :before-upload="beforeAvatarUpload">

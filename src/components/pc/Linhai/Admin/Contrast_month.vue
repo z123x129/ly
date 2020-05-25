@@ -23,8 +23,8 @@
                 </el-form-item>
             </el-form>
             <div style="height:60vh;" class="header">
-                <p v-if="value1">各学校年数据对比</p>
-                <p v-if="!value1">各区域年数据对比</p>
+                <p v-if="value1">各学校月数据对比</p>
+                <p v-if="!value1">各区域月数据对比</p>
                 <New_zhexian ref="New_zhexian" :data="year" style="width: 100%;height: 100%"></New_zhexian>
             </div>
         </div>

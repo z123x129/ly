@@ -133,9 +133,10 @@
                 collapsed:false,
                 img:headImg,
                 isFullscreen:false,
-                ws:new WebSocket("ws://"+"js2.300c.cn"+":7272"),
-                router_name : this.$route.name
+                // ws:new WebSocket("ws://"+"10.22.116.249"+":7272"),
+                router_name : this.$route.name,
                 // ws:new WebSocket("ws://"+"192.168.0.2"+":7272")
+                ws:new WebSocket("ws://"+"js2.300c.cn"+":7272")
             }
         },
         created(){
@@ -321,6 +322,9 @@
                     case "examine_stranger":
                         that.open(data.describe,data.content.user_login,type);
                         that.$store.commit("getMessage", data);
+                        break;
+                    case "newCoordinate":
+                        that.$store.commit("getCoordinate", data);
                         break;
                 }
             };

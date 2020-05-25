@@ -255,7 +255,7 @@
                 params = this.$secret_key.func(this.$store.state.on_off, params);
                 this.$https.fetchPost('/plugin/school/api_index/out_health_list',params).then((res) => {
                     var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
-                    window.location.href=this.$store.state.route.http + res_data;
+                    window.location.href=res_data;
                 })
             },
             getSchool(){ //获取学校列表
