@@ -15,11 +15,11 @@
         props:{
             appkey:{
                 type:String,
-                default:'24387968'
+                default:'20307173'
             },
             secret:{
                 type:String,
-                default:"DDZd1gZIBoEvwUKx0vVx"
+                default:"GcBtnm6uvyjiuKyvYne7"
             },
             ip:{
                 type:String,
