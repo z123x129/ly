@@ -169,7 +169,7 @@
                 <el-form-item label="人脸照片:" prop="face" :label-width="formLabelWidth">
                     <el-upload
                             class="avatar-uploader"
-                            :action='url+"/public/plugin/file_manage/api_index/upload_img"'
+                            :action='url+"/plugin/file_manage/api_index/upload_img"'
                             :show-file-list="false"
                             :on-success="handleAvatarSuccess"
                             :before-upload="beforeAvatarUpload">
@@ -180,7 +180,7 @@
                 <el-form-item label="健康证照片:" prop="health" :label-width="formLabelWidth">
                     <el-upload
                             class="avatar-uploader"
-                            :action='url+"/public/plugin/file_manage/api_index/upload_img"'
+                            :action='url+"/plugin/file_manage/api_index/upload_img"'
                             :show-file-list="false"
                             :on-success="handleAvatarSuccess2"
                             :before-upload="beforeAvatarUpload">
@@ -357,7 +357,7 @@
                 params = this.$secret_key.func(this.$store.state.on_off, params);
                 this.$https.fetchPost('/plugin/school/api_index/out_health_list',params).then((res) => {
                     var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
-                    window.location.href=this.$store.state.route.http + res_data;
+                    window.location.href=res_data;
                 })
             },
             delList(id){

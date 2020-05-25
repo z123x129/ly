@@ -80,7 +80,7 @@
             <Layout>
                 <Header class="layout-header-bar">
                     <div>
-                        <Icon @click.native="collapsedSider" :class="rotateIcon" :style="{margin: '20px'}" type="md-menu" size="24"></Icon>
+<!--                        <Icon @click.native="collapsedSider" :class="rotateIcon" :style="{margin: '20px'}" type="md-menu" size="24"></Icon>-->
                         <custom-bread-crumb show-icon style="margin-left: 30px;" :list="breadCrumbList"></custom-bread-crumb>
                     </div>
 
@@ -128,14 +128,15 @@
         inject:["app"],
         data () {
             return {
-                isCollapsed: true,
+                isCollapsed: false,
                 minLogo,
-                collapsed:true,
+                collapsed:false,
                 img:headImg,
                 isFullscreen:false,
-                ws:new WebSocket("ws://"+"js2.300c.cn"+":7272"),
-                router_name : this.$route.name
+                // ws:new WebSocket("ws://"+"10.22.116.249"+":7272"),
+                router_name : this.$route.name,
                 // ws:new WebSocket("ws://"+"192.168.0.2"+":7272")
+                ws:new WebSocket("ws://"+"js2.300c.cn"+":7272")
             }
         },
         created(){
@@ -321,6 +322,9 @@
                     case "examine_stranger":
                         that.open(data.describe,data.content.user_login,type);
                         that.$store.commit("getMessage", data);
+                        break;
+                    case "newCoordinate":
+                        that.$store.commit("getCoordinate", data);
                         break;
                 }
             };
