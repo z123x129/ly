@@ -18,8 +18,8 @@ export default {
         CoordinateList:'',
         msgNum: 0,
         jurisdiction:"",
-        http:"http://js2.300c.cn/lhyd/public"
-        // http:"http://10.22.116.249:10000"
+        // http:"http://js2.300c.cn/lhyd/public"
+        http:"http://10.22.116.249:10000"
     },
     mutations: {
         setRouteInfo: function (state, routeInfo) {
