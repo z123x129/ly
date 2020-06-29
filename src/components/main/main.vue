@@ -301,12 +301,14 @@
                         });
                         break;
                     case 'emphasis':
-                        that.open(data.describe,data.content.faceInfoName,type);
+                        // that.open(data.describe,data.content.faceInfoName,type);
+                        that.open(data.describe,'发现重点人员',type);
                         that.$store.commit("getMessage", data);
                         bus.$emit("outmes",data);
                         break;
                     case 'stranger':
-                        that.open(data.describe,data.content.gender+','+data.content.ageGroup,type);
+                        // that.open(data.describe,data.content.gender+','+data.content.ageGroup,type);
+                        that.open(data.describe,'发现后厨陌生人员',type);
                         that.$store.commit("getMessage", data);
                         bus.$emit("outmes",data);
                         break;
