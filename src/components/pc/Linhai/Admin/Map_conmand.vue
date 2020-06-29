@@ -740,6 +740,7 @@
                         this.videoinit()
                     }, 100);
                 }
+                console.log(step)
                 if (this.data2.length == 0) {
                     if (step) {
                         step.label = step.cameraName;
