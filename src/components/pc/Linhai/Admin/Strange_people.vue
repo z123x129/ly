@@ -95,24 +95,24 @@
                     </el-image>
                 </template>
             </el-table-column>
-            <el-table-column
-                    align="center"
-                    prop="gender"
-                    label="性别"
-                    width="100">
-            </el-table-column>
-            <el-table-column
-                    align="center"
-                    prop="ageGroup"
-                    label="年龄段"
-                    width="100">
-            </el-table-column>
-            <el-table-column
-                    align="center"
-                    prop="glass"
-                    label="是否戴眼镜"
-                    width="100">
-            </el-table-column>
+<!--            <el-table-column-->
+<!--                    align="center"-->
+<!--                    prop="gender"-->
+<!--                    label="性别"-->
+<!--                    width="100">-->
+<!--            </el-table-column>-->
+<!--            <el-table-column-->
+<!--                    align="center"-->
+<!--                    prop="ageGroup"-->
+<!--                    label="年龄段"-->
+<!--                    width="100">-->
+<!--            </el-table-column>-->
+<!--            <el-table-column-->
+<!--                    align="center"-->
+<!--                    prop="glass"-->
+<!--                    label="是否戴眼镜"-->
+<!--                    width="100">-->
+<!--            </el-table-column>-->
             <el-table-column
                     align="center"
                     prop="faceTime"

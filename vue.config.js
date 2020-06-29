@@ -11,7 +11,7 @@ module.exports = {
             '/public': {
                 // target: 'http://192.168.0.2/lhyd',
                 target: 'http://js2.300c.cn/lhyd',
-                // target: 'http://tp.300c.cn/zy_137/subsystem20190906',
+                // target: 'http://192.168.0.10/lhyd',
                 ws: true, //是否代理websockets
                 changeOrigin: true // 设置同源  默认false，是否需要改变原始主机头为目标URL
             },
