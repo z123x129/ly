@@ -198,7 +198,7 @@ export const asyncRouterMap = [
                 name: 'Contrast',
                 meta: {
                     icon: 'md-stats',
-                    title: '数据对比',
+                    title: '月数据对比',
                     role: [1],
                 },
                 component: Contrast
@@ -208,7 +208,7 @@ export const asyncRouterMap = [
                 name: 'Contrast_month',
                 meta: {
                     icon: 'md-trending-up',
-                    title: '月数据对比',
+                    title: '年数据对比',
                     role: [1],
                 },
                 component: Contrast_month

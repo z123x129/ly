@@ -73,9 +73,30 @@
             loadNode(node, resolve) {
                 switch (node.level) {
                     case 1:
-                        resolve(node.data.children);
+                        if(node.data.spec_type == 1)
+                        {
+                            let params ={'indexCode':node.data.indexCode};
+                            params = this.$secret_key.func(this.$store.state.on_off, params);
+                            this.$https.fetchPost('/plugin/statistics/api_index/schoolOnline',params).then((res) => {
+                                var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
+                                resolve(res_data);
+                            })
+                        }
+                        else
+                            resolve(node.data.children);
                         break;
                     case 2:
+                        if(node.data.spec_type == 2)
+                        {
+                            let params ={'indexCode':node.data.indexCode};
+                            params = this.$secret_key.func(this.$store.state.on_off, params);
+                            this.$https.fetchPost('/plugin/statistics/api_index/schoolOnline',params).then((res) => {
+                                var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
+                                resolve(res_data);
+                            })
+                        }
+                        else
+                            resolve(node.data.children);
                         resolve(node.data.children);
                         break;
                     case 3:
