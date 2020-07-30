@@ -221,16 +221,145 @@
                     </el-pagination>
                 </div>
             </el-tab-pane>
-
+            <el-tab-pane label="选择图片归属地区" name="third">
+                <el-form :inline="true" :model="formInline" class="demo-form-inline">
+                    <el-form-item label="选择区域:">
+                        <el-select @change="getSchool2" size="small" filterable clearable v-model="formInline2.indexCode">
+                            <el-option v-for="(item,index) in regions2" :label="item.name" :value="item.indexCode" :key="index"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="选择学校:">
+                        <el-select @change="getWgy" size="small" filterable clearable v-model="formInline2.dir_id">
+                            <el-option v-for="(item,index) in dir2" :label="item.dirName" :value="item.id" :key="index"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="选择网格员:">
+                        <el-select size="small" v-model="formInline2.user" placeholder="请优先选择学校">
+                            <el-option v-for="(item,index) in user" :label="item.user_login" :value="item.user_id" :key="index"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item style="margin-top: -2px">
+                        <el-button size="small" type="primary" @click="search2">搜索</el-button>
+                    </el-form-item>
+                </el-form>
+                <el-table
+                        :data="tableData3"
+                        border
+                        stripe
+                        :row-class-name="tableRowClassName"
+                        header-row-class-name="headerRow"
+                        style="width: 100%">
+                    <el-table-column
+                        align="center"
+                        type="selection"
+                        width="60">
+                    </el-table-column>
+                    <el-table-column
+                            align="center"
+                            prop="MIID"
+                            label="ID"
+                            width="80">
+                    </el-table-column>
+                    <el-table-column
+                            align="center"
+                            prop="nickname"
+                            label="姓名">
+                    </el-table-column>
+                    <el-table-column
+                            align="center"
+                            prop="mobile"
+                            label="联系电话">
+                    </el-table-column>
+                    <el-table-column
+                            align="center"
+                            prop="where"
+                            label="来源">
+                    </el-table-column>
+                    <el-table-column
+                            align="center"
+                            prop="id_card"
+                            label="身份证号码">
+                    </el-table-column>
+                    <el-table-column
+                            align="center"
+                            label="图片信息">
+                        <template slot-scope="scope">
+                            <el-image
+                                    style="width: 35px; height: 35px"
+                                    :src="scope.row.face_thumb"
+                                    :preview-src-list="[scope.row.face_thumb]">
+                            </el-image>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            align="center"
+                            prop="health_id_card"
+                            label="健康证号码">
+                    </el-table-column>
+                    <el-table-column
+                            align="center"
+                            prop="health_endtime"
+                            label="健康证到期时间">
+                    </el-table-column>
+                    
+                    <el-table-column
+                            align="center"
+                            prop="timeStr"
+                            label="添加时间">
+                    </el-table-column>
+                    <el-table-column
+                            align="center"
+                            label="操作">
+                        <template slot-scope="scope">
+                            <el-button @click="look2" type="text" size="small">操作</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <div style="padding: 15px;display: flex;justify-content: flex-end;">
+                    <el-pagination
+                            @size-change="handleSizeChange3"
+                            @current-change="handleCurrentChange3"
+                            :current-page="currentPage3"
+                            :page-sizes="[paginates, paginates*2, paginates*3, paginates*4]"
+                            :page-size="paginate3"
+                            background
+                            layout="total, sizes, prev, pager, next, jumper"
+                            :total="total2">
+                    </el-pagination>
+                </div>
+                <el-dialog
+                        :title=title
+                        :visible.sync="dialogFormVisible">
+                    <span v-html="content"></span>
+                    <div class="demo-image__preview">
+                        <el-image v-if="img"
+                                  style="width: 100px; height: 100px"
+                                  :src="img[0]"
+                                  :preview-src-list="img">
+                        </el-image>
+                    </div>
+                </el-dialog>
+                <el-dialog
+                        :visible.sync="dialogFormVisible2">
+                    <div class="block">
+                        <span class="demonstration">默认 click 触发子菜单</span>
+                        <el-cascader
+                            v-model="value"
+                            :options="options"
+                            @change="handleChange"></el-cascader>
+                    </div>
+                </el-dialog>
+            </el-tab-pane>
         </el-tabs>
     </div>
 </template>
 <script>
-    import { Form,FormItem,Select,Option,Button,DatePicker,Tabs,TabPane,Table,TableColumn,Image,Pagination,Input,Dialog } from 'element-ui'
+    import { Form,Cascader,FormItem,Select,Option,Button,DatePicker,Tabs,TabPane,Table,TableColumn,Image,Pagination,Input,Dialog } from 'element-ui'
     import 'element-ui/lib/theme-chalk/index.css'
     export default {
         components:{
             [Form.name]:Form,
+            [Cascader.name]:Cascader,
             [FormItem.name]:FormItem,
             [Select.name]:Select,
             [Option.name]:Option,
@@ -247,6 +376,8 @@
         },
         data(){
             return{
+                value:'',
+                options:[],
                 activeName: 'first',
                 formInline: {
                     indexCode: '',
@@ -266,6 +397,7 @@
                 user:'',
                 tableData: [],
                 tableData2: [],
+                tableData3: [],
                 pickerOptions: {
                     shortcuts: [{
                         text: '最近一周',
@@ -297,6 +429,7 @@
                 content: '',
                 img:'',
                 dialogFormVisible:false,
+                dialogFormVisible2:false,
                 currentPage: 1,
                 total:0,
                 page:1,
@@ -306,12 +439,18 @@
                 paginate:10,
                 paginate2:10,
                 paginates:10,
+                paginate3:10,
+                page3:1, //医院列表
+                total3:0,
+                currentPage3: 1,
             }
         },
         mounted(){
             this.getList();
             this.getList2();
             this.getAddress();
+            this.getBwhlist()
+            this.getAddlist()
         },
         methods: {
             search(){
@@ -321,6 +460,30 @@
             search2(){
                 this.page2 = 1;
                 this.getList2();
+            },
+            search3(){
+                this.page3 = 1;
+                this.getBwhlist();
+            },
+            // 医院数据
+            getBwhlist(){
+                let params ={'page':this.page3};
+                this.$https.fetchPost('/plugin/statistics/api_index/getHospitalInfo',params).then((res) => {
+                    console.log(res.data)
+                    this.tableData3 = res.data;
+                    this.currentPage3 = res.current_page;
+                    this.total3 = res.total;
+                })
+            },
+            // 获取地区列表
+            getAddlist(){
+                this.$https.fetchPost('/plugin/statistics/api_index/getSchoolDir').then((res) => {
+                    var res_data = this.$secret_key.func(this.$store.state.on_off, res, "key");
+                    this.options = res_data
+                })
+            },
+             handleChange(value) {
+                console.log(value);
             },
             getList(){
                 var timeStart = '',timeEnd = '';
@@ -440,7 +603,17 @@
                 this.page2 = val;
                 this.getList2();
             },
+             handleSizeChange3(val) {//分页器
+                this.paginate3 = val;
+                this.page3 = 1;
+                this.getBwhlist();
+            },
+            handleCurrentChange3(val) {//分页器
+                this.page3 = val;
+                this.getBwhlist();
+            },
             tableRowClassName({row, rowIndex}) {
+                console.log(row)
                 if (row.is_over === -1) {
                     return 'warning-row';
                 } else if (row.is_over === 1) {
@@ -457,6 +630,9 @@
                     this.img = '';
                 }
                 this.dialogFormVisible = true;
+            },
+            look2(){
+                this.dialogFormVisible2 = true;
             },
         },
     }

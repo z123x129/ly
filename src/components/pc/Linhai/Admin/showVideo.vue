@@ -71,8 +71,16 @@
                             let params ={'indexCode':node.data.indexCode};
                             params = this.$secret_key.func(this.$store.state.on_off, params);
                             this.$https.fetchPost('/plugin/statistics/api_index/schoolOnline',params).then((res) => {
-                                var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
-                                resolve(res_data);
+                                if(res == undefined){
+                                    resolve([]);
+                                    Message.error({
+                                        message:'该区域无设备信息',
+                                        duration:600
+                                    });
+                                }else{
+                                    var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
+                                    resolve(res_data);
+                                }
                             })
                         }
                         else
@@ -84,20 +92,37 @@
                             let params ={'indexCode':node.data.indexCode};
                             params = this.$secret_key.func(this.$store.state.on_off, params);
                             this.$https.fetchPost('/plugin/statistics/api_index/schoolOnline',params).then((res) => {
-                                var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
-                                resolve(res_data);
+                                if(res == undefined){
+                                    resolve([]);
+                                    Message.error({
+                                        message:'该区域无设备信息',
+                                        duration:600
+                                    });
+                                }else{
+                                    var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
+                                    resolve(res_data);
+                                }
+                                
                             })
                         }
                         else
-                            resolve(node.data.children);
+                        resolve(node.data.children);
                         resolve(node.data.children);
                         break;
                     case 3:
                         let params ={'indexCode':node.data.indexCode};
                         params = this.$secret_key.func(this.$store.state.on_off, params);
                         this.$https.fetchPost('/plugin/statistics/api_index/schoolOnline',params).then((res) => {
-                            var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
-                            resolve(res_data);
+                            if(res == undefined){
+                                resolve([]);
+                                Message.error({
+                                    message:'该区域无设备信息',
+                                    duration:600
+                                });
+                            }else{
+                               var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
+                                resolve(res_data); 
+                            }
                         })
                         break;
                     default:
