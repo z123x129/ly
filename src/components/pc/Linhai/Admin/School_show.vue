@@ -223,23 +223,36 @@
             </el-tab-pane>
             <el-tab-pane label="选择图片归属地区" name="third">
                 <el-form :inline="true" :model="formInline" class="demo-form-inline">
-                    <el-form-item label="选择区域:">
-                        <el-select @change="getSchool2" size="small" filterable clearable v-model="formInline2.indexCode">
-                            <el-option v-for="(item,index) in regions2" :label="item.name" :value="item.indexCode" :key="index"></el-option>
+                    <el-form-item label="姓名:">
+                        <el-input size="small" v-model="formInline3.nickname"></el-input>
+                    </el-form-item>
+                    <el-form-item label="联系电话:">
+                        <el-input size="small" v-model="formInline3.mobile"></el-input>
+                    </el-form-item>
+                    <el-form-item label="来源:">
+                        <el-select clearable size="small" v-model="formInline3.where" placeholder="请选择来源">
+                            <el-option label="临海市第一人民医院" value="临海市第一人民医院" ></el-option>
+                            <el-option label="临海市第二人民医院" value="临海市第二人民医院" ></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="选择学校:">
-                        <el-select @change="getWgy" size="small" filterable clearable v-model="formInline2.dir_id">
-                            <el-option v-for="(item,index) in dir2" :label="item.dirName" :value="item.id" :key="index"></el-option>
+                    <el-form-item label="状态:">
+                        <el-select clearable size="small" v-model="formInline3.status" placeholder="请选择状态">
+                            <el-option label="未处理" value="1" ></el-option>
+                            <el-option label="已处理" value="3" ></el-option>
+                            <el-option label="忽略" value="2" ></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="选择网格员:">
-                        <el-select size="small" v-model="formInline2.user" placeholder="请优先选择学校">
-                            <el-option v-for="(item,index) in user" :label="item.user_login" :value="item.user_id" :key="index"></el-option>
-                        </el-select>
+                    <el-form-item label="身份证号码:">
+                        <el-input size="small" v-model="formInline3.id_card"></el-input>
+                    </el-form-item>
+                    <el-form-item label="健康证号码:">
+                        <el-input size="small" v-model="formInline3.headth_id_card"></el-input>
                     </el-form-item>
                     <el-form-item style="margin-top: -2px">
-                        <el-button size="small" type="primary" @click="search2">搜索</el-button>
+                        <el-button size="small" type="primary" @click="search3">搜索</el-button>
+                    </el-form-item>
+                    <el-form-item style="margin-top: -2px">
+                        <el-button size="small" type="primary" >批量操作</el-button>
                     </el-form-item>
                 </el-form>
                 <el-table
@@ -311,7 +324,9 @@
                             align="center"
                             label="操作">
                         <template slot-scope="scope">
-                            <el-button @click="look2" type="text" size="small">操作</el-button>
+                            <el-button @click="look2(scope.row)" type="text" size="small">操作</el-button>
+                            <el-button v-if="scope.row.status==1" @click="remind(1,scope.row.MIID)" type="text" size="small">忽略</el-button>
+                            <el-button v-if="scope.row.status==2" @click="remind(0,scope.row.MIID)" type="text" size="small">取消忽略</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -324,29 +339,99 @@
                             :page-size="paginate3"
                             background
                             layout="total, sizes, prev, pager, next, jumper"
-                            :total="total2">
+                            :total="total3">
                     </el-pagination>
                 </div>
                 <el-dialog
-                        :title=title
-                        :visible.sync="dialogFormVisible">
-                    <span v-html="content"></span>
-                    <div class="demo-image__preview">
-                        <el-image v-if="img"
-                                  style="width: 100px; height: 100px"
-                                  :src="img[0]"
-                                  :preview-src-list="img">
-                        </el-image>
+                    title="信息更新"
+                    :width="is_new?'30%':'60%'"
+                    :visible.sync="dialogFormVisible2">
+                    <div class="block" style="display:flex">
+                        <div>
+                            <div class="flex">
+                                <span>头像：</span>
+                                <div class="avatarimg">
+                                    <img :src="selectinfo.face_thumb" alt="">
+                                </div>
+                            </div>
+                            <div class="flex">
+                                <div class="inline">
+                                    <span>姓名：</span>
+                                    <el-input :value="selectinfo.nickname" readonly></el-input>
+                                </div>
+                                <div class="inline">
+                                    <span>联系电话：</span>
+                                    <el-input :value="selectinfo.mobile" readonly></el-input>
+                                </div>
+                            </div>
+                            <div class="flex">
+                                <div class="inline">
+                                    <span>身份证号码:</span>
+                                    <el-input :value="selectinfo.id_card" readonly></el-input>
+                                </div>
+                            </div>
+                            <div class="flex">
+                                <div class="inline">
+                                    <span>健康证号码:</span>
+                                    <el-input :value="selectinfo.health_id_card" readonly></el-input>
+                                </div>
+                                <div class="inline">
+                                    <span>健康证过期时间：</span>
+                                    <el-input :value="selectinfo.health_endtime" readonly></el-input>
+                                </div>
+                            </div>
+                            <div class="flex">
+                                <div class="inline">
+                                    <span>归属学校：</span>
+                                    <el-select v-model="value" clearable  filterable placeholder="请选择">
+                                        <el-option
+                                        v-for="item in options"
+                                        :key="item.id"
+                                        :label="item.label"
+                                        :value="item.id">
+                                        </el-option>
+                                    </el-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-if="!is_new" style="padding-left:10px;border-left:1px solid #eee;margin-left:10px">
+                            <div class="flex">
+                                <span>头像：</span>
+                                <div class="avatarimg">
+                                    <img :src="selectinfo2.face_thumb" alt="">
+                                </div>
+                            </div>
+                            <div class="flex">
+                                <div class="inline">
+                                    <span>姓名：</span>
+                                    <el-input :value="selectinfo2.nickname" readonly></el-input>
+                                </div>
+                                <div class="inline">
+                                    <span>联系电话：</span>
+                                    <el-input :value="selectinfo2.mobile" readonly></el-input>
+                                </div>
+                            </div>
+                            <div class="flex">
+                                <div class="inline">
+                                    <span>身份证号码</span>
+                                    <el-input :value="selectinfo2.id_card" readonly></el-input>
+                                </div>
+                            </div>
+                            <div class="flex">
+                                <div class="inline">
+                                    <span>健康证号码</span>
+                                    <el-input :value="selectinfo2.health_id_card" readonly></el-input>
+                                </div>
+                                <div class="inline">
+                                    <span>健康证过期时间：</span>
+                                    <el-input :value="selectinfo2.health_endtime" readonly></el-input>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </el-dialog>
-                <el-dialog
-                        :visible.sync="dialogFormVisible2">
-                    <div class="block">
-                        <span class="demonstration">默认 click 触发子菜单</span>
-                        <el-cascader
-                            v-model="value"
-                            :options="options"
-                            @change="handleChange"></el-cascader>
+                    <div class="flex" style="justify-content: center;">
+                        <el-button @click="postinfo" type="primary" style="margin-left:10px">确定</el-button>
+                        <el-button @click="dialogFormVisible2 = false">取消</el-button>
                     </div>
                 </el-dialog>
             </el-tab-pane>
@@ -354,10 +439,11 @@
     </div>
 </template>
 <script>
-    import { Form,Cascader,FormItem,Select,Option,Button,DatePicker,Tabs,TabPane,Table,TableColumn,Image,Pagination,Input,Dialog } from 'element-ui'
+    import { Form,Cascader,Message,FormItem,Select,Option,Button,DatePicker,Tabs,TabPane,Table,TableColumn,Image,Pagination,Input,Dialog } from 'element-ui'
     import 'element-ui/lib/theme-chalk/index.css'
     export default {
         components:{
+            [Message.name]:Message,
             [Form.name]:Form,
             [Cascader.name]:Cascader,
             [FormItem.name]:FormItem,
@@ -376,7 +462,24 @@
         },
         data(){
             return{
-                value:'',
+                value:[],
+                selectinfo:{
+                    nickname:'',
+                    face_thumb:'',
+                    mobile:'',
+                    id_card:'',
+                    health_id_card:'',
+                    health_endtime:''
+                },//图片归属选中项信息
+                selectinfo2:{
+                    nickname:'',
+                    face_thumb:'',
+                    mobile:'',
+                    id_card:'',
+                    health_id_card:'',
+                    health_endtime:''
+                },//新信息
+                is_new:0,//信息是否需要更新
                 options:[],
                 activeName: 'first',
                 formInline: {
@@ -388,6 +491,14 @@
                     indexCode: '',
                     dir_id: '',
                     user:'',
+                },
+                formInline3:{
+                    nickname:'',
+                    mobile:'',
+                    where:'',
+                    id_card:'',
+                    headth_id_card:'',
+                    status:'1'
                 },
                 regions:'',
                 regions2:'',
@@ -467,7 +578,16 @@
             },
             // 医院数据
             getBwhlist(){
-                let params ={'page':this.page3};
+                let params ={
+                    'page':this.page3,
+                    'pagesize':this.paginate3,
+                    'nickname':this.formInline3.nickname,
+                    "mobile":this.formInline3.mobile,
+                    "where":this.formInline3.where,
+                    "id_card":this.formInline3.id_card,
+                    "health_id_card":this.formInline3.headth_id_card,
+                    'status':this.formInline3.status
+                    };
                 this.$https.fetchPost('/plugin/statistics/api_index/getHospitalInfo',params).then((res) => {
                     console.log(res.data)
                     this.tableData3 = res.data;
@@ -477,13 +597,10 @@
             },
             // 获取地区列表
             getAddlist(){
-                this.$https.fetchPost('/plugin/statistics/api_index/getSchoolDir').then((res) => {
+                this.$https.fetchPost('/plugin/statistics/api_index/getSchoolDir_1').then((res) => {
                     var res_data = this.$secret_key.func(this.$store.state.on_off, res, "key");
                     this.options = res_data
                 })
-            },
-             handleChange(value) {
-                console.log(value);
             },
             getList(){
                 var timeStart = '',timeEnd = '';
@@ -631,9 +748,51 @@
                 }
                 this.dialogFormVisible = true;
             },
-            look2(){
+            look2(item){
+                this.selectinfo = item
+                let params ={
+                    'MIID':item.MIID,
+                    "id_card":item.id_card,
+                };
+                this.$https.fetchPost('/plugin/statistics/api_index/checkHealthMember',params).then((res) => {
+                    this.is_new = res.is_new
+                    if(!res.is_new){
+                        this.selectinfo2 = res.data
+                        this.value = String(res.data.school_id)
+                    }
+                })
                 this.dialogFormVisible2 = true;
             },
+            // 提交选择信息
+            postinfo(){
+                let params ={
+                    'MIID':this.selectinfo.MIID,
+                    "school_id":this.value,
+                };
+                this.$https.fetchPost('/plugin/statistics/api_index/setSingleHealth',params).then((res) => {
+                    if(res.is_right){
+                        this.dialogFormVisible2 = false
+                        this.is_new = 1
+                        Message.success({
+                            message:'操作成功',
+                            duration:800
+                        });
+                    }
+                })
+            },
+            // 忽略
+            remind(status,id){
+                if(status){
+                    this.$https.fetchPost('/plugin/statistics/api_index/ignoreStatus',{'MIID':id,}).then((res) => {
+                        this.getBwhlist()
+                    })
+                }else{
+                    this.$https.fetchPost('/plugin/statistics/api_index/ignoreCancelStatus',{'MIID':id,}).then((res) => {
+                        this.getBwhlist()
+                    })
+                }
+                
+            }
         },
     }
 </script>
@@ -664,5 +823,25 @@
 }
 .el-image /deep/ .el-icon-circle-close{
     color: #fff;
+}
+.flex{
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    .avatarimg{
+        flex:1;
+        padding-left: 10px;
+        img{
+            width:100px;
+            height: auto;
+        }
+    }
+    .inline{
+        span{
+            line-height: 35px;
+        }
+        &:nth-child(1){margin-right: 5px;}
+        &:nth-child(2){margin-left: 5px;}
+    }
 }
 </style>
