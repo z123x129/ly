@@ -252,7 +252,7 @@
                         <el-button size="small" type="primary" @click="search3">搜索</el-button>
                     </el-form-item>
                     <el-form-item style="margin-top: -2px">
-                        <el-button size="small" type="primary" >批量操作</el-button>
+                        <el-button size="small" type="primary" @click="look2(0)" >批量操作</el-button>
                     </el-form-item>
                 </el-form>
                 <el-table
@@ -261,6 +261,7 @@
                         stripe
                         :row-class-name="tableRowClassName"
                         header-row-class-name="headerRow"
+                        @selection-change="selectAll"
                         style="width: 100%">
                     <el-table-column
                         align="center"
@@ -295,7 +296,8 @@
                     </el-table-column>
                     <el-table-column
                             align="center"
-                            label="图片信息">
+                            label="图片信息"
+                            width="120">
                         <template slot-scope="scope">
                             <el-image
                                     style="width: 35px; height: 35px"
@@ -322,9 +324,17 @@
                     </el-table-column>
                     <el-table-column
                             align="center"
+                            label="状态"
+                            width="100">
+                            <template slot-scope="scope">
+                                {{scope.row.status==1?'未处理':(scope.row.status==2?'已忽略':'已处理')}}
+                            </template>
+                    </el-table-column>
+                    <el-table-column
+                            align="center"
                             label="操作">
                         <template slot-scope="scope">
-                            <el-button @click="look2(scope.row)" type="text" size="small">操作</el-button>
+                            <el-button @click="look2(1,scope.row)" type="text" size="small">操作</el-button>
                             <el-button v-if="scope.row.status==1" @click="remind(1,scope.row.MIID)" type="text" size="small">忽略</el-button>
                             <el-button v-if="scope.row.status==2" @click="remind(0,scope.row.MIID)" type="text" size="small">取消忽略</el-button>
                         </template>
@@ -348,38 +358,40 @@
                     :visible.sync="dialogFormVisible2">
                     <div class="block" style="display:flex">
                         <div>
-                            <div class="flex">
-                                <span>头像：</span>
-                                <div class="avatarimg">
-                                    <img :src="selectinfo.face_thumb" alt="">
+                            <template v-if="multipleSelection.length==0">
+                                <div class="flex">
+                                    <span>头像：</span>
+                                    <div class="avatarimg">
+                                        <img :src="selectinfo.face_thumb" alt="">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="flex">
-                                <div class="inline">
-                                    <span>姓名：</span>
-                                    <el-input :value="selectinfo.nickname" readonly></el-input>
+                                <div class="flex">
+                                    <div class="inline">
+                                        <span>姓名：</span>
+                                        <el-input :value="selectinfo.nickname" readonly></el-input>
+                                    </div>
+                                    <div class="inline">
+                                        <span>联系电话：</span>
+                                        <el-input :value="selectinfo.mobile" readonly></el-input>
+                                    </div>
                                 </div>
-                                <div class="inline">
-                                    <span>联系电话：</span>
-                                    <el-input :value="selectinfo.mobile" readonly></el-input>
+                                <div class="flex">
+                                    <div class="inline">
+                                        <span>身份证号码:</span>
+                                        <el-input :value="selectinfo.id_card" readonly></el-input>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="flex">
-                                <div class="inline">
-                                    <span>身份证号码:</span>
-                                    <el-input :value="selectinfo.id_card" readonly></el-input>
+                                <div class="flex">
+                                    <div class="inline">
+                                        <span>健康证号码:</span>
+                                        <el-input :value="selectinfo.health_id_card" readonly></el-input>
+                                    </div>
+                                    <div class="inline">
+                                        <span>健康证过期时间：</span>
+                                        <el-input :value="selectinfo.health_endtime" readonly></el-input>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="flex">
-                                <div class="inline">
-                                    <span>健康证号码:</span>
-                                    <el-input :value="selectinfo.health_id_card" readonly></el-input>
-                                </div>
-                                <div class="inline">
-                                    <span>健康证过期时间：</span>
-                                    <el-input :value="selectinfo.health_endtime" readonly></el-input>
-                                </div>
-                            </div>
+                            </template>
                             <div class="flex">
                                 <div class="inline">
                                     <span>归属学校：</span>
@@ -430,7 +442,7 @@
                         </div>
                     </div>
                     <div class="flex" style="justify-content: center;">
-                        <el-button @click="postinfo" type="primary" style="margin-left:10px">确定</el-button>
+                        <el-button @click="postinfo(multipleSelection.length)" type="primary" style="margin-left:10px">确定</el-button>
                         <el-button @click="dialogFormVisible2 = false">取消</el-button>
                     </div>
                 </el-dialog>
@@ -462,7 +474,7 @@
         },
         data(){
             return{
-                value:[],
+                value:'',
                 selectinfo:{
                     nickname:'',
                     face_thumb:'',
@@ -479,7 +491,7 @@
                     health_id_card:'',
                     health_endtime:''
                 },//新信息
-                is_new:0,//信息是否需要更新
+                is_new:1,//信息是否需要更新
                 options:[],
                 activeName: 'first',
                 formInline: {
@@ -554,7 +566,16 @@
                 page3:1, //医院列表
                 total3:0,
                 currentPage3: 1,
+                multipleSelection:[]
             }
+        },
+        watch:{
+            dialogFormVisible2(val, oldVal){//普通的watch监听
+                if(!val){
+                    this.is_new = 1
+                    this.value = ''
+                }
+            },
         },
         mounted(){
             this.getList();
@@ -589,7 +610,6 @@
                     'status':this.formInline3.status
                     };
                 this.$https.fetchPost('/plugin/statistics/api_index/getHospitalInfo',params).then((res) => {
-                    console.log(res.data)
                     this.tableData3 = res.data;
                     this.currentPage3 = res.current_page;
                     this.total3 = res.total;
@@ -730,7 +750,6 @@
                 this.getBwhlist();
             },
             tableRowClassName({row, rowIndex}) {
-                console.log(row)
                 if (row.is_over === -1) {
                     return 'warning-row';
                 } else if (row.is_over === 1) {
@@ -748,37 +767,61 @@
                 }
                 this.dialogFormVisible = true;
             },
-            look2(item){
-                this.selectinfo = item
-                let params ={
-                    'MIID':item.MIID,
-                    "id_card":item.id_card,
-                };
-                this.$https.fetchPost('/plugin/statistics/api_index/checkHealthMember',params).then((res) => {
-                    this.is_new = res.is_new
-                    if(!res.is_new){
-                        this.selectinfo2 = res.data
-                        this.value = String(res.data.school_id)
+            look2(status,item){
+                if(status){
+                    this.selectinfo = item
+                    let params ={
+                        'MIID':item.MIID,
+                        "id_card":item.id_card,
+                    };
+                    this.$https.fetchPost('/plugin/statistics/api_index/checkHealthMember',params).then((res) => {
+                        this.is_new = res.is_new
+                        if(!res.is_new){
+                            this.selectinfo2 = res.data
+                            this.value = String(res.data.school_id)
+                        }
+                    })
+                }else{
+                    if(this.multipleSelection.length == 0){
+                        Message.error({
+                            message:'请选择需要操作的项目后再进行操作',
+                            duration:1000
+                        });
+                        return
                     }
-                })
+                }
                 this.dialogFormVisible2 = true;
             },
             // 提交选择信息
-            postinfo(){
-                let params ={
-                    'MIID':this.selectinfo.MIID,
-                    "school_id":this.value,
-                };
-                this.$https.fetchPost('/plugin/statistics/api_index/setSingleHealth',params).then((res) => {
-                    if(res.is_right){
+            postinfo(status){
+                if(status){//批量操作
+                    let params ={
+                        'MIID':this.multipleSelection,
+                        "school_id":this.value,
+                    };
+                    this.$https.fetchPost('/plugin/statistics/api_index/setBatchHealth',params).then((res) => {
                         this.dialogFormVisible2 = false
-                        this.is_new = 1
-                        Message.success({
-                            message:'操作成功',
-                            duration:800
+                        Message.warning({
+                            message:res.msg,
+                            duration:1000
                         });
-                    }
-                })
+                    })
+                }else{
+                    let params ={
+                        'MIID':this.selectinfo.MIID,
+                        "school_id":this.value,
+                    };
+                    this.$https.fetchPost('/plugin/statistics/api_index/setSingleHealth',params).then((res) => {
+                        if(res.is_right){
+                            this.dialogFormVisible2 = false
+                            Message.success({
+                                message:'操作成功',
+                                duration:1000
+                            });
+                        }
+                    })
+                }
+                this.getBwhlist()
             },
             // 忽略
             remind(status,id){
@@ -791,7 +834,13 @@
                         this.getBwhlist()
                     })
                 }
-                
+            },
+            // 表格全选
+            selectAll(e){
+                this.multipleSelection = []
+                e.forEach((item)=>{
+                    this.multipleSelection=this.multipleSelection.concat(item.MIID)
+                })
             }
         },
     }
