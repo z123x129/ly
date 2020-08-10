@@ -11,7 +11,6 @@
 </template>
 
 <script>
-import {Message,MessageBox} from "element-ui"
 export default {
   name: 'Fullscreen',
   computed: {
