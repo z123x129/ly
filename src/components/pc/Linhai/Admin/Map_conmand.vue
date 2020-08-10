@@ -297,7 +297,6 @@
                     }
                     this.addsite(1)
                 })
-
             },
             gotoMap(data) {//地图跳转
                 if (data.parentIndexCode) {
