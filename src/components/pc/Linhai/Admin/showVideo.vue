@@ -10,8 +10,6 @@
             <el-tree
                     class="filter-tree"
                     :data="data"
-                    :load="loadNode"
-                    lazy
                     :props="defaultProps"
                     :filter-node-method="filterNode"
                     @node-click="getvideo"
@@ -121,14 +119,17 @@
                 if(!data.children){
                     // this.$refs.H1.videoPlay(data.cameraIndexCode);//传入摄像头编码
                     // console.log(data.cameraIndexCode)
-                    if (data.value == 1) {
-                        this.$refs.H1.videoPlay(data.cameraIndexCode);//传入摄像头编码
-                    }else{//如果摄像头离线
-                        Message.error({
-                            message:'该摄像头处于离线状态',
-                            duration:600
-                        });
-                    }
+                    this.$https.fetchPost('/plugin/statistics/api_index/camerasOnline',{indexCode:data.cameraIndexCode}).then((res) => {
+                        if (res.is_online == 1) {
+                            this.$refs.H1.videoPlay(data.cameraIndexCode);//传入摄像头编码
+                        }else{//如果摄像头离线
+                            Message.error({
+                                message:'该摄像头处于离线状态',
+                                duration:600
+                            });
+                        }
+                    })
+
                 }
             },
             videoinit(){//初始化视频插件
