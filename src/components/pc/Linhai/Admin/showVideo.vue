@@ -52,6 +52,7 @@
         },
         watch: {
             filterText(val) {
+                console.log(this.$refs.tree)
                 this.$refs.tree.filter(val);
             }
         },

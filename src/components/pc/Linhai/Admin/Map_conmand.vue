@@ -306,6 +306,23 @@
                     this.map.setZoomAndCenter(17,
                         [data.longitude, data.latitude]);
                     this.redian(data)
+                    if (this.data2.length == 0) {
+                        this.data2 = this.data2.concat(data)
+                    } else {
+                        for (let i in this.data2) {
+                            if (this.data2[i].label == data.label)
+                                return;
+                        }
+                        this.data2 = this.data2.concat(data)
+                    }
+                    this.videoVisible = true
+                    if (this.$refs.H1.checkWebC()) {
+                        this.app[this.ddd].JS_ShowWnd();
+                    } else {
+                        setTimeout(() => {
+                            this.videoinit()
+                        }, 100);
+                    }
                 }
             },
             playvideo(data) {//地图跳转
