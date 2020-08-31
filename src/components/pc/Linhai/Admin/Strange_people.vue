@@ -172,7 +172,7 @@
                 </el-image>
             </div>
         </el-dialog>
-        <el-dialog width="80%" title="抓拍原图" :visible.sync="imgshow">
+        <el-dialog width="80%" title="抓拍原图" :visible.sync="imgshow" @closed="close">
             <img width="100%" :src="img" />
         </el-dialog>
     </div>
@@ -262,6 +262,9 @@
                 this.img = img[0];
                 this.imgshow = true;
             },
+            close(){
+                this.img = '';
+            },
             search(){
                 this.page = 1;
                 this.getList();
@@ -291,7 +294,7 @@
             },
             getList(){ //获取学校列表
                 var timeStart = '',timeEnd = '';
-                if(this.formInline.timeStr !== null){
+                if(this.formInline.value !== null){
                     timeStart = this.formInline.value[0];
                     timeEnd = this.formInline.value[1];
                 }

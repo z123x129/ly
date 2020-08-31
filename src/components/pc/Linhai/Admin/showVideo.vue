@@ -14,6 +14,17 @@
                     :filter-node-method="filterNode"
                     @node-click="getvideo"
                     ref="tree">
+                <template slot-scope="scope">
+                    <span class="el-tree-node__label">
+                        <template v-if="scope.data.hasOwnProperty('is_online') && scope.data.is_online == 1">
+                            <img src="../images/online.png" style="height:0.8rem"/>
+                        </template>
+                        <template v-else-if="scope.data.hasOwnProperty('is_online') && scope.data.is_online == 0">
+                              <img src="../images/offline.png" style="height:0.8rem"/>
+                        </template>
+                        {{scope.data.label}}{{show_online(scope.data)}}
+                    </span>
+                </template>
             </el-tree>
         </div>
             <Hik id="Hik" class="videobox" ref="H1" :openOWebName="ddd"></Hik>
@@ -50,7 +61,6 @@
         },
         watch: {
             filterText(val) {
-                console.log(this.$refs.tree)
                 this.$refs.tree.filter(val);
             }
         },
@@ -61,7 +71,15 @@
             this.resize_window();
         },
         methods:{
-
+            show_online(data)
+            {
+              if(data.hasOwnProperty("on"))
+              {
+                  return "("+data.on+"/"+data.off+")";
+              }
+              else
+                  return "";
+            },
             loadNode(node, resolve) {
                 switch (node.level) {
                     case 1:
@@ -101,7 +119,7 @@
                                     var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
                                     resolve(res_data);
                                 }
-                                
+
                             })
                         }
                         else
@@ -120,7 +138,7 @@
                                 });
                             }else{
                                var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
-                                resolve(res_data); 
+                                resolve(res_data);
                             }
                         })
                         break;
@@ -145,16 +163,16 @@
                 if(!data.children){
                     // this.$refs.H1.videoPlay(data.cameraIndexCode);//传入摄像头编码
                     // console.log(data.cameraIndexCode)
-                    this.$https.fetchPost('/plugin/statistics/api_index/camerasOnline',{indexCode:data.cameraIndexCode}).then((res) => {
-                        if (res.is_online == 1) {
-                            this.$refs.H1.videoPlay(data.cameraIndexCode);//传入摄像头编码
-                        }else{//如果摄像头离线
-                            Message.error({
-                                message:'该摄像头处于离线状态',
-                                duration:600
-                            });
-                        }
-                    })
+                    if(data.is_online == "0")
+                    {
+                        Message.error({
+                            message:'该摄像头处于离线状态',
+                            duration:600
+                        });
+                    }
+                    else {
+                        this.$refs.H1.videoPlay(data.cameraIndexCode);//传入摄像头编码
+                    }
 
                 }
             },
