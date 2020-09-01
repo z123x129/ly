@@ -47,11 +47,11 @@
             <div class="videobox">
                 <div class="demo">
                     <p>摄像点选择:</p>
-                    <el-input placeholder="输入关键字搜索"
-                              size="small"
-                              style="padding: 10px"
-                              v-model="filterText2">
-                    </el-input>
+<!--                    <el-input placeholder="输入关键字搜索"-->
+<!--                              size="small"-->
+<!--                              style="padding: 10px"-->
+<!--                              v-model="filterText2">-->
+<!--                    </el-input>-->
                     <el-tree
                             :data="data2"
                             :filter-node-method="filterNode2"
@@ -61,6 +61,18 @@
                             class="filter-tree"
                             lazy
                             ref="tree2">
+                        <template slot-scope="scope">
+
+                            <span class="el-tree-node__label">
+                                <template v-if="scope.data.hasOwnProperty('value') && scope.data.value == 1">
+                                    <img src="../images/online.png" style="height:0.8rem"/>
+                                </template>
+                                <template v-else-if="scope.data.hasOwnProperty('value') && scope.data.value == 0">
+                                      <img src="../images/offline.png" style="height:0.8rem"/>
+                                </template>
+                                {{scope.data.label}}
+                            </span>
+                        </template>
                     </el-tree>
                 </div>
                 <Hikr :openOWebName="ddd" class="videobox" id="Hik" ref="H1"></Hikr>
@@ -1011,13 +1023,19 @@
     .videobox {
         overflow: hidden;
         display: flex;
-        align-items: center;
+        align-items: flex-start;
+        width: 100%;
+        height: 100%;
+        .videobox{
+            flex:1
+        }
     }
 
     .demo {
         padding: 10px;
         box-sizing: border-box;
         height: 100%;
+        width: 250px;
         background: #fff;
         overflow: auto;
     }
@@ -1029,12 +1047,6 @@
         flex: 1;
         height: 100%;
         // max-width: calc(~'100% - 200px');
-    }
-
-    .videobox {
-        width: 100%;
-        height: 100%;
-
     }
 
     .map {

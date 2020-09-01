@@ -186,17 +186,17 @@
                             </el-image>
                         </template>
                     </el-table-column>
-                    <el-table-column
-                            align="center"
-                            label="健康证照片">
-                        <template slot-scope="scope">
-                            <el-image
-                                    style="width: 35px; height: 35px"
-                                    :src="scope.row.health_card[0]"
-                                    :preview-src-list="scope.row.health_card">
-                            </el-image>
-                        </template>
-                    </el-table-column>
+<!--                    <el-table-column-->
+<!--                            align="center"-->
+<!--                            label="健康证照片">-->
+<!--                        <template slot-scope="scope">-->
+<!--                            <el-image-->
+<!--                                    style="width: 35px; height: 35px"-->
+<!--                                    :src="scope.row.health_card[0]"-->
+<!--                                    :preview-src-list="scope.row.health_card">-->
+<!--                            </el-image>-->
+<!--                        </template>-->
+<!--                    </el-table-column>-->
                     <el-table-column
                             align="center"
                             prop="member_type"
@@ -221,7 +221,7 @@
                     </el-pagination>
                 </div>
             </el-tab-pane>
-            <el-tab-pane label="选择图片归属地区" name="third">
+            <el-tab-pane label="人员处理" name="third">
                 <el-form :inline="true" :model="formInline" class="demo-form-inline">
                     <el-form-item label="姓名:">
                         <el-input size="small" v-model="formInline3.nickname"></el-input>
@@ -316,7 +316,7 @@
                             prop="health_endtime"
                             label="健康证到期时间">
                     </el-table-column>
-                    
+
                     <el-table-column
                             align="center"
                             prop="timeStr"
@@ -805,6 +805,8 @@
                             message:res.msg,
                             duration:1000
                         });
+                        this.getBwhlist()
+                        this.getList()
                     })
                 }else{
                     let params ={
@@ -819,9 +821,11 @@
                                 duration:1000
                             });
                         }
+                        this.getBwhlist()
+                        this.getList()
                     })
                 }
-                this.getBwhlist()
+
             },
             // 忽略
             remind(status,id){

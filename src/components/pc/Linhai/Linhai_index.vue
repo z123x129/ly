@@ -34,7 +34,7 @@
                     <dv-border-box-7 title="健康证图表" class="box1" ref="box3" :titleWidth=160>
                         <h2>健康证图表</h2>
                         <div style="width: 100%;height: 100%;display: flex;justify-content: space-between;margin-top: -20px">
-                            <Customized :type="1" :data="regions_chart.area_chart" ref="Customized" style="width: 50%;height: 100%"></Customized>
+                            <Customized :type="1" :data="regions_chart.area_chart" ref="Customized2" style="width: 50%;height: 100%"></Customized>
                             <Customized :type="2" :data="regions_chart.school_general" ref="Customized1" style="width: 50%;height: 100%"></Customized>
                         </div>
                     </dv-border-box-7>
@@ -196,7 +196,7 @@
                         let that = this;
                         setTimeout(()=>{
                             that.init_child("Dataset");
-                            that.init_child("Customized");
+                            that.init_child("Customized2");
                             that.init_child("Customized1");
                         },500)
                     })
@@ -313,12 +313,14 @@
             this.currentTime();
         },
         activated() {
+            if(this.showBack)
+                this.back();
             if(this.$refs.hasOwnProperty("map"))
             {
                 this.$refs.srroll_1.initWH();
                 this.$refs.srroll_2.initWH();
                 this.$refs.map.map_resize();
-                this.$refs.Customized.Customized_resize();
+                this.$refs.Customized2.Customized_resize();
                 this.$refs.Customized1.Customized_resize();
                 this.$refs.Dataset.Dataset_resize();
                 this.$refs.Mixed.Mixed_resize();
@@ -327,6 +329,7 @@
                     this.$refs["box"+i].initWH();
                 }
             }
+
         },
         beforeDestroy: function() {
             if (this.getDate) {
