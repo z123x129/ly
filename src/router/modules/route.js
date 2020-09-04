@@ -173,16 +173,16 @@ export const asyncRouterMap = [
             role: [1],
         },
         children:[
-            {
-                path: 'Key_personnel',
-                name: 'Key_personnel',
-                meta: {
-                    icon: 'ios-people',
-                    title: '重点人员监控',
-                    role: [1],
-                },
-                component: Key_personnel
-            },
+            // {
+            //     path: 'Key_personnel',
+            //     name: 'Key_personnel',
+            //     meta: {
+            //         icon: 'ios-people',
+            //         title: '重点人员监控',
+            //         role: [1],
+            //     },
+            //     component: Key_personnel
+            // },
             {
                 path: 'Strange_people',
                 name: 'Strange_people',

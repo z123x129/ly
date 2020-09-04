@@ -144,9 +144,9 @@
               <img v-else width="35px" height="35px" src="../images/school_logo.png" />
             </template>
           </el-table-column>
-          <el-table-column prop="dirName" label="学校名称" align="center"></el-table-column>
-          <el-table-column prop="name" label="乡镇街道" align="center"></el-table-column>
           <el-table-column prop="company" label="单位名称" align="center"></el-table-column>
+          <el-table-column prop="name" label="乡镇街道" align="center"></el-table-column>
+          <el-table-column prop="dirName" label="学校名称" align="center"></el-table-column>
           <el-table-column prop="personCharge" label="负责人" align="center"></el-table-column>
           <el-table-column prop="personChargePhone" label="负责人联系方式" align="center"></el-table-column>
           <el-table-column prop="street" label="学校地址" align="center"></el-table-column>
