@@ -183,8 +183,9 @@
                 });//初始化
 
             },
-            filterNode(value, data) {
+            filterNode(value, data,x) {
                 if (!value) return true;
+                // if(x.level==4)return ;
                 return data.label.indexOf(value) !== -1;
             },
             resize(){

@@ -132,6 +132,20 @@
           header-row-class-name="headerRow"
           style="width: 100%"
         >
+          <el-table-column
+            type="index"
+            width="50"
+            align="center">
+          </el-table-column>
+          <el-table-column prop="company" label="单位名称（营业执照名称）" align="center"></el-table-column>
+          <el-table-column prop="name" label="乡镇街道" align="center"></el-table-column>
+          <el-table-column prop="dirName" label="监控点位名称" align="center"></el-table-column>
+          <el-table-column prop="personCharge" label="负责人" align="center"></el-table-column>
+          <el-table-column prop="personChargePhone" label="负责人联系方式" align="center"></el-table-column>
+          <el-table-column prop="street" label="学校地址" align="center"></el-table-column>
+          <el-table-column prop="student_num" label="学生就餐人数" align="center"></el-table-column>
+          <el-table-column prop="teacher_num" label="教职工就餐人数" align="center"></el-table-column>
+          <el-table-column prop="canteen_num" label="学校食堂员工数" align="center"></el-table-column>
           <el-table-column label="学校Logo" align="center">
             <template slot-scope="scope">
               <img
@@ -144,15 +158,6 @@
               <img v-else width="35px" height="35px" src="../images/school_logo.png" />
             </template>
           </el-table-column>
-          <el-table-column prop="company" label="单位名称" align="center"></el-table-column>
-          <el-table-column prop="name" label="乡镇街道" align="center"></el-table-column>
-          <el-table-column prop="dirName" label="学校名称" align="center"></el-table-column>
-          <el-table-column prop="personCharge" label="负责人" align="center"></el-table-column>
-          <el-table-column prop="personChargePhone" label="负责人联系方式" align="center"></el-table-column>
-          <el-table-column prop="street" label="学校地址" align="center"></el-table-column>
-          <el-table-column prop="student_num" label="学生就餐人数" align="center"></el-table-column>
-          <el-table-column prop="teacher_num" label="教职工就餐人数" align="center"></el-table-column>
-          <el-table-column prop="canteen_num" label="学校食堂员工数" align="center"></el-table-column>
         </el-table>
         <div style="padding: 15px;display: flex;justify-content: flex-end;background-color:#fff">
           <el-pagination
@@ -991,15 +996,15 @@ export default {
   height: 178px;
   display: block;
 }
-.el-table /deep/ .warning-row td:nth-child(9) {
+.el-table /deep/ .warning-row td:nth-child(8) {
   color: #f56c6c;
   background: rgba(245, 108, 108, 0.35);
 }
-.el-table /deep/ .jinggao-row td:nth-child(9) {
+.el-table /deep/ .jinggao-row td:nth-child(8) {
   color: #e6a23c;
   background: rgba(230, 162, 60, 0.35);
 }
-.el-table /deep/ .success-row td:nth-child(9) {
+.el-table /deep/ .success-row td:nth-child(8) {
   color: #67c23a;
   background: rgba(103, 194, 58, 0.35);
 }
