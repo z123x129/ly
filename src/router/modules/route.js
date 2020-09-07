@@ -173,16 +173,16 @@ export const asyncRouterMap = [
             role: [1],
         },
         children:[
-            {
-                path: 'Key_personnel',
-                name: 'Key_personnel',
-                meta: {
-                    icon: 'ios-people',
-                    title: '重点人员监控',
-                    role: [1],
-                },
-                component: Key_personnel
-            },
+            // {
+            //     path: 'Key_personnel',
+            //     name: 'Key_personnel',
+            //     meta: {
+            //         icon: 'ios-people',
+            //         title: '重点人员监控',
+            //         role: [1],
+            //     },
+            //     component: Key_personnel
+            // },
             {
                 path: 'Strange_people',
                 name: 'Strange_people',
@@ -198,21 +198,21 @@ export const asyncRouterMap = [
                 name: 'Contrast',
                 meta: {
                     icon: 'md-stats',
-                    title: '月数据对比',
+                    title: '数据对比',
                     role: [1],
                 },
                 component: Contrast
             },
-            {
-                path: 'Contrast_month',
-                name: 'Contrast_month',
-                meta: {
-                    icon: 'md-trending-up',
-                    title: '年数据对比',
-                    role: [1],
-                },
-                component: Contrast_month
-            },
+            // {
+            //     path: 'Contrast_month',
+            //     name: 'Contrast_month',
+            //     meta: {
+            //         icon: 'md-trending-up',
+            //         title: '年数据对比',
+            //         role: [1],
+            //     },
+            //     component: Contrast_month
+            // },
             {
                 path: 'School_show',
                 name: 'School_show',
@@ -223,16 +223,16 @@ export const asyncRouterMap = [
                 },
                 component: School_show
             },
-            {
-                path: 'School_message',
-                name: 'School_message',
-                meta: {
-                    icon: 'md-filing',
-                    title: '学校信息',
-                    role: [1],
-                },
-                component: School_message
-            },
+            // {
+            //     path: 'School_message',
+            //     name: 'School_message',
+            //     meta: {
+            //         icon: 'md-filing',
+            //         title: '学校信息',
+            //         role: [1],
+            //     },
+            //     component: School_message
+            // },
         ]
     },
     {
