@@ -116,13 +116,15 @@
           <div>
             <el-input size="small" placeholder="请输入内容" v-model="input" class="input-with-select">
               <el-select style="width: 110px" v-model="select" slot="prepend" placeholder="请选择">
-                <el-option label="学校名称" value="dirName"></el-option>
+                <el-option label="监控点位名称" value="dirName"></el-option>
+                <el-option label="乡镇街道" value="name"></el-option>
                 <el-option label="单位名称" value="company"></el-option>
                 <el-option label="负责人" value="personCharge"></el-option>
                 <el-option label="学校地址" value="street"></el-option>
               </el-select>
               <el-button @click="getList4" slot="append" icon="el-icon-search"></el-button>
             </el-input>
+            <el-button class="daochu" @click="exportSchoolList" type="primary" size="mini" plain>导出</el-button>
           </div>
         </div>
         <el-table
@@ -137,7 +139,7 @@
             width="50"
             align="center">
           </el-table-column>
-          <el-table-column prop="company" label="单位名称（营业执照名称）" align="center"></el-table-column>
+          <el-table-column prop="company" label="单位名称（营业执照名称）" align="center" width="210"></el-table-column>
           <el-table-column prop="name" label="乡镇街道" align="center"></el-table-column>
           <el-table-column prop="dirName" label="监控点位名称" align="center"></el-table-column>
           <el-table-column prop="personCharge" label="负责人" align="center"></el-table-column>
@@ -634,6 +636,12 @@ export default {
     this.getAddlist();
   },
   methods: {
+    exportSchoolList(){
+      let params = {};
+      this.$https.fetchPost("/plugin/statistics/api_index/exportSchoolList", params).then((res) => {
+          window.location.href=res;
+        });
+    },
     search() {
       this.page = 1;
       this.getList();
@@ -1041,8 +1049,20 @@ export default {
         padding: 20px 0;
         /*margin-bottom: 10px;*/
         >div{
-            width: 40%;
-            margin: auto;
+          width: 40%;
+          margin: auto;
+          & /deep/ .el-input-group__prepend{
+            width: 130px;
+            .el-select{
+              width: auto !important;
+            }
+          }
         }
     }
+
+.daochu{
+    position: absolute;
+    top: 22px;
+    right: 5%;
+  }
 </style>
