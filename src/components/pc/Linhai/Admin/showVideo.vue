@@ -10,12 +10,21 @@
             <el-tree
                     class="filter-tree"
                     :data="data"
-                    :load="loadNode"
-                    lazy
                     :props="defaultProps"
                     :filter-node-method="filterNode"
                     @node-click="getvideo"
                     ref="tree">
+                <template slot-scope="scope">
+                    <span class="el-tree-node__label">
+                        <template v-if="scope.data.hasOwnProperty('is_online') && scope.data.is_online == 1">
+                            <img src="../images/online.png" style="height:0.8rem"/>
+                        </template>
+                        <template v-else-if="scope.data.hasOwnProperty('is_online') && scope.data.is_online == 0">
+                              <img src="../images/offline.png" style="height:0.8rem"/>
+                        </template>
+                        {{scope.data.label}}{{show_online(scope.data)}}
+                    </span>
+                </template>
             </el-tree>
         </div>
             <Hik id="Hik" class="videobox" ref="H1" :openOWebName="ddd"></Hik>
@@ -62,21 +71,75 @@
             this.resize_window();
         },
         methods:{
-
+            show_online(data)
+            {
+              if(data.hasOwnProperty("on"))
+              {
+                  return "("+data.on+"/"+data.off+")";
+              }
+              else
+                  return "";
+            },
             loadNode(node, resolve) {
                 switch (node.level) {
                     case 1:
-                        resolve(node.data.children);
+                        if(node.data.spec_type == 1)
+                        {
+                            let params ={'indexCode':node.data.indexCode};
+                            params = this.$secret_key.func(this.$store.state.on_off, params);
+                            this.$https.fetchPost('/plugin/statistics/api_index/schoolOnline',params).then((res) => {
+                                if(res == undefined){
+                                    resolve([]);
+                                    Message.error({
+                                        message:'该区域无设备信息',
+                                        duration:600
+                                    });
+                                }else{
+                                    var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
+                                    resolve(res_data);
+                                }
+                            })
+                        }
+                        else
+                            resolve(node.data.children);
                         break;
                     case 2:
+                        if(node.data.spec_type == 2)
+                        {
+                            let params ={'indexCode':node.data.indexCode};
+                            params = this.$secret_key.func(this.$store.state.on_off, params);
+                            this.$https.fetchPost('/plugin/statistics/api_index/schoolOnline',params).then((res) => {
+                                if(res == undefined){
+                                    resolve([]);
+                                    Message.error({
+                                        message:'该区域无设备信息',
+                                        duration:600
+                                    });
+                                }else{
+                                    var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
+                                    resolve(res_data);
+                                }
+
+                            })
+                        }
+                        else
+                        resolve(node.data.children);
                         resolve(node.data.children);
                         break;
                     case 3:
                         let params ={'indexCode':node.data.indexCode};
                         params = this.$secret_key.func(this.$store.state.on_off, params);
                         this.$https.fetchPost('/plugin/statistics/api_index/schoolOnline',params).then((res) => {
-                            var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
-                            resolve(res_data);
+                            if(res == undefined){
+                                resolve([]);
+                                Message.error({
+                                    message:'该区域无设备信息',
+                                    duration:600
+                                });
+                            }else{
+                               var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
+                                resolve(res_data);
+                            }
                         })
                         break;
                     default:
@@ -100,14 +163,17 @@
                 if(!data.children){
                     // this.$refs.H1.videoPlay(data.cameraIndexCode);//传入摄像头编码
                     // console.log(data.cameraIndexCode)
-                    if (data.value == 1) {
-                        this.$refs.H1.videoPlay(data.cameraIndexCode);//传入摄像头编码
-                    }else{//如果摄像头离线
+                    if(data.is_online == "0")
+                    {
                         Message.error({
                             message:'该摄像头处于离线状态',
                             duration:600
                         });
                     }
+                    else {
+                        this.$refs.H1.videoPlay(data.cameraIndexCode);//传入摄像头编码
+                    }
+
                 }
             },
             videoinit(){//初始化视频插件
@@ -117,8 +183,9 @@
                 });//初始化
 
             },
-            filterNode(value, data) {
+            filterNode(value, data,x) {
                 if (!value) return true;
+                // if(x.level==4)return ;
                 return data.label.indexOf(value) !== -1;
             },
             resize(){

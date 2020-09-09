@@ -54,6 +54,9 @@
             })
         },
         methods:{
+            Customized_resize(){
+                this.chart.resize();
+            },
             init(){
                 let dataName = [];
                 let total = 0;

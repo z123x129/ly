@@ -13,29 +13,29 @@
     export default {
         inject:["app"],
         props:{
-            appkey:{
-                type:String,
-                default:'24387968'
-            },
-            secret:{
-                type:String,
-                default:"DDZd1gZIBoEvwUKx0vVx"
-            },
-            ip:{
-                type:String,
-                default:"10.22.113.85"
-            },
             // appkey:{
             //     type:String,
-            //     default:'20307173'
+            //     default:'24387968'
             // },
             // secret:{
             //     type:String,
-            //     default:"GcBtnm6uvyjiuKyvYne7"
+            //     default:"DDZd1gZIBoEvwUKx0vVx"
             // },
             // ip:{
             //     type:String,
-            //     default:"111.3.64.34"},
+            //     default:"10.22.113.85"
+            // },
+            appkey:{
+                type:String,
+                default:'20307173'
+            },
+            secret:{
+                type:String,
+                default:"GcBtnm6uvyjiuKyvYne7"
+            },
+            ip:{
+                type:String,
+                default:"111.3.64.34"},
             port:{
                 type:String,
                 default:"446"

@@ -18,13 +18,22 @@
             </DatePicker>
             <el-tree
                     class="filter-tree"
-                    :load="loadNode"
-                    lazy
                     :data="data"
                     :props="defaultProps"
                     :filter-node-method="filterNode"
                     @node-click="getvideo"
                     ref="tree">
+                <template slot-scope="scope">
+                    <span class="el-tree-node__label">
+                        <template v-if="scope.data.hasOwnProperty('is_online') && scope.data.is_online == 1">
+                            <img src="../images/online.png" style="height:0.8rem"/>
+                        </template>
+                        <template v-else-if="scope.data.hasOwnProperty('is_online') && scope.data.is_online == 0">
+                              <img src="../images/offline.png" style="height:0.8rem"/>
+                        </template>
+                        {{scope.data.label}}{{show_online(scope.data)}}
+                    </span>
+                </template>
            </el-tree> <!-- @node-click="gotoMap" -->
         </div>
         <Hikr class="videobox" ref="H1" id="Hik" :openOWebName="ddd"></Hikr>
@@ -70,12 +79,42 @@
             this.resize_window();
         },
         methods:{
+            show_online(data)
+            {
+                if(data.hasOwnProperty("on"))
+                {
+                    return "("+data.on+"/"+data.off+")";
+                }
+                else
+                    return "";
+            },
             loadNode(node, resolve) {
                 switch (node.level) {
                     case 1:
-                        resolve(node.data.children);
+                        if(node.data.spec_type == 1)
+                        {
+                            let params ={'indexCode':node.data.indexCode};
+                            params = this.$secret_key.func(this.$store.state.on_off, params);
+                            this.$https.fetchPost('/plugin/statistics/api_index/schoolOnline',params).then((res) => {
+                                var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
+                                resolve(res_data);
+                            })
+                        }
+                        else
+                            resolve(node.data.children);
                         break;
                     case 2:
+                        if(node.data.spec_type == 2)
+                        {
+                            let params ={'indexCode':node.data.indexCode};
+                            params = this.$secret_key.func(this.$store.state.on_off, params);
+                            this.$https.fetchPost('/plugin/statistics/api_index/schoolOnline',params).then((res) => {
+                                var res_data = this.$secret_key.func(this.$store.state.on_off, res ,"key");
+                                resolve(res_data);
+                            })
+                        }
+                        else
+                            resolve(node.data.children);
                         resolve(node.data.children);
                         break;
                     case 3:
@@ -110,16 +149,28 @@
                         return ;
                     }
                     // var endTime = Math.floor((new Date(new Date().toLocaleDateString()).getTime()) / 1000)//当天零点
-
-                    // console.log(data.cameraIndexCode)
-                    if (data.value == 1) {
-                        this.$refs.H1.videoPlay(data.cameraIndexCode,function(){},null,null,null,null,startTime,endTime);//传入摄像头编码
-                    }else{//如果摄像头离线
+                        // this.$refs.H1.videoPlay(data.cameraIndexCode);//传入摄像头编码
+                        // console.log(data.cameraIndexCode)
+                    if(data.is_online == "0")
+                    {
                         Message.error({
                             message:'该摄像头处于离线状态',
                             duration:600
                         });
                     }
+                    else {
+                        this.$refs.H1.videoPlay(data.cameraIndexCode,function(){},null,null,null,null,startTime,endTime);//传入摄像头编码
+                    }
+
+                    // console.log(data.cameraIndexCode)
+                        // if (data.value == 1) {
+                        //     this.$refs.H1.videoPlay(data.cameraIndexCode,function(){},null,null,null,null,startTime,endTime);//传入摄像头编码
+                        // }else{//如果摄像头离线
+                        //     Message.error({
+                        //         message:'该摄像头处于离线状态',
+                        //         duration:600
+                        //     });
+                        // }
                 }
             },
             videoinit(){//初始化视频插件

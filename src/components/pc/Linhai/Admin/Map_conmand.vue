@@ -47,11 +47,11 @@
             <div class="videobox">
                 <div class="demo">
                     <p>摄像点选择:</p>
-                    <el-input placeholder="输入关键字搜索"
-                              size="small"
-                              style="padding: 10px"
-                              v-model="filterText2">
-                    </el-input>
+<!--                    <el-input placeholder="输入关键字搜索"-->
+<!--                              size="small"-->
+<!--                              style="padding: 10px"-->
+<!--                              v-model="filterText2">-->
+<!--                    </el-input>-->
                     <el-tree
                             :data="data2"
                             :filter-node-method="filterNode2"
@@ -61,6 +61,18 @@
                             class="filter-tree"
                             lazy
                             ref="tree2">
+                        <template slot-scope="scope">
+
+                            <span class="el-tree-node__label">
+                                <template v-if="scope.data.hasOwnProperty('value') && scope.data.value == 1">
+                                    <img src="../images/online.png" style="height:0.8rem"/>
+                                </template>
+                                <template v-else-if="scope.data.hasOwnProperty('value') && scope.data.value == 0">
+                                      <img src="../images/offline.png" style="height:0.8rem"/>
+                                </template>
+                                {{scope.data.label}}
+                            </span>
+                        </template>
                     </el-tree>
                 </div>
                 <Hikr :openOWebName="ddd" class="videobox" id="Hik" ref="H1"></Hikr>
@@ -162,13 +174,27 @@
                 this.value.forEach(step => {
                     if (step == '单兵') {
                         let res = this.$store.state.route.CoordinateList;
+                        if(res.newC == 2)
+                        {
+                            this.markerArr.push(res);
+                            if (!this.time || this.time == this.newTime) {
+                                this.getTouxiang(this.markerArr.length-1);
+                                if (this.markerArr[this.markerArr.length-1].start == undefined || this.markerArr[this.markerArr.length-1].start === false) {
+                                    this.polylines(this.markerArr.length-1);
+                                }
+                                return;
+                            }
+                        }
                         this.markerArr.forEach((item, index) => {
                             if (item.cameraIndexCode == res.cameraIndexCode) {
                                 if (this.markers[index]) {
                                     this.map.remove(this.markers[index]);
                                     // this.markers[index] ='';
                                 }
-                                this.markerArr[index].xy.push(res.xy);
+                                if(res.newC == 1)
+                                    item.xy.push([res.xy]);
+                                else if(res.newC == 0)
+                                    item.xy[ item.xy.length-1].push(res.xy);
                                 if (!this.time || this.time == this.newTime) {
                                     this.getTouxiang(index);
                                     if (this.markerArr[index].start === false) {
@@ -283,15 +309,31 @@
                     }
                     this.addsite(1)
                 })
-
             },
             gotoMap(data) {//地图跳转
-
                 if (data.parentIndexCode) {
                     this.map.setZoomAndCenter(12, [data.longitude, data.latitude]);
                 } else if (!data.children) {
-                    this.map.setZoomAndCenter(17, [data.longitude, data.latitude]);
+                    this.map.setZoomAndCenter(17,
+                        [data.longitude, data.latitude]);
                     this.redian(data)
+                    if (this.data2.length == 0) {
+                        this.data2 = this.data2.concat(data)
+                    } else {
+                        for (let i in this.data2) {
+                            if (this.data2[i].label == data.label)
+                                return;
+                        }
+                        this.data2 = this.data2.concat(data)
+                    }
+                    this.videoVisible = true
+                    if (this.$refs.H1.checkWebC()) {
+                        this.app[this.ddd].JS_ShowWnd();
+                    } else {
+                        setTimeout(() => {
+                            this.videoinit()
+                        }, 100);
+                    }
                 }
             },
             playvideo(data) {//地图跳转
@@ -416,7 +458,7 @@
                                     offset: new AMap.Pixel(-15, 0)
                                 });
                                 var info = JSON.stringify(this.data[i]["children"][x]["children"][y])
-
+                                //console.log(this.data[i]["children"][x]["children"][y]["longitude"], this.data[i]["children"][x]["children"][y]["latitude"])
                                 var img = 'https://cdn.pixabay.com/photo/2016/08/18/23/04/yale-university-1604159_960_720.jpg'
                                 // if(this.data[i]["children"][y].school_cover != null && this.data[i]["children"][y].school_cover){
                                 //     var img = this.data[i]["children"][x]["children"][y].school_cover
@@ -437,6 +479,7 @@
                                 schoolMarker.on('mousemove', this.dianji);
                                 schoolMarker.setMap(this.map);
                                 this.schoolmarkers.push(schoolMarker);
+                                //console.log(this.schoolmarkers)
                             }
                         }
 
@@ -453,9 +496,10 @@
                             tubiao = this.marker2;
                         }
                         let length = va.xy.length - 1;
+                        let length_last =  va.xy[length].length -1 ;
                         let marker = new AMap.Marker({
                             isCustom: true,
-                            position: va.xy[length],
+                            position: va.xy[length][length_last],
                             icon: new AMap.Icon({
                                 // 图标尺寸
                                 size: new AMap.Size(30, 30),
@@ -546,8 +590,9 @@
                     tubiao = this.marker2;
                 }
                 let length = va.xy.length - 1;
+                let length_last =  va.xy[length].length -1 ;
                 let marker = new AMap.Marker({
-                    position: va.xy[length],
+                    position: va.xy[length][length_last],
                     icon: new AMap.Icon({
                         // 图标尺寸
                         size: new AMap.Size(30, 30),
@@ -651,65 +696,96 @@
             //实时轨迹
             polyline: function (key) {
                 if (this.markerArr[key].start == undefined || this.markerArr[key].start == true) {
-                    // let params ={'uid':this.$store.state.user.uid,'cameraIndexCode':this.markerArr[key].cameraIndexCode,'key':2};
-                    // this.$https.fetchPost('/plugin/statistics/api_index/switchCoordinate',params).then(() => {
                     this.markerArr[key].start = false;
                     this.polylines(key);
-                    // })
                 } else {
-                    // let params ={'uid':this.$store.state.user.uid,'cameraIndexCode':this.markerArr[key].cameraIndexCode,'key':1};
-                    // this.$https.fetchPost('/plugin/statistics/api_index/switchCoordinate',params).then(() => {
                     this.markerArr[key].start = true;
-                    this.markerArr[key].pline.setMap(null);
-                    // })
+                    this.markerArr[key].pline.forEach((item, index)=>{
+                        item.setMap(null);
+                    })
                 }
             },
             //描绘实时轨迹
             polylines: function (key) {
-                if (this.markerArr[key].pline) {
-                    this.markerArr[key].pline.setMap(null);
-                }
+                if(this.markerArr[key].pline == undefined)
+                    this.markerArr[key].pline = [];
                 let _this = this
-                let pline = new AMap.Polyline({
-                    map: _this.map,
-                    path: _this.markerArr[key].xy,
-                    showDir: true,
-                    strokeColor: "#28F",  //线颜色
-                    // strokeOpacity: 1,     //线透明度
-                    strokeWeight: 6,      //线宽
-                    // strokeStyle: "solid"  //线样式
-                });
-                _this.markerArr[key].pline = pline;
+                this.markerArr[key].pline.forEach((item, index)=>{
+                    item.setMap(null);
+                })
+                this.markerArr[key].xy.forEach((item, index)=>{
+                    let temCode =  new AMap.Polyline({
+                        map: _this.map,
+                        path: item,
+                        showDir: true,
+                        strokeColor: "#28F",  //线颜色
+                        // strokeOpacity: 1,     //线透明度
+                        strokeWeight: 6,      //线宽
+                        // strokeStyle: "solid"  //线样式
+                    });
+                    if(_this.markerArr[key].pline.length <= index)
+                        _this.markerArr[key].pline.push(temCode);
+                    else
+                        _this.markerArr[key].pline[index] = temCode;
+                })
             },
             //历史轨迹
             repolyline: function (key) {
+                if (this.historyArr[key].start == undefined || this.historyArr[key].start == true) {
+                    this.historyArr[key].start = false;
+                    this.cameraIndexCode = this.historyArr[key].cameraIndexCode;
+                    this.hispolyline(key);
+                } else {
+                    this.historyArr[key].start = true;
+                    this.historyArr[key].pline.forEach((item, index)=>{
+                        item.setMap(null);
+                    })
+                }
                 // if(this.historyArr[key].start==true && this.historyArr[key].pline.setMap){
                 //     this.historyArr[key].start = false;
                 //     this.historyArr[key].pline.setMap(null);
-                // }else{
+                // }else {
                 //     this.time = '';
-                // this.show = true;
-                // this.$nextTick(x=>{
-                //     this.$refs.input.focus();
-                // });
-                this.cameraIndexCode = this.historyArr[key].cameraIndexCode;
-                this.hispolyline(key);
+                //     this.show = true;
+                //     this.$nextTick(x => {
+                //         this.$refs.input.focus();
+                //     });
+                // }
+                // this.cameraIndexCode = this.historyArr[key].cameraIndexCode;
+                // this.hispolyline(key);
                 // this.historyArr[key].start = true;
                 // }
             },
             //描绘历史轨迹
-            hispolyline: function (index) {
+            hispolyline: function (key) {
                 let _this = this
-                let pline = new AMap.Polyline({
-                    map: _this.map,
-                    path: _this.historyArr[index].xy,
-                    showDir: true,
-                    strokeColor: "#ff009c",  //线颜色
-                    // strokeOpacity: 1,     //线透明度
-                    strokeWeight: 6,      //线宽
-                    // strokeStyle: "solid"  //线样式
-                });
-                _this.historyArr[index].pline = pline;
+                if(this.historyArr[key].pline == undefined)
+                    this.historyArr[key].pline = [];
+                // let pline = new AMap.Polyline({
+                //     map: _this.map,
+                //     path: _this.historyArr[index].xy,
+                //     showDir: true,
+                //     strokeColor: "#ff009c",  //线颜色
+                //     // strokeOpacity: 1,     //线透明度
+                //     strokeWeight: 6,      //线宽
+                //     // strokeStyle: "solid"  //线样式
+                // });
+                // _this.historyArr[index].pline = pline;
+                this.historyArr[key].xy.forEach((item, index)=>{
+                    let temCode =  new AMap.Polyline({
+                        map: _this.map,
+                        path: item,
+                        showDir: true,
+                        strokeColor: "#28F",  //线颜色
+                        // strokeOpacity: 1,     //线透明度
+                        strokeWeight: 6,      //线宽
+                        // strokeStyle: "solid"  //线样式
+                    });
+                    if(_this.historyArr[key].pline.length <= index)
+                        _this.historyArr[key].pline.push(temCode);
+                    else
+                        _this.historyArr[key].pline[index] = temCode;
+                })
             },
             //时间选择
             changeTime() {
@@ -740,7 +816,7 @@
                         this.videoinit()
                     }, 100);
                 }
-                console.log(step)
+                // console.log(step)
                 if (this.data2.length == 0) {
                     if (step) {
                         step.label = step.cameraName;
@@ -780,9 +856,9 @@
                     '<div class="flex">' +
                     '<img src="' + img + '">' +
                     '<div class="text">' +
-                    '<p>联系人：' + data.personCharge + '</p>' +
-                    '<p>联系电话：' + data.personChargePhone + '</p>' +
-                    '<p>地址：' + data.street + '</p>' +
+                    '<p>联系人：' + (data.personCharge ? data.personCharge : '无') + '</p>' +
+                    '<p>联系电话：' + (data.personChargePhone ? data.personChargePhone : '无') + '</p>' +
+                    '<p>地址：' + (data.street ?data.street : '无') + '</p>' +
                     '<a onclick=\'opvideo(' + info + ')\'>查看视频</a>' +
                     '</div>' +
                     '</div>' +
@@ -947,13 +1023,19 @@
     .videobox {
         overflow: hidden;
         display: flex;
-        align-items: center;
+        align-items: flex-start;
+        width: 100%;
+        height: 100%;
+        .videobox{
+            flex:1
+        }
     }
 
     .demo {
         padding: 10px;
         box-sizing: border-box;
         height: 100%;
+        width: 250px;
         background: #fff;
         overflow: auto;
     }
@@ -965,12 +1047,6 @@
         flex: 1;
         height: 100%;
         // max-width: calc(~'100% - 200px');
-    }
-
-    .videobox {
-        width: 100%;
-        height: 100%;
-
     }
 
     .map {

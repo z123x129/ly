@@ -1,5 +1,8 @@
 <template>
   <div v-if="showFullScreenBtn" class="full-screen-btn-con">
+    <Tooltip content="下载视频插件" placement="bottom">
+      <Icon type="md-arrow-down" style="margin-right: 10px;" :size="23" @click.native="downLoad"></Icon>
+    </Tooltip>
     <Tooltip :content="value ? '退出全屏' : '全屏'" placement="bottom">
       <Icon @click.native="handleChange" :type="value ? 'md-contract' : 'md-expand'" :size="23"></Icon>
     </Tooltip>
@@ -48,6 +51,18 @@ export default {
     },
     handleChange () {
       this.handleFullscreen()
+    },
+    downLoad(){
+      // MessageBox.confirm('?', '提示', {
+      //   confirmButtonText: '确定',
+      //   cancelButtonText: '取消',
+      //   type: 'warning'
+      // }).then(() => {
+        window.location.href="http://10.22.116.249:10000/VideoWebPlugin.exe"
+        // window.location.href="http://js2.300c.cn/lhyd/VideoWebPlugin.exe"
+      // }).catch(() => {
+      //   Message.error("插件启动失败！")
+      // });
     }
   },
   mounted () {
